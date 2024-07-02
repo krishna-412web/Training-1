@@ -1,0 +1,32 @@
+.footer {
+ position: absolute;
+ bottom: 6vh;
+ height: 2vh; 
+ width: 190vh;
+ font-size: 14px;
+ color: #5f6368;
+ }
+
+
+
+.f {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between; 
+ padding: 0 5vh;
+ width: 100%;
+ 
+ }
+
+.f>div:last-child {
+ margin-right: 0;
+ }
+
+.f a {
+ padding: 0 20px;
+ }
+
+.footer a {
+ text-decoration: none;
+ color: #808080;
+}

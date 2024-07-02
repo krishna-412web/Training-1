@@ -1,0 +1,196 @@
+body {
+       font-family: Arial, sans-serif;
+       margin: 0;
+       padding: 0;
+       height: 100%;
+       display: block;
+    }
+
+
+header {
+ background-color: #ffffff;
+ padding: 9px 19px;
+ margin-top: 1vh;
+ font-size: 2vh;
+ color: #d3d3d3;
+}
+
+header img{
+ border-radius: 24px;
+
+}
+
+a:hover {
+ text-decoration: underline;
+}
+.navigation {
+ width: 100%;
+ display: flex;
+ justify-content: right;
+ align-items: center;
+}
+
+.navigation a {
+ margin-left: 20px;
+ text-decoration: none;
+ color: black;
+ }
+
+.navigation a:hover {
+ text-decoration: underline;
+}
+
+.navigation first-child {
+ margin-left : 0;
+}
+
+
+
+main {
+ display: block;
+ align-items: center;
+}
+
+.logo1 {
+ height: 17vh;
+ width: 100%;
+ margin-bottom: 2vh;
+		
+ }
+.center{
+ display:block;
+ margin-top: 17vh;
+ margin-left: auto;
+ margin-right: auto;
+ margin-bottom: 5vh;
+ width: 287px;
+}
+
+
+.search {
+ display:flex;
+ justify-content: center;
+ border: 1px solid #808080;
+ border-radius: 25px;
+ padding: 0;
+ margin-top: 0;
+ margin-bottom: 4vh;
+ margin-left: auto;
+ margin-right: auto;
+ height 7vh;
+ width: 60vh;
+}
+
+.search:hover {
+ box-shadow: 1px 1px 1px 1px #808080;
+}
+
+.search button {
+ margin: 0;
+ background-color: #00000000;
+ border: 0;
+}
+
+.search img {
+ width: 95%;
+}
+
+.search textarea{
+ flex: 1;
+ margin: 0 8px;
+ border: 0;
+ outline: none;
+ height: 20px;
+ resize: none;
+ font-size: 17px;
+}
+
+
+.search1 {
+ display:flex;
+ justify-content: center;
+ margin-top: 0;
+ margin-bottom: 2vh;
+ 
+}
+
+.search1 button {
+ padding: 10px 20px;
+ margin: 0 5px;
+ background-color: #00000000;
+ border: 0;
+}
+ 
+.search1 button:hover {
+ background-color: #d3d3d3;
+ border: 1px #d3d3d3;
+ border-radius: 3px;
+ 
+}
+
+.lg {
+ display:flex;
+ justify-content: center;
+ margin-top: 0;
+ font-size: 2vh;
+}
+
+.container{
+ display:flex;
+ flex-direction: row;
+ list-style-type: none;
+ padding: 0;
+ margin:0 ;
+}
+
+.container li{
+ margin-right:5px;
+}
+
+
+
+
+.footer {
+ position: absolute;
+ bottom: 7vh;
+ height: 2vh; 
+ width: 190vh;
+ font-size: 2vh;
+ }
+
+
+.footer p {
+ text-color: #ffffff;
+ padding: 0px 15px;
+ }
+
+.f {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between; 
+ padding: 0 4vh;
+ width: 100%;
+ 
+ }
+
+.f>div:last-child {
+ margin-right: 0;
+ }
+
+.f a {
+ padding: 0 20px;
+ }
+
+.footer a {
+ text-decoration: none;
+ color: #808080;
+}
+
+
+.footer a:hover {
+ text-decoration: underline;
+ color: #808080;
+}
+
+
+

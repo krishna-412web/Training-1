@@ -1,0 +1,82 @@
+body {
+ font-family: TwitterChirpExtendedHeavy;
+ background-color: #000000;
+ color: #e7e9ea;
+}
+
+
+/*.container {
+
+ display: flex;
+ flex-direction: row;
+ justify-content: space-evenly;
+ flex-wrap: wrap;
+ column-gap: 1em;
+ margin: 0 auto;
+
+}*/
+
+.container {
+ min-height: 100vh;
+ font-family: TwitterChirpExtendedHeavy;
+ color: #e7e9ea;
+ margin-top: 1em;
+}
+
+img {
+ width: 100%;
+}
+
+/*#box-2 {
+ margin-top: 1em;
+}*/
+
+.container-1 {
+ display: flex;
+ flex-direction: row;
+ justify-content: flex-start;
+ flex-wrap: wrap;
+ column-gap: 1em;
+ list-style-type: none;
+ margin: 0;
+ padding: auto;
+}
+
+.container-1 ul {
+ list-style-type: none;
+ margin: 0;
+}
+
+.container-1 li {
+ padding-right: 16px;
+}
+
+.container-1 li a{
+  text-decoration: none;
+  color: #71767b;
+  font-size: 13px;
+  font-family: twitter-chirp
+}
+ 
+
+
+.row-1 {
+ flex: 1;
+ align-items: center;
+ padding: auto;
+}
+
+.row-2 {
+ display: flex;
+ flex-direction: column; 
+ justify-content: center;
+ align-items: center;
+ padding: auto;
+}
+
+button {
+ display: block;
+ border: 1px solid #e7e9ea;
+ border-radius: 50px;
+ margin: 0;
+}
