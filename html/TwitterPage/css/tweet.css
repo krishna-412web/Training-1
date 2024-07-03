@@ -70,6 +70,14 @@
         flex-direction: row;   
 } 
 
+#g1 {
+	z-index: 1;
+        width: 3vw;
+        height: 3vh;
+        object-fit: contain;
+        border-radius: 50vw;
+}
+
 p {
  	font-family: TwitterChirpExtendedHeavy;	
 }
