@@ -6,13 +6,9 @@
  	
 }
 
-
-
 #x img {
- width: 40vw;
+ 	width: 40vw;
 }
-
-
 
 .container-1 {
  	display: flex;
@@ -46,8 +42,6 @@
 	text-decoration: underline;
 }
  
-
-
 .row-1 {
  	flex: 1;
  	align-items: center;
@@ -61,8 +55,6 @@
  	align-items: center;
  	padding: auto;
 }
-
-
 
 #sign-in {
  	font: arial;
@@ -83,18 +75,18 @@ p {
 }
 
 .big {
- font-weight: 800;
- font-size: 5.5vw;
+ 	font-weight: 800;
+ 	font-size: 5.5vw;
 }
 
 .medium {
- font-weight: 800;
- font-size: 3vw;
+ 	font-weight: 800;
+ 	font-size: 3vw;
 }
 
 .small {
- font-weight: 800;
- font-size: 3vw;
+ 	font-weight: 800;
+ 	font-size: 3vw;
 }
 
 .line {
