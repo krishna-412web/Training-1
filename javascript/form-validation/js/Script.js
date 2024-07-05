@@ -3,6 +3,10 @@ const lastName = document.getElementById("last-name");
 const email = document.getElementById("email");
 const phone = document.getElementById("phone-number");
 const password= document.getElementById("new-password");
+const s = document.getElementById("male");
+const s1 = document.getElementById("female");
+const ms = document.getElementByName("unmarried");
+const ms1 = document.getElementByName("married")
 
 
 const fnameError = document.getElementById("fname-error");
@@ -10,6 +14,8 @@ const lnameError = document.getElementById("lname-error");
 const mailError = document.getElementById("mail-error");
 const phError = document.getElementById("num-error");
 const passError = document.getElementById("pass-error");
+const sError = document.getElementById("s-error");
+const msError = document.getElementById("ms-error");
 
 const form = document.getElementById("form");
 
@@ -74,6 +80,28 @@ form.addEventListener('submit',(e) =>
 	{
 		passError.innerText = "";
 	}		
+
+	if(s.value == "" || s.value == null)
+	{
+		e.preventDefault();
+		sError.innerText = "*Atleast one button should be checked";
+		valid = false;
+	}
+	else
+	{
+		sError.innerText = "";
+	}	
+
+	if(ms.value == "" || ms.value == null)
+	{
+		e.preventDefault();
+		msError.innerText = "*Atleast one button should be checked";
+		valid = false;
+	}
+	else
+	{
+		msError.innerText = "";
+	}
 
 	window.scrollTo(0,0);
 	if(!valid)

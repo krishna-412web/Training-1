@@ -25,12 +25,14 @@
 
 			<fieldset>
 				<legend>Gender: </legend>
-				<label for="male"><input id="male" type="radio" name="gender" class="inline" /> Male</label>
-				<label for="female"><input id="female" type="radio" name="gender" class="inline" /> Female</label>
-
+				<label for="male"><input id="male" type="radio" name="gender" class="inline" value="male" /> Male</label>
+				<label for="female"><input id="female" type="radio" name="gender" class="inline" value="female" /> Female</label>
+				<span id="serror"></span>		
+			
 				<legend>Marital Status: </legend>
-				<label for="married"><input id="married" type="radio" name="m-status" class="inline" /> Married</label>
-				<label for="female"><input id="unmarried" type="radio" name="m-status" class="inline" /> Unmarried</label>
+				<label for="married"><input id="married" type="radio" name="m-status" class="inline" value="married" /> Married</label>
+				<label for="female"><input id="unmarried" type="radio" name="m-status" class="inline" value="unmarried" /> Unmarried</label>
+				<span id="mserror"></span>
 			</fieldset>
 
       			<fieldset>
