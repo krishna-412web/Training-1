@@ -6,26 +6,65 @@ const password= document.getElementById("new-password");
 
 
 const fnameError = document.getElementById("fname-error");
-const lNameError = document.getElementById("lname-error");
+const lnameError = document.getElementById("lname-error");
 const mailError = document.getElementById("mail-error");
 const phError = document.getElementById("num-error");
 const passError = document.getElementById("pass-error");
 
 const form = document.getElementById("form");
 
+let email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
 form.addEventListener('submit',(e) =>
 {
 	let valid = true; 
+
 	if(firstName.value == '' || firstName.value == null)
 	{
 		e.preventDefault();
-		fnameError.innerText = "*Name field is required";
+		fnameError.innerText = "*first name field is required";
 		valid = false;
 	}
 	else
 	{
 		fnameError.innerText = "";
 	}
+
+	if(lastName.value == '' || lastName.value == null)
+	{
+		e.preventDefault();
+		lnameError.innerText = "*last name field is required";
+		valid = false;
+	}
+	else
+	{
+		lnameError.innerText = "";
+	}
+
+	if(!email.value.match(email_check))
+	{
+		e.preventDefault();
+		mailError.innerText = "*Email format not correct/empty field";
+		valid = false;
+	}
+	else
+	{
+		mailError.innerText = "";
+	}
+
+	if(phone.value.length == 10)
+	{
+		e.preventDefault();
+		phError.innerText = "*Phone no should be atleast 10 characters";
+		valid = false;
+	}
+	else
+	{
+		phError.innerText = "";
+	}
+
+	
+
 	window.scrollTo(0,0);
 	if(!valid)
 	{
