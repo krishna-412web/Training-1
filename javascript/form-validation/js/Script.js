@@ -15,12 +15,22 @@ const form = document.getElementById("form");
 
 form.addEventListener('submit',(e) =>
 {
-	alert("hello");
+	let valid = true; 
 	if(firstName.value == '' || firstName.value == null)
 	{
 		e.preventDefault();
 		fnameError.innerText = "*Name field is required";
-		 
+		valid = false;
 	}
+	else
+	{
+		fnameError.innerText = "";
+	}
+	window.scrollTo(0,0);
+	if(!valid)
+	{
+		e.preventDefault();		
+	}
+	
 
 });
