@@ -9,7 +9,7 @@ const pic = document.getElementById("profile-picture");
 const date = document.getElementById("dob");
 const occup = document.getElementById("referrer");
 const bio = document.getElementById("bio");
-const terms = document.getElementsByName("terms-and-condition");
+const terms = document.getElementsByName("terms-and-conditions");
 
 const fnameError = document.getElementById("fname-error");
 const lnameError = document.getElementById("lname-error");
@@ -167,12 +167,8 @@ form.addEventListener('submit',(e) =>
 		bioError.innerText = "";
 	}
 	
-	for (let i = 0; i < terms.length; i++) {
-		if (terms[i].checked) {
-    			b3+=1;
-  		}
-	}
-	if(b3 == 0)
+	
+	if(terms[0].checked == false)
 	{
 		e.preventDefault();
 		termsError.innerText = "*Atleast one button should be checked";
