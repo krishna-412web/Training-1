@@ -27,19 +27,19 @@
 				<legend>Gender: </legend>
 				<label for="male"><input id="male" type="radio" name="gender" class="inline" value="male" /> Male</label>
 				<label for="female"><input id="female" type="radio" name="gender" class="inline" value="female" /> Female</label>
-				<span id="serror"></span>		
+				<span id="s-error"></span>		
 			
 				<legend>Marital Status: </legend>
 				<label for="married"><input id="married" type="radio" name="m-status" class="inline" value="married" /> Married</label>
 				<label for="female"><input id="unmarried" type="radio" name="m-status" class="inline" value="unmarried" /> Unmarried</label>
-				<span id="mserror"></span>
+				<span id="ms-error"></span>
 			</fieldset>
 
       			<fieldset>
         			<label for="profile-picture">Upload a profile picture: <input id="profile-picture" type="file" name="file" /></label>
+				<span id="pic-error"></span>
 				<label for="dob">Input your dob (dd-mm-yyyy): <input id="dob" type="date" name="dob"/></label>
-        			<label for="age">Input your age (years): <input id="age" type="number" name="age" min="18" max="60" /></label>
-
+				<span id="dob-error"></span>
         			<label for="referrer">Occupation
           				<select id="referrer" name="referrer">
             					<option value="">(select one)</option>
@@ -49,15 +49,16 @@
             					<option value="4">Other</option>
           				</select>
         			</label>	
-
+				<span id="ref-error"></span>
         			<label for="bio">Provide a bio:
           			<textarea id="bio" name="bio" rows="3" cols="30" placeholder="I like coding on the beach..."></textarea>
         			</label>
+				<span id="bio-error"></span>
      			</fieldset>
 
       			<label for="terms-and-conditions">
         			<input class="inline" id="terms-and-conditions" type="checkbox" name="terms-and-conditions" /> I accept the <a href="https://www.freecodecamp.org/news/terms-of-service/">terms and conditions</a>
-                                <p id="declaration"></p>
+                                <span id="terms-error"></span>
       			</label>
 
       			<input type="submit" value="submit" />
