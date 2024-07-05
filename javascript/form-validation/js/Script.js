@@ -14,6 +14,7 @@ const passError = document.getElementById("pass-error");
 const form = document.getElementById("form");
 
 let email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+let pass_check = /^([A-Za-z0-9*#_])$/
 
 form.addEventListener('submit',(e) =>
 {
@@ -52,18 +53,27 @@ form.addEventListener('submit',(e) =>
 		mailError.innerText = "";
 	}
 
-	if(phone.value.length == 10)
+	if(!(phone.value.length == 10))
 	{
 		e.preventDefault();
-		phError.innerText = "*Phone no should be atleast 10 characters";
+		phError.innerText = "*Phone no should be 10 characters";
 		valid = false;
 	}
 	else
 	{
 		phError.innerText = "";
 	}
-
 	
+	if(!password.value.match(pass_check))
+	{
+		e.preventDefault();
+		passError.innerText = "*Password should only contain A-Z,a-z,0-9,*,#,_";
+		valid = false;
+	}
+	else
+	{
+		passError.innerText = "";
+	}		
 
 	window.scrollTo(0,0);
 	if(!valid)
