@@ -14,7 +14,7 @@
     		<form class="d-flex flex-column bg-primary bg-gradient rounded p-5 my-5 gap-3 " id="form" action='' method="get">
 	      			<fieldset>
 					<div class="form-floating mb-2 ">
-						<input class="form-control" id="first-name" name="first-name" type="text"  placeholder=""/> 
+						<input class="form-control" id="first-name" name="first-name"  type="text"  placeholder=""/> 
         					<label class="form-label"  for="first-name">Enter Your First Name: </label>
  						<span id="fname-error"></span>
 					</div>
@@ -24,17 +24,17 @@
 						<span id="lname-error"></span>
 					</div>
 					<div class="form-floating mb-2">
-						<input class="form-control" id="email" name="email" type="text" placeholder=""/>
+						<input class="form-control" id="email" name="email" type="text" oninput="Email()" placeholder=""/>
         					<label class="form-label"  for="email">Enter Your Email: </label>
 						<span id="mail-error"></span>
 					</div>
 					<div class="form-floating mb-2">
-						<input class="form-control" id="phone-number" name="phone-number" type="number"  placeholder=""/>
+						<input class="form-control" id="phone-number" name="phone-number" type="number" oninput="Phone()"  placeholder=""/>
 						<label  class="form-label" for="phone-number">Enter Your Phone number: </label>
 						<span id="num-error"></span>
 					</div>
 					<div class="form-floating mb-2">
-						<input class="form-control" id="new-password" name="new-password" type="password"  placeholder=""/>
+						<input class="form-control" id="new-password" name="new-password" type="password" oninput="Password()" placeholder=""/>
         					<label  class="form-label"  for="new-password">Create a New Password: </label>
 						<span id="pass-error"></span>
 					</div>
