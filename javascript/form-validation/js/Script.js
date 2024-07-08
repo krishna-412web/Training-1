@@ -26,8 +26,8 @@ const termsError = document.getElementById("terms-error");
 
 const form = document.getElementById("form");
 
-let email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z])$/;
-let pass_check = /^([A-Za-z0-9*#_])$/
+let email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]){2,4}$/;
+let pass_check = /^([A-Za-z0-9*#_@.]{8,})$/;
 
 let b1=0;
 let b2=0;
@@ -160,7 +160,7 @@ form.addEventListener('submit',(e) =>
 	if(terms[0].checked == false)
 	{
 		valid = false;
-		termsError.innerText = "*Atleast one button should be checked";
+		termsError.innerText = "*This field is required";
 	}
 	else
 	{

@@ -8,19 +8,16 @@
     		<script src="./js/bootstrap.min.js"></script>
   	</head>
   	<body>
-	<div class="container-fluid pt-4 bg-dark text-white">
-		<div class="">
+	<div class="container-fluid bg-dark text-white d-flex flex-column align-items-center">
     		<h1>Registration Form</h1>
     		<div><p>Please fill out this form with the required information</p></div>
-    		<form class="rounded" id="form" action='' method="get">
-			<div class="">
-
+    		<form class="rounded bg-primary d-flex flex-column justify-content-center" id="form" action='' method="get">
 	      			<fieldset>
-					<div class="rounded form-control mb-3 mt-3">
+					<div class="rounded bg-info mb-3 mt-3">
         					<label for="first-name">Enter Your First Name: <input class="form-control" id="first-name" name="first-name" type="text" /> </label>
  						<span id="fname-error"></span>
 					</div>
-					<div class=" form-control mb-3">
+					<div class=" mb-3">
         					<label for="last-name">Enter Your Last Name: <input class="form-control" id="last-name" name="last-name" type="text" /></label>
 						<span id="lname-error"></span>
 					</div>
@@ -33,7 +30,7 @@
 						<span id="num-error"></span>
 					</div>
 					<div class="mb-3">
-        					<label for="new-password">Create a New Password: <input class="form-control" id="new-password" name="new-password" type="password" pattern="[a-z0-9#@*]{8,16}" /></label>
+        					<label for="new-password">Create a New Password: <input class="form-control" id="new-password" name="new-password" type="password" /></label>
 						<span id="pass-error"></span>
 					</div>
      	 			</fieldset>
@@ -59,7 +56,7 @@
 			</fieldset>
 
       			<fieldset>
-				<div>
+				<div class="d-flex flex-row">
         				<label for="profile-picture">Upload a profile picture: <input class="form-input" id="profile-picture" type="file" name="file" /></label>
 					<span id="pic-error"></span>
 				</div>
@@ -67,7 +64,7 @@
 					<label for="dob">Input your dob (dd-mm-yyyy): <input class="form-input" id="dob" type="date" name="dob"/></label>
 					<span id="dob-error"></span>
 				</div>
-				<div class="form-control">
+				<div class="">
         				<label for="referrer">Occupation
           					<select class="form-select" id="referrer" name="referrer">
             						<option value="">(select one)</option>
@@ -79,25 +76,25 @@
         				</label>	
 					<span id="ref-error"></span>
 				</div>
-				<div class="form-control">
+				<div class="">
         				<label for="bio">Provide a bio:
           				<textarea class="form-input" id="bio" name="bio" rows="3" cols="30" placeholder="I like coding on the beach..."></textarea>
         				</label>
 					<span id="bio-error"></span>
 				</div>
      			</fieldset>
-			<div class="form-check">
-   
+			<div class= "d-flex flex-column"
+				<div class="form-check d-flex flex-row">
         				<input class="form-check-input" id="terms-and-conditions" type="checkbox" name="terms-and-conditions" /> 
 					<label class="form-check-label" for="terms-and-conditions">I accept the <a href="https://www.freecodecamp.org/news/terms-of-service/">terms and 
 					conditions</a></label>
-                                	<span id="terms-error"></span>
-
+				</div>
+				<span id="terms-error"></span>
+				<button class="form-input rounded-pill" type="submit">Submit</button>
 			</div>
-			<button class="form-input rounded-pill" type="submit">Submit</button>
-		</div>
+			
     		</form>
-		
+		</div>
 		<script src="./js/Script.js"></script>
   	</body>
 </html>
