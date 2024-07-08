@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   	<head>
     		<meta charset="UTF-8" />
     		<title>Registration Form</title>
@@ -8,63 +8,73 @@
     		<script src="./js/bootstrap.min.js"></script>
   	</head>
   	<body>
-	<div class="container-fluid bg-dark text-white d-flex flex-column align-items-center">
-    		<h1>Registration Form</h1>
-    		<div><p>Please fill out this form with the required information</p></div>
-    		<form class="rounded bg-primary d-flex flex-column justify-content-center" id="form" action='' method="get">
+	<div class="container-fluid bg-dark  d-flex flex-column align-items-center">
+    		<h1 class="text-white">Registration Form</h1>
+    		<div><p class="text-white">Please fill out this form with the required information</p></div>
+    		<form class="d-flex flex-column bg-primary bg-gradient rounded p-5 my-5 gap-3 " id="form" action='' method="get">
 	      			<fieldset>
-					<div class="rounded bg-info mb-3 mt-3">
-        					<label for="first-name">Enter Your First Name: <input class="form-control" id="first-name" name="first-name" type="text" /> </label>
+					<div class="form-floating mb-2 ">
+						<input class="form-control" id="first-name" name="first-name" type="text"  placeholder=""/> 
+        					<label class="form-label"  for="first-name">Enter Your First Name: </label>
  						<span id="fname-error"></span>
 					</div>
-					<div class=" mb-3">
-        					<label for="last-name">Enter Your Last Name: <input class="form-control" id="last-name" name="last-name" type="text" /></label>
+					<div class="form-floating mb-2">
+						<input class="form-control" id="last-name" name="last-name" type="text"  placeholder=""/>
+        					<label class="form-label" for="last-name">Enter Your Last Name: </label>
 						<span id="lname-error"></span>
 					</div>
-					<div class="mb-3">
-        					<label for="email">Enter Your Email: <input class="form-control" id="email" name="email" type="text" placeholder="abc@kmail.com"/></label>
+					<div class="form-floating mb-2">
+						<input class="form-control" id="email" name="email" type="text" placeholder=""/>
+        					<label class="form-label"  for="email">Enter Your Email: </label>
 						<span id="mail-error"></span>
 					</div>
-					<div class="mb-3">
-						<label for="phone-number">Enter Your Phone number: <input class="form-control" id="phone-number" name="phone-number" type="number" /></label>
+					<div class="form-floating mb-2">
+						<input class="form-control" id="phone-number" name="phone-number" type="number"  placeholder=""/>
+						<label  class="form-label" for="phone-number">Enter Your Phone number: </label>
 						<span id="num-error"></span>
 					</div>
-					<div class="mb-3">
-        					<label for="new-password">Create a New Password: <input class="form-control" id="new-password" name="new-password" type="password" /></label>
+					<div class="form-floating mb-2">
+						<input class="form-control" id="new-password" name="new-password" type="password"  placeholder=""/>
+        					<label  class="form-label"  for="new-password">Create a New Password: </label>
 						<span id="pass-error"></span>
 					</div>
      	 			</fieldset>
 
 			<fieldset>
-				<div class="form-check d-flex flex-wrap flex-column">
-					<legend>Gender: </legend>
-					<div class="d-flex flex-row"><input class="form-check-input" id="male" type="radio" name="gender" value="male" />
-					<label class="form-check-label" for="male"> Male</label></div>
-					<div class="d-flex flex-row"><input class="form-check-input" id="female" type="radio" name="gender" value="female" />
-					<label class="form-check-label" for="female">Female</label></div>
-					<span id="s-error"></span>
+				<div class="form-control mb-2">
+					<div class="form-check d-flex flex-wrap flex-column">
+						<legend>Gender: </legend>
+						<div class="d-flex flex-row"><input class="form-check-input" id="male" type="radio" name="gender" value="male" />
+						<label class="form-check-label" for="male"> Male</label></div>
+						<div class="d-flex flex-row"><input class="form-check-input" id="female" type="radio" name="gender" value="female" />
+						<label class="form-check-label" for="female">Female</label></div>
+						<span id="s-error"></span>
+					</div>
 				</div>		
-				
-				<div class="form-check d-flex flex-wrap flex-column">
-					<legend>Marital Status: </legend>
-					<div class="d-flex flex-row"><input class="form-check-input" id="married" type="radio" name="m-status" class="inline" value="married" />
+				<div class="form-control mb-2">
+					<div class="form-check d-flex flex-wrap flex-column">
+						<legend>Marital Status: </legend>
+						<div class="d-flex flex-row"><input class="form-check-input" id="married" type="radio" name="m-status" class="inline" value="married" />
 					<label class="form-check-label" for="married"> Married</label></div>
 					<div class="d-flex flex-row"><input class="form-check-input" id="unmarried" type="radio" name="m-status" class="inline" value="unmarried" />
 					<label class="form-check-label" for="female"> Unmarried</label></div>
 					<span id="ms-error"></span>
+					</div>
 				</div>
 			</fieldset>
 
-      			<fieldset>
-				<div class="d-flex flex-row">
-        				<label for="profile-picture">Upload a profile picture: <input class="form-input" id="profile-picture" type="file" name="file" /></label>
+      			<fieldset>	
+				<div class="d-flex flex-column mb-2">
+        				<label for="profile-picture">Upload a profile picture: </label>
+					<input class="form-input" id="profile-picture" type="file" name="file" />
 					<span id="pic-error"></span>
 				</div>
-				<div>
-					<label for="dob">Input your dob (dd-mm-yyyy): <input class="form-input" id="dob" type="date" name="dob"/></label>
+				<div class="d-flex flex-column mb-2">
+					<label for="dob">Input your dob (dd-mm-yyyy): </label>
+					<input class="form-input" id="dob" type="date" name="dob"/>
 					<span id="dob-error"></span>
 				</div>
-				<div class="">
+				<div class="d-flex flex-column mb-2">
         				<label for="referrer">Occupation
           					<select class="form-select" id="referrer" name="referrer">
             						<option value="">(select one)</option>
@@ -76,21 +86,21 @@
         				</label>	
 					<span id="ref-error"></span>
 				</div>
-				<div class="">
+				<div class="d-flex flex-column mb-2">
         				<label for="bio">Provide a bio:
           				<textarea class="form-input" id="bio" name="bio" rows="3" cols="30" placeholder="I like coding on the beach..."></textarea>
         				</label>
 					<span id="bio-error"></span>
 				</div>
      			</fieldset>
-			<div class= "d-flex flex-column"
+			<div class= "d-flex flex-column">
 				<div class="form-check d-flex flex-row">
         				<input class="form-check-input" id="terms-and-conditions" type="checkbox" name="terms-and-conditions" /> 
-					<label class="form-check-label" for="terms-and-conditions">I accept the <a href="https://www.freecodecamp.org/news/terms-of-service/">terms and 
+					<label class="form-check-label" for="terms-and-conditions">I accept the <a class="text-white" href="https://www.freecodecamp.org/news/terms-of-service/">terms and 
 					conditions</a></label>
 				</div>
 				<span id="terms-error"></span>
-				<button class="form-input rounded-pill" type="submit">Submit</button>
+				<button class="btn btn-outline-success" type="submit">Submit</button>
 			</div>
 			
     		</form>
