@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    		<meta charset="UTF-8" />
+    		<title>Registration Form</title>
+		<link rel="stylesheet" href="./css/register.css" />
+		<link href="./css/bootstrap.min.css" rel="stylesheet" >
+    		<script src="./js/bootstrap.min.js"></script>
+  	</head>
+  	<body>
+	<div class="container-fluid pt-4 bg-dark text-white">
+		<div class="">
+    		<h1>Registration Form</h1>
+    		<div><p>Please fill out this form with the required information</p></div>
+    		<form class="rounded" id="form" action='' method="get">
+			<div class="">
+
+	      			<fieldset>
+					<div class="rounded form-control mb-3 mt-3">
+        					<label for="first-name">Enter Your First Name: <input class="form-control" id="first-name" name="first-name" type="text" /> </label>
+ 						<span id="fname-error"></span>
+					</div>
+					<div class=" form-control mb-3">
+        					<label for="last-name">Enter Your Last Name: <input class="form-control" id="last-name" name="last-name" type="text" /></label>
+						<span id="lname-error"></span>
+					</div>
+					<div class="mb-3">
+        					<label for="email">Enter Your Email: <input class="form-control" id="email" name="email" type="text" placeholder="abc@kmail.com"/></label>
+						<span id="mail-error"></span>
+					</div>
+					<div class="mb-3">
+						<label for="phone-number">Enter Your Phone number: <input class="form-control" id="phone-number" name="phone-number" type="number" /></label>
+						<span id="num-error"></span>
+					</div>
+					<div class="mb-3">
+        					<label for="new-password">Create a New Password: <input class="form-control" id="new-password" name="new-password" type="password" pattern="[a-z0-9#@*]{8,16}" /></label>
+						<span id="pass-error"></span>
+					</div>
+     	 			</fieldset>
+
+			<fieldset>
+				<div class="form-check d-flex flex-wrap flex-column">
+					<legend>Gender: </legend>
+					<div class="d-flex flex-row"><input class="form-check-input" id="male" type="radio" name="gender" value="male" />
+					<label class="form-check-label" for="male"> Male</label></div>
+					<div class="d-flex flex-row"><input class="form-check-input" id="female" type="radio" name="gender" value="female" />
+					<label class="form-check-label" for="female">Female</label></div>
+					<span id="s-error"></span>
+				</div>		
+				
+				<div class="form-check d-flex flex-wrap flex-column">
+					<legend>Marital Status: </legend>
+					<div class="d-flex flex-row"><input class="form-check-input" id="married" type="radio" name="m-status" class="inline" value="married" />
+					<label class="form-check-label" for="married"> Married</label></div>
+					<div class="d-flex flex-row"><input class="form-check-input" id="unmarried" type="radio" name="m-status" class="inline" value="unmarried" />
+					<label class="form-check-label" for="female"> Unmarried</label></div>
+					<span id="ms-error"></span>
+				</div>
+			</fieldset>
+
+      			<fieldset>
+				<div>
+        				<label for="profile-picture">Upload a profile picture: <input class="form-input" id="profile-picture" type="file" name="file" /></label>
+					<span id="pic-error"></span>
+				</div>
+				<div>
+					<label for="dob">Input your dob (dd-mm-yyyy): <input class="form-input" id="dob" type="date" name="dob"/></label>
+					<span id="dob-error"></span>
+				</div>
+				<div class="form-control">
+        				<label for="referrer">Occupation
+          					<select class="form-select" id="referrer" name="referrer">
+            						<option value="">(select one)</option>
+            						<option value="1">Student</option>
+            						<option value="2">Full-time employee</option>
+            						<option value="3">Part-time employee</option>
+            						<option value="4">Other</option>
+          					</select>
+        				</label>	
+					<span id="ref-error"></span>
+				</div>
+				<div class="form-control">
+        				<label for="bio">Provide a bio:
+          				<textarea class="form-input" id="bio" name="bio" rows="3" cols="30" placeholder="I like coding on the beach..."></textarea>
+        				</label>
+					<span id="bio-error"></span>
+				</div>
+     			</fieldset>
+			<div class="form-check">
+   
+        				<input class="form-check-input" id="terms-and-conditions" type="checkbox" name="terms-and-conditions" /> 
+					<label class="form-check-label" for="terms-and-conditions">I accept the <a href="https://www.freecodecamp.org/news/terms-of-service/">terms and 
+					conditions</a></label>
+                                	<span id="terms-error"></span>
+
+			</div>
+			<button class="form-input rounded-pill" type="submit">Submit</button>
+		</div>
+    		</form>
+		
+		<script src="./js/Script.js"></script>
+  	</body>
+</html>
