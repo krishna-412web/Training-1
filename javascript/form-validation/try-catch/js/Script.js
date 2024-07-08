@@ -27,12 +27,53 @@ const termsError = document.getElementById("terms-error");
 const form = document.getElementById("form");
 
 let email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]){2,4}$/;
-let pass_check = /^([A-Za-z0-9*#_@.]{8,})$/;
+let pass_check = /^([A-Za-z0-9!@#$%^&*()_+-]{8,})$/;
+let phone_check = /^([0-9]{10})$/;
 
 let b1=0;
 let b2=0;
 let b3=0;
-form.addEventListener('submit',(e) =>
+
+
+function Email(){
+	if(!email.value.match(email_check))
+	{
+		mailError.innerText = "*Email format not correct/empty field";
+		mailError.style.color = "red";
+	}
+	else
+	{
+		mailError.innerText = "*Valid Form Identified";
+		mailError.style.color = "white";
+	}
+}
+
+function Phone(){
+	if(!phone.value.match(phone_check))
+	{
+		phError.innerText = "*Email format not correct/empty field";
+		phError.style.color = "red";
+	}
+	else
+	{
+		phError.innerText = "*Valid Form Identified";
+		phError.style.color = "white";
+	}
+}
+function Password(){
+	if(!password.value.match(pass_check))
+	{
+		passError.innerHTML = "*Password should have atleast 8 characters<br>[alphabets, numbers and !@#$%^&*()_+-";
+		passError.style.color = "red";
+	}
+	else
+	{
+		passError.innerText = "*Valid Form Identified";
+		passError.style.color = "white";
+	}
+}
+
+form.addEventListener('submit',function(e)
 {
 	let valid = true; 
 
@@ -66,7 +107,7 @@ form.addEventListener('submit',(e) =>
 		mailError.innerText = "";
 	}
 
-	if(!(phone.value.length == 10))
+	if(!(phone.value.match(phone_check)))
 	{
 		valid = false;
 		phError.innerText = "*Phone no should be 10 characters";
@@ -171,7 +212,12 @@ form.addEventListener('submit',(e) =>
 	window.scrollTo(0,0);
 	if(!valid)
 	{
+		alert("All the fields are required");
 		e.preventDefault();		
+	}
+	else
+	{
+		alert("Form is valid");	
 	}
 	
 
