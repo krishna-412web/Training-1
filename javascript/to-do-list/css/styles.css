@@ -1,0 +1,18 @@
+
+span {
+ color: red;
+}
+
+.a {
+list-style-type: none;
+}
+
+.hit {
+	background-color: #198754 !important;
+}
+
+.no-hit {
+	background-color: #f8f9fa !important;
+}
+
+/*#198754*/
