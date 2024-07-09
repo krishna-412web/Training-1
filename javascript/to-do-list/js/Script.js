@@ -10,16 +10,23 @@ function change(event) {
 	let c = event.target;
 	c.classList.toggle('bg-success'); 
 	c.classList.toggle('bg-light'); 
+	save();
 }
 
 function dlt(event) {
 	let d = event.target.parentElement;
 	d.remove(); 
+	save();
 }
 
 function save() {
 	let t = list.innerHTML;
 	localStorage.setItem("save",t);
+}
+
+function retreive(){
+	let data = localStorage.getItem("save");
+	list.innerHTML = data;
 }
 
 function NewLi(){
@@ -45,19 +52,4 @@ form.addEventListener('submit',function(e)
 		save();		
 });
 
-/*document.addEventListener('DOMContentLoaded', () => {
-    const listItems = document.querySelectorAll('#anand li');
-
-    listItems.forEach(item => {
-        item.addEventListener('click', () => {
-	    if(item.style.backgroundColor == "F8F9FA")
-		{
-			item.style.backgroundColor = "#198754";	
-		}
-	    else
-		{
-			item.style.backgroundColor = "#f8f9fa";
-		}
-        });
-    });
-});*/
+window.onload = retreive();
