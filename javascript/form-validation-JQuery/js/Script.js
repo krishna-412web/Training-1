@@ -148,7 +148,7 @@ form.addEventListener('submit',function(e)
     			b2+=1;
   		}
 	}
-	if(b1 == 0)
+	if(b2 == 0)
 	{
 		valid = false;
 		msError.innerText = "*Atleast one button should be checked";
@@ -237,8 +237,10 @@ $(document).ready(function() {
 			
 			let fname = $("#first-name").val();
 			let lname = $("#last-name").val();
+			let s=$("input[name='gender']");
+			let m=$("input[name='m-status']");
 
-			if(fname == '' || fname == null)
+			/*if(fname == '' || fname == null)
 			{
 				valid = false;
 				$("#fname-error").text("*first name field is required");
@@ -290,7 +292,40 @@ $(document).ready(function() {
 			else
 			{
 				$("#pass-error").html("");
+			}*/
+			
+			console.log(m);
+
+			for (let i = 0; i < s.length; i++) {
+				if (s[i].checked) {
+    					b1+=1;
+  				}
 			}
+			if(b1 == 0)
+			{
+				valid = false;
+				$("#s-error").text("*Atleast one button should be checked");
+			}
+			else
+			{
+				$("#s-error").text("");
+			}	
+
+			console.log(m);
+			/*for (let i = 0; i < ms.length; i++) {
+				if (ms[i].checked) {
+    					b2+=1;
+  				}
+			}
+			if(b2 == 0)
+			{
+				valid = false;
+				msError.innerText = "*Atleast one button should be checked";
+			}
+			else
+			{
+				msError.innerText = "";
+			}*/
 	
 			window.scrollTo(0,0);
 			if(!valid)
