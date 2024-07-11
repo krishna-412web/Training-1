@@ -1,4 +1,4 @@
-const firstName = document.getElementById("first-name");
+/*const firstName = document.getElementById("first-name");
 const lastName = document.getElementById("last-name");
 const email = document.getElementById("email");
 const phone = document.getElementById("phone-number");
@@ -222,4 +222,45 @@ form.addEventListener('submit',function(e)
 	}
 	
 
+});*/
+
+
+$(document).ready(function() {
+	$("#form").submit(function(e) {
+			var valid = false;
+			
+			let fname = $("#first-name").val();
+			if(fname == '' || fname == null)
+			{
+				valid = false;
+				$("#fname-error").text("*first name field is required");
+			}
+			else
+			{
+				$("#fname-error").text("");
+			}
+
+
+			let lname = $("#last-name").val();			
+			if(lname == '' || lname == null)
+			{
+				valid = false;
+				$("#lname-error").text("*first name field is required");
+			}
+			else
+			{
+				$("#lname-error").text("");
+			}
+
+
+			window.scrollTo(0,0);
+			if(!valid)
+			{	
+				e.preventDefault();
+			}
+			else
+			{
+				alert("Form is valid");	
+			}
+	});
 });
