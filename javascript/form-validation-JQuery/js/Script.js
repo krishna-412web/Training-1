@@ -226,10 +226,18 @@ form.addEventListener('submit',function(e)
 
 
 $(document).ready(function() {
-	$("#form").submit(function(e) {
+	$("form").submit(function(e) {
 			var valid = false;
+			var email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]){2,4}$/;
+			var pass_check = /^([A-Za-z0-9!@#$%^&*()_+-]{8,})$/;
+			var phone_check = /^([0-9]{10})$/;
+			let b1=0;
+			let b2=0;
+			let b3=0;
 			
 			let fname = $("#first-name").val();
+			let lname = $("#last-name").val();
+
 			if(fname == '' || fname == null)
 			{
 				valid = false;
@@ -240,8 +248,7 @@ $(document).ready(function() {
 				$("#fname-error").text("");
 			}
 
-
-			let lname = $("#last-name").val();			
+			
 			if(lname == '' || lname == null)
 			{
 				valid = false;
@@ -253,6 +260,38 @@ $(document).ready(function() {
 			}
 
 
+			if(!$("#email").val().match(email_check))
+			{
+				valid = false;
+				$("#mail-error").text("*Email format not correct/empty field");
+			}
+			else
+			{
+				$("#mail-error").text("");
+			}
+
+
+			if(!$("#phone-number").val().match(phone_check))
+			{
+				valid = false;
+				$("#num-error").text("*Phone no should be 10 characters");
+			}
+			else
+			{
+				$("#num-error").text("");
+			}
+
+	
+			if(!$("#new-password").val().match(pass_check))
+			{
+				valid = false;
+				$("#pass-error").html("*Password should have atleast 8 characters<br>alphabets, numbers and !@#$%^&*()_+-");
+			}
+			else
+			{
+				$("#pass-error").html("");
+			}
+	
 			window.scrollTo(0,0);
 			if(!valid)
 			{	
