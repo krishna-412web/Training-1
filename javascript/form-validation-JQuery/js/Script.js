@@ -11,8 +11,6 @@ $(document).ready(function() {
 		if(id=="email") { c1=0; }
 		else if(id=="phone-number") {c1=1;}
 		else { c1=2;}
-		console.log();
-
 		if(!value.match(check_list[c1]))
 		{	
 			if(c1 == 0){ 
@@ -35,6 +33,8 @@ $(document).ready(function() {
 		
 				
 	});
+
+
 	$("form").on('submit',function(e) {
 
 			var valid = true;
