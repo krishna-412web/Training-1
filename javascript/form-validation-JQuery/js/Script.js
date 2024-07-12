@@ -1,5 +1,42 @@
 $(document).ready(function() {
-	$("form").submit(function(e) {
+
+	$(".check").on("input",function(e) {
+		var check_list=[/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]){2,4}$/,/^([0-9]{10})$/,/^([A-Za-z0-9!@#$%^&*()_+-]{8,})$/];
+		var error_id=["mail-error","num-error","pass-error"];
+		var id = $(this).attr("id");
+		var value = $("#"+id).val();
+		var c1;
+		var text;
+
+		if(id=="email") { c1=0; }
+		else if(id=="phone-number") {c1=1;}
+		else { c1=2;}
+		console.log();
+
+		if(!value.match(check_list[c1]))
+		{	
+			if(c1 == 0){ 
+					text = "*Email format not correct/empty field"; 
+			}
+			else if(c1 == 1){
+					text = "*Phone no should be 10 characters"; 
+			}
+			else{
+					text = "*Password should have atleast 8 characters<br>alphabets, numbers and !@#$%^&*()_+-"; 		
+			}
+			$("#"+error_id[c1]).html(text);
+			$("#"+error_id[c1]).css("color","red");
+		}
+		else 
+		{
+			$("#"+error_id[c1]).html("This field is valid");
+			$("#"+error_id[c1]).css("color","white");
+		}
+		
+				
+	});
+	$("form").on('submit',function(e) {
+
 			var valid = true;
 			var email_check = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]){2,4}$/;
 			var pass_check = /^([A-Za-z0-9!@#$%^&*()_+-]{8,})$/;
@@ -17,6 +54,7 @@ $(document).ready(function() {
 			let occup= $("#referrer").val();
 			let bio= $("#bio").val();
 			let terms= $("input[name='terms-and-conditions']");
+			
 
 			if(fname == '' || fname == null)
 			{
@@ -25,14 +63,14 @@ $(document).ready(function() {
 			}
 			else
 			{
-				$("#fname-error").text("");
+				$("#fname-error").text("") ;
 			}
 
 			
 			if(lname == '' || lname == null)
 			{
 				valid = false;
-				$("#lname-error").text("*first name field is required");
+				$("#lname-error").text("*last name field is required");
 			}
 			else
 			{
@@ -154,7 +192,6 @@ $(document).ready(function() {
 			{
 				$("#terms-error").text("");
 			}
-
 			window.scrollTo(0,0);
 			if(!valid)
 			{	
