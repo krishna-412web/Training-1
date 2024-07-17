@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset='utf-8'/>
+    		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    		<title>Registration Form</title>
+		<style>
+			body {font-family: Arial;}
+
+			.tab {
+  				overflow: hidden;
+  				border: 0.5vw solid #ccc;
+  				background-color: #f1f1f1;
+			}
+
+			.tab button {
+ 				background-color: inherit;
+  				float: left;
+  				border: none;
+  				outline: none;
+  				cursor: pointer;
+  				padding: 1.5vh 2vw;
+  				transition: 0.3s;
+ 				font-size: 17px;
+			}
+
+			.tab button:hover {
+  				background-color: #ddd;
+			}
+
+			.tab button.active {
+ 				background-color: #ccc;
+			}
+
+			.active {
+ 				background-color: #ccc;
+			}
+
+			.tabcontent {
+  				display: none;
+  				padding: 1vh 2vw;
+  				border: 0.5vw solid #ccc;
+ 				border-top: none;
+			}
+			#b4{
+				float : right;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h2>jQuery Task1-Tabs</h2>
+
+		<div class="tab">
+   			<button class="tablinks" id="b1" name="london">London</button>
+  			<button class="tablinks" id="b2" name="paris">Paris</button>
+ 			<button class="tablinks" id="b3" name="tokyo">Tokyo</button>
+			<button class="tablinks" id="b4">x</button>
+		</div>
+
+		<div id="london" class="tabcontent">
+  			<h3>London</h3>
+  			<p>London is the capital city of England.</p>
+		</div>
+
+		<div id="paris" class="tabcontent">
+  			<h3>Paris</h3>
+  			<p>Paris is the capital of France.</p> 
+		</div>
+
+		<div id="tokyo" class="tabcontent">
+  			<h3>Tokyo</h3>
+  			<p>Tokyo is the capital of Japan.</p>
+		</div>
+		<script src="./js/jQuery.js"></script>
+		<script src="./js/script.js"></script>   
+	</body>
+</html> 
