@@ -1,10 +1,10 @@
 $(document).ready(function (){
 
-	$("button").click(function(){
-		$("button").not(this).removeClass("active");
-		$(this).addClass("active");
-		$("#"+$(this).attr("name")).toggle("slow");	
+	$("#datetext").click(function(){
+		$("#pop-up").toggle();	
 	});
-
+	$("#datebutton").click(function (){
+		$("#pop-up").toggle();
+	});
 
 });
