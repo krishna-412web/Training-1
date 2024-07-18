@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset='utf-8'/>
-    <title>Simple jQuery Datepicker</title>
-    <style>
-	#pop-up {
-		height:30vh;
-		width: 25vw;
-		background-color: #e7e9ea;
-		display: none;
-	}
-    </style>
-</head>
-<body>
-    <div class="datepicker-container">
-	<h2>Enter Date:</h2>
-        <input type="text" name="date" id="datetext" placeholder="mm/dd/yyyy">
-	<button id="datebutton">...</button>
-	<div id="pop-up"></div>
-    </div>
+	<head>
+  		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<title>jQuery UI Datepicker - Default functionality</title>
+  		<link rel="stylesheet" href="./assets/jquery-ui-themes/themes/base/jquery-ui.css">
+	</head>
+	<body>
+ 
+		<form action="" method="post"> 
+			<label for="datepicker">Enter Date: <input type="text" id="datepicker"  placeholder="mm/dd/yyyy"></label>
+		</form>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./js/script.js"></script>
-</body>
+		<script src="./js/jquery.js"></script>
+		<script src="./assets/jquery-ui/jquery-ui.js"></script>
+		<script>
+  			$(document).ready( function() {
+   				$( "#datepicker" ).datepicker();
+ 			} );
+  		</script>
+ 
+	</body>
 </html>

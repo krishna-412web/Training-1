@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+  		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<title>jQuery UI Datepicker - Default functionality</title>
+  		<link rel="stylesheet" href="./assets/jquery-ui-themes/themes/base/jquery-ui.css">
+		<link rel="stylesheet" href="./assets/datatables/datatables.css"  >
+	</head>
+	<body> 
+		<h2>DataTables</h2>
+		<table id="myTable">
+			<thead>
+				<tr>
+					<td>Employee ID</td>
+					<td>Name</td>
+					<td>Email</td>
+					<td>Telephone</td>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Arthur C Clark</td>
+					<td>cclark@ahrcl.org</td>
+					<td/>751-121-8124</td>
+				</tr>
+			
+				<tr>
+					<td>2</td>
+					<td>Steve Shirley</td>
+					<td>sshirle@yestev.co</td>
+					<td>743-121-8124</td>
+				</tr>
+
+				<tr>
+					<td>3</td>
+					<td>James Gosling</td>
+					<td>jgosl@gosl.edu</td>
+					<td>651-821-1256</td>
+				</tr>
+
+				<tr>
+					<td>4</td>
+					<td>Vint Cerf</td>
+					<td>vcer@internet.com</td>
+					<td>751-121-8124</td>
+				</tr>
+
+				<tr>
+					<td>5</td>
+					<td>Bill Joy</td>
+					<td>bjoy@sun.com</td>
+					<td>871-121-8124</td>
+				</tr>
+
+				<tr>
+					<td>6</td>
+					<td>Grace Hopper</td>
+					<td>ghopper@cobol.com</td>
+					<td>751-121-1234</td>
+				</tr>
+
+				<tr>
+					<td>7</td>
+					<td>Larry Elison</td>
+					<td>leli@oracle.com</td>
+					<td>561-121-8124</td>
+				</tr>
+
+				<tr>
+					<td>8</td>
+					<td>David Powers</td>
+					<td>dpowers@phpfriends.com</td>
+					<td>734-121-8124</td>
+				</tr>
+				<tr>
+					<td>9</td>
+					<td>Isha Barragan</td>
+					<td>isha@behstant.com</td>
+					<td>751-121-8124</td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>Albert Einstein</td>
+					<td>albert@emac.com</td>
+					<td>841-121-8124</td>
+				</tr>
+			</tbody>
+
+		</table>
+
+		<script src="./js/jquery.js"></script>
+		<script src="./assets/datatables/datatables.js"></script>
+		<script src="./assets/jquery-ui/jquery-ui.js"></script>
+		<script>
+  			$(document).ready( function() {
+   				$( "#myTable" ).DataTable();
+ 			} );
+  		</script>
+	</body>
+</html>
