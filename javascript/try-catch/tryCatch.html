@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineer Portfolio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+
+        .container h2 {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .container p {
+            font-size: 1em;
+            color: #555;
+        }
+
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+
+            nav ul li {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .container img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .container h2 {
+                font-size: 1.2em;
+            }
+
+            .container p {
+                font-size: 0.9em;
+            }
+        }
+
+
+        @media (min-width: 601px) and (max-width: 1024px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul li {
+                margin: 0 5px;
+            }
+
+            .container img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .container h2 {
+                font-size: 1.3em;
+            }
+
+            .container p {
+                font-size: 0.95em;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            nav ul li {
+                margin: 0 15px;
+            }
+
+            .container img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .container h2 {
+                font-size: 1.5em;
+            }
+
+            .container p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>John Doe</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Software Engineer</h2>
+        <p>Passionate about developing innovative programs that expedite the efficiency and effectiveness of organizational success. Well-versed in technology and writing code to create systems that are reliable and user-friendly.</p>
+    </div>
+</body>
+</html>
