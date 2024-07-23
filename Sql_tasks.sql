@@ -25,8 +25,8 @@ SELECT * FROM EMPLOYEES WHERE emp_name LIKE '%AR%';
 SELECT * FROM EMPLOYEES WHERE job_name NOT IN("PRESIDENT","MANAGER");
 SELECT DISTINCT job_name,
 	CASE 
-		WHEN job_name IN("PRESIDENT","MANAGER") THEN "Management-Level"
-		WHEN job_name IN("ANALYST","CLERK","SALESMAN") THEN "Employee-level"
+		WHEN job_name IN("PRESIDENT","MANAGER","ANALYST") THEN "Management-Level"
+		WHEN job_name IN("CLERK","SALESMAN") THEN "Employee-level"
 	END as Level
     FROM Employees;
 /*UPDATE EMPLOYEES 
