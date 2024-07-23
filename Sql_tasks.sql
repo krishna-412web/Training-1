@@ -18,7 +18,7 @@ SELECT * FROM EMPLOYEES WHERE job_name NOT IN("PRESIDENT","MANAGER") ORDER BY sa
 SELECT MAX(SALARY) FROM EMPLOYEES;
 SELECT job_name,AVG(salary),AVG(salary+commission) FROM EMPLOYEES GROUP BY job_name;
 SELECT emp_id,emp_name,e.dep_id,dep_name,dep_location FROM EMPLOYEES e,DEPARTMENT d WHERE e.dep_id=d.dep_id AND d.dep_id IN(1001,2001);
-SELECT manager_id,COUNT(manager_id) FROM EMPLOYEES GROUP BY manager_id ORDER BY manager_id;
+SELECT manager_id,COUNT(manager_id) AS count FROM EMPLOYEES GROUP BY manager_id HAVING count>0 ORDER BY manager_id;
 SELECT dep_id,COUNT(dep_id) FROM EMPLOYEES GROUP BY dep_id HAVING COUNT(*)>2;
 SELECT * FROM EMPLOYEES WHERE emp_name LIKE '%AR%';
 -- added workbench
