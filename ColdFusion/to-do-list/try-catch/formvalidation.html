@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Element Example</title>
+</head>
+<body>
+    <div id="container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Create a new button element
+            const button = document.createElement('button');
+
+            // Set the button's text content
+            button.textContent = 'Click Me';
+
+            // Set an attribute (e.g., id)
+            button.setAttribute('id', 'myButton');
+
+            // Add an event listener to the button
+            button.addEventListener('click', () => {
+                alert('Button was clicked!');
+            });
+
+            // Find the container div and append the button to it
+            const container = document.getElementById('container');
+            container.appendChild(button);
+        });
+    </script>
+</body>
+</html>

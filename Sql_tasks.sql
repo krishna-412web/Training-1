@@ -35,3 +35,6 @@ WHERE job_name="ANALYST";*/
 SELECT * FROM EMPLOYEES;
 SELECT * FROM DEPARTMENT;
 SELECT * FROM salary_grade;
+SELECT curdate();
+TRUNCATE table2;
+-- SELECT emp_id,emp_name,job_name INTO table2(emp_id,emp_name,job_name) FROM employees; 
