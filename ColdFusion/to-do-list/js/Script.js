@@ -1,35 +1,38 @@
 let list = document.getElementById("anand");
+
 let input = document.getElementById("add-new");
+
+empty = () => { document.getElementById("add-new").value=''; }
 
 let form = document.getElementById("todo-input");
 
 let i=0;
 let id=0;
 
-function change(event) {
+change = (event) => {
 	let c = event.target;
 	c.classList.toggle('bg-success'); 
 	c.classList.toggle('bg-light'); 
 	save();
 }
 
-function dlt(event) {
+dlt = (event) => {
 	let d = event.target.parentElement;
 	d.remove(); 
 	save();
 }
 
-function save() {
+save= () => {
 	let t = list.innerHTML;
 	localStorage.setItem("save",t);
 }
 
-function retreive(){
+retreive = () => {
 	let data = localStorage.getItem("save");
 	list.innerHTML = data;
 }
 
-function NewLi(){
+NewLi = () => {
 	const n = document.createElement("LI");
 	const value = input.value;
 	//alert(value);
@@ -49,7 +52,8 @@ form.addEventListener('submit',function(e)
 {		
 		e.preventDefault();
 		NewLi();
-		save();		
+		save();
+		empty();		
 });
 
 window.onload = retreive();
