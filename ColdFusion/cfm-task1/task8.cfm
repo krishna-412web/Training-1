@@ -1,4 +1,4 @@
-<cfset session.s = StructNew()>
+<cfset session.s1 = StructNew()>
 
 
 <cfapplication
@@ -21,11 +21,11 @@
 
 <cfif NOT isNull(form.submit)>
 	
-	<cfif StructKeyExists(session.s,"#form.keys#")>
+	<cfif StructKeyExists(session.s1,"#form.keys#")>
 		alert("Key Already Exists!!");
 	<cfelse>
-		<cfset session.s["#form.keys#"]=#form.value# >
+		<cfset session.s1["#form.keys#"]=#form.value# >
 	</cfif>
 
-	<cfdump var="#session.s#">
+	<cfdump var="#session.s1#">
 </cfif>
