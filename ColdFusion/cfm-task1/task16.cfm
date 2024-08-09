@@ -1,26 +1,16 @@
-<cfset info=QueryNew("id,name,email","Integer,Varchar,Varchar",
-	[ [1,"John Doe","johnDoe@gmail.com"],
-	  [2,"Jane Smith","janeSmith@gmail.com"],
-	  [3,"Robin Smith","robe@gmail.com"]
-	])>
-
 <cfoutput>
-	<style>
-		th,td { padding: 5px;
-		}
-	</style>
-	<table border="1px solid black">
+<style>
+	th {
+		padding: 10px;
+	}
+</style>
+<table>
+	<cfloop from="1" to="3" index="i">
 		<tr>
-			<th>ID</th>
-			<th>NAME</th>
-			<th>EMAIL</th>
+		<cfloop from="0" to="6" step="3" index="j">
+			<th>#i+j#</th>
+		</cfloop>
 		</tr>
-		<cfloop query="info">
-			<tr>
-				<td>#id#</td>
-				<td>#name#</td>
-				<td>#email#</td>
-			</tr>
-		</cfloop> 
-	</table>
+	</cfloop>
+</table>
 </cfoutput>

@@ -1,16 +1,52 @@
-<cfapplication name="COOKIE TASK"  setClientCookies="yes">
+<cfoutput>
+	<cfform action="" method="post" id="form1">
+		<div>
+			<label for="num">Enter Number:</label>
+			<cfinput type="text" id="num" name="num" message="*this field is required" required>
+		</div>
+		<input type="submit" name="submit" value="submit">
+	</cfform>
+	<script>
+		let form=document.getElementById("form1");
+		let number=document.getElementById("num");
+		form.addEventListener("submit", (event) => {
+			let valid = true;
+			if( isNaN(num.value))
+			{
+				valid = false;
+				alert("*only numbers are allowed");
+				number.value="";
+			}
+			
+			if(!valid)
+				event.preventDefault();
+			else
+				alert("!!FORM SUBMITTED!!")
+			
+		})
+	</script>
+</cfoutput>
 
-<cfform id=form>
-<cfinput name="submit" type="submit">
-</cfform>
+<cfparam name="form.submit" default="">
+<cfparam name="form.num" default="0">
 
 <cfif NOT isNull(form.submit)>
-	<cfif structKeyExists(Cookie,"count")>
-		<cfset cookie.count=cookie.count+1>
-	<cfelse>
-		<cfcookie name="count" value="0"  expires=#CreateTimeSpan(0,0,2,0)# >
-		<cfset cookie.count=1>
-	</cfif>
-	<cfoutput>Visited=#cookie.count#</cfoutput>
-	<cfdump var="#cookie#">
+
+	<cfoutput>
+		<style>
+			.odd { color:blue; }
+			.even { color:green; }
+		</style>
+		<cfset n= form.num>
+
+		<cfloop from="1" to="#n#" index="i">
+			<cfif i mod 2 EQ 0>
+				<cfoutput><span class="even">#i#</span><br></cfoutput>
+			<cfelse>
+				<cfoutput><span class="odd">#i#</span><br></cfoutput>
+			</cfif>
+		</cfloop>
+ 
+	</cfoutput>
+	
 </cfif>

@@ -1,14 +1,20 @@
-<cfform action="" method="post">
-	<label for="str">Enter String:</label>
-	<input type="text" id="str" name="str" placeholder="A dog.">
-	<input type="submit" name="submit" value="submit"/>
-</cfform>
+<cffunction name="multiply" returnType="numeric">
+	<cfargument name="n1" type="numeric" default="1">
+	<cfargument name="n2" type="numeric" default="1">
+	<cfargument name="n3" type="numeric" default="1">
+	<cfargument name="n4" type="numeric" default="1">
+	<cfset var r= n1*n2*n3*n4>
+	<cfreturn r/>
+</cffunction>
 
-<cfset s="the quick brown fox jumps over the lazy dog">
+<cfset res=multiply(1,2)>
+<cfdump var="#res#">
+<cfoutput><br></cfoutput>
 
-<cfif NOT isNull(form.submit)>
-	
-	<cfset n=ListValueCountNoCase(s,form.str," ")>
-	<cfoutput>Found the key word entered in #n# times-#s#</cfoutput>
-</cfif>
+<cfset res=multiply(1,2,3)>
+<cfdump var="#res#">
+<cfoutput><br></cfoutput>
 
+<cfset res=multiply(1,2,3,4)>
+<cfdump var="#res#">
+<cfoutput><br></cfoutput>
