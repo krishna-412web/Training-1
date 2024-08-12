@@ -6,7 +6,7 @@
 
 <cfset s="the quick brown fox jumps over the lazy dog">
 
-<cfif NOT isNull(form.submit)>
+<cfif structKeyExists(form,"submit")>
 	
 	<cfset n=ListValueCountNoCase(s,form.str," ")>
 	<cfoutput>Found the key word entered in #n# times-#s#</cfoutput>

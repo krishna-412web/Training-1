@@ -1,8 +1,8 @@
-<cfform action="">
-<label for="num">Enter Number:</label>
-<cfinput type="text" name="num" id="num" required="yes" message="Enter Number:" placeholder="1to5">
-<cfinput type="submit" name="submit" required="yes" value="Submit">
-<input type="hidden" name="sub" value="1">
+<cfform action="" method="post">
+	<label for="num">Enter Number:</label>
+	<cfinput type="text" name="num" id="num" required="yes" message="Enter Number:" placeholder="1to5">
+	<cfinput type="submit" name="submit" required="yes" value="Submit">
+	<input type="hidden" name="sub" value="1">
 </cfform>
 
 <cfif NOT isNull(form.submit)>

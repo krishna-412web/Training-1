@@ -37,7 +37,7 @@
 	<input type="submit" name="submit" value="submit"/>
 </cfform>
 
-<cfif NOT isNull(form.submit)>
+<cfif structKeyExists(form,"submit")>
 	<cfif form.num GTE 1 AND form.num LTE 10>
 		<table border="2px solid black">
 			<tr>

@@ -4,9 +4,8 @@
 <cfset d = now().setDay(0)+DaysInMonth(now())>
 
 
-<cfoutput>#DateFormat(cdate,"dd-mm-yyyy")#<br></cfoutput>
-<cfoutput>#DateFormat(cdate,"mm")#<br></cfoutput>
-<cfoutput>#DateFormat(cdate,"mmmm")#<br></cfoutput>
+<cfoutput>#DateFormat(cdate,"dd-mm-yyyy")#<br>
+#DateFormat(cdate,"mm")#<br>#DateFormat(cdate,"mmmm")#<br></cfoutput>
 
 <cfloop from="#now()#" to="#now()-7#" step="#CreateTimeSpan(-1,0,0,0)#" index="n">
 	<cfset check=DateFormat(n,"dddd")>
