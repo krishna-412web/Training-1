@@ -1,0 +1,9 @@
+.hide{
+	visibility : hidden;
+}
+.colour{
+	color: red;
+}
+.show {
+	visibility: visible;
+}

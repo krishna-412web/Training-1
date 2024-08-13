@@ -2,19 +2,9 @@
 <html>
 	<head>
 		<title>Mypage</title>
+		<link rel="stylesheet" href="./css/styles.css">
 	</head>
 	<body>
-	<style>
-		.hide{
-			visibility : hidden;
-		}
-		.colour{
-			color: red;
-		}
-		.show {
-			visibility: visible;
-		}
-	</style>
 	<form action="" method="post" id="form1" enctype="multipart/form-data">
 		<div>
 			<label for="name">Birthday Baby Name:</label>

@@ -90,14 +90,3 @@
   	</body>
 </html>
 </cfoutput>
-
-
-<!---<cfif NOT isNull(form.submit)>
-	<cfset date=DateFormat(#form.doj#,"YYYY-MM-DD")>
-	<cfquery name="InsertData" datasource="test1">
-		INSERT INTO form_table(position,choice,doj,webSite,reume,salary,name,email,phoneNumber)
-		VALUES
-		("#form.position#","#form.choice#","#date#","#form.website#","#form.resume#","#form.salary#","#form.name#","#form.email#","#form.phoneNumber#");
-	</cfquery>
-	<cfdump var="#InsertData#">
-</cfif>--->

@@ -1,0 +1,10 @@
+.output{
+	width: 70%;
+	margin: 2vh auto;
+	background-color: green;
+	color : white;
+	border: 1px double black;
+	}
+.output h3{
+	text-align: center;
+	}

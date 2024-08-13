@@ -4,11 +4,8 @@
 	  [3,"Robin Smith","robe@gmail.com"]
 	])>
 
+
 <cfoutput>
-	<style>
-		th,td { padding: 5px;
-		}
-	</style>
 	<table border="1px solid black">
 		<tr>
 			<th>ID</th>
