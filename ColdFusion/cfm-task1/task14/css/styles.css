@@ -1,0 +1,10 @@
+img {
+	height: 10vh;
+	width: 5vw;
+}
+/*Special Submit Button*/
+#sps {
+	background-color: #ffffff;
+	border:0;
+	outline: 0;
+}

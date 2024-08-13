@@ -1,0 +1,30 @@
+<!---<cfquery name="setData" datasource="test1">--->
+<!---	CREATE TABLE NAMES(firstname VARCHAR(15),secondname VARCHAR(15));--->
+<!---</cfquery>--->
+
+<!---<cfquery name="alterTable" datasource="test1">
+	ALTER TABLE NAMES CHANGE secondname lastname VARCHAR(15);
+</cfquery>--->
+
+<!---<cfquery name="InsertData" datasource="test1">
+	INSERT INTO NAMES(firstname,lastname) 
+	VALUES
+	("Krishna","Renjith"),
+	("Jake","Perellta"),
+	("Amy","Santiago"),
+	("Terry","Jeffords"),
+	("Raymond","Holt"),
+	("Gina","Tribbiani"),
+	("Joey","Tribbiani"),
+	("Charles","Xavier"),
+	("Jeralt","Peter"),
+	("Giddon","Holtsting");
+
+</cfquery>--->
+
+
+<!---<cfloop query="showData">
+	<cfoutput>#firstname &" "& lastname # <br></cfoutput>
+</cfloop>--->
+
+<!---****************************************************************************************** --->
