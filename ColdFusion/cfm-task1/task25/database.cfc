@@ -6,7 +6,7 @@
 		<cfargument name="s" type="string">
 		<cfset word=arguments.s>
 	</cffunction>
-	
+	 
 	<cffunction name="insert">
 		<cfset delimitedPara = REReplace(word, "[^a-zA-Z0-9]", ",", "all")>
 		<cfloop list="#delimitedPara#" item="i">

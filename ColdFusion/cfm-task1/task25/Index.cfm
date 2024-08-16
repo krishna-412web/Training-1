@@ -7,12 +7,13 @@
     		<title>task25</title>
 	</head>
 	<body>
+		<link rel="stylesheet" href="./css/styles.css">
     		<form action="" method="post">
 			<div>
-				Enter the text:
+				<label for="text">Enter the text:</label>
 				<textarea id="text" name="text"></textarea>
-				<input type="submit" name="submit"/>
 			</div>
+			<input type="submit" name="submit"/>
 		</form>
 	</body>
 </html>
@@ -22,7 +23,11 @@
 	<cfset obj.init(form.text)>
 	<cfset obj.truncate()>
 	<cfset obj.insert()>
-	<!---<cfinclude template="index2.cfm">--->
-	<!---<cfoutput query="select1">-#word# (#count#)<br></cfoutput>--->
+	
 	<cfset obj1=createObject("component","tagCloud")>
+	<cfset obj1.init()>
+	<cfset s=obj1.get()>
+	<cfset d=obj1.process(s)>
+	<cfset obj1.output(d)>
+	<script src="./js/script.js"></script>
 </cfif>
