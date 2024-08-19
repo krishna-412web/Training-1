@@ -1,3 +1,4 @@
+<cfinclude template="result20.cfc">
 <!DOCTYPE html>
 <html lang="en">
  	<head>
@@ -23,7 +24,6 @@
 			</div>
 			<input type="submit" name="submit">
 		</form>
-		<cfinclude template="result20.cfc">
      	</body>
 </html>
 

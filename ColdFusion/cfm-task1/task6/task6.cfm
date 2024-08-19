@@ -1,3 +1,4 @@
+<cfinclude template="result6.cfm">
 <!DOCTYPE html>
 <html lang="en">
   	<head>
@@ -18,7 +19,6 @@
 			</div>
 			<input type="submit" id="submit" name="submit" value="submit" required>
 		</form>
-		<cfinclude template="result6.cfm">
 	</body>
 </html>
 

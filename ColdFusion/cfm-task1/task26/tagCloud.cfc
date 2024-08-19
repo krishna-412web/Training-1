@@ -3,29 +3,40 @@
 	<cfproperty name="s" type="string">
 	
 	<cfset c1=0>
-	<cfinclude template="Index2.cfm">
-
 	<cffunction name="init" access="public">
-		<cfset s= SerializeJSON(select1,"struct")>
-	</cffunction>
+		<cfquery name="select1" datasource="test1">
+		SELECT 
+			word,
+			COUNT(word) AS count
+		FROM 
+			paragraph 
+		group by 
+			word 
+		HAVING 
+			length(word)>=3 
+		ORDER BY 
+				count(word) DESC, length(word) DESC, word ASC;	
+		</cfquery>
 
-	
-	<cffunction name="get" returnType="string">
+		<cfset s= SerializeJSON(select1,"struct")>
 		<cfreturn s>
 	</cffunction>
 
+	
+
+
 	<cffunction name="process" returnType="array">
 		<cfargument name="text" type="string">
-		<cfset d= deSerializeJSON(text)>
-		<cfreturn d>
+		<cfset local.d= deSerializeJSON(text)>
+		<cfreturn local.d>
 	</cffunction>	
 
 	<cffunction name="output">	
 		<cfargument name="d" type="array">
 		<cfoutput>	
-			<cfloop array="#d#" index="i">
+			<cfloop array="#arguments.d#" index="local.i">
 				<cfset c1=c1+1>
-				-<span class="output" id="n#c1#" style="font-size:#i.count#em">#i.word# (#i.count#)</span><br>
+				-<span class="output" id="n#c1#" style="font-size:#local.i.count#em">#local.i.word# (#local.i.count#)</span><br>
 			</cfloop>
 			<script src="./js/script.js"></script>	
 		</cfoutput>

@@ -9,6 +9,7 @@
 	</head>
 	<body>
 		<link rel="stylesheet" href="./css/styles.css">
+		<script src="./js/script.js"></script>
     		<form action="" method="post" enctype="multipart/form-data">
 			<div>
 				<label for="text">Enter text file:</label>
@@ -29,15 +30,12 @@
 		<cffile action="read" file="#uploadDir#/#r.SERVERFILE#" variable="s">
 		<cfset obj=createObject("component","database")>
 		<cfset obj.init(s)>
-		<cfset obj.truncate()>
 		<cfset obj.insert()>
 	
 		<cfset obj1=createObject("component","tagCloud")>
-		<cfset obj1.init()>
-		<cfset s=obj1.get()>
+		<cfset s = obj1.init()>
 		<cfset d=obj1.process(s)>
 		<cfset obj1.output(d)>
-		<script src="./js/script.js"></script>
 	<cfelse>
 		*text files are only allowed
 	</cfif>		
