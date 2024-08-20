@@ -19,15 +19,10 @@
 </html>
 
 <cfif structKeyExists(form,"submit")>	
-	<cfset obj=createObject("component","database")>
+	<cfset obj=createObject("component","tagCloud")>
 	<cfset obj.init(form.text)>
-	<cfset obj.truncate()>
 	<cfset obj.insert()>
-	
-	<cfset obj1=createObject("component","tagCloud")>
-	<cfset obj1.init()>
-	<cfset s=obj1.get()>
-	<cfset d=obj1.process(s)>
-	<cfset obj1.output(d)>
-	<script src="./js/script.js"></script>
+	<cfset s=obj.get()>
+	<cfset d=obj.process(s)>
+	<cfset obj.output(d)>
 </cfif>
