@@ -1,3 +1,4 @@
+<cfinclude template="logic.cfm">
 <!DOCTYPE html>
 <html lang="en">
   	<head>
@@ -23,7 +24,6 @@
 			</div>	
 			<input type="submit" name="submit" value="submit"/>
 		</form>
-		<cfinclude template="logic.cfm">
  	 </body>
 </html>
 

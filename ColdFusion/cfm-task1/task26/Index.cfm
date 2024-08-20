@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -9,7 +8,6 @@
 	</head>
 	<body>
 		<link rel="stylesheet" href="./css/styles.css">
-		<script src="./js/script.js"></script>
     		<form action="" method="post" enctype="multipart/form-data">
 			<div>
 				<label for="text">Enter text file:</label>
@@ -27,15 +25,13 @@
 	<cffile action="upload" fileField="textFile" destination="#uploadDir#" nameConflict="makeUnique" result="r">
 	<cfif r.SERVERFILEEXT EQ "txt">
 		File uploaded successsfully!!<br>
-		<cffile action="read" file="#uploadDir#/#r.SERVERFILE#" variable="s">
-		<cfset obj=createObject("component","database")>
-		<cfset obj.init(s)>
+		<cffile action="read" file="#uploadDir#/#r.SERVERFILE#" variable="serverFile">
+		<cfset obj=createObject("component","tagCloud")>
+		<cfset obj.init(serverFile)>
 		<cfset obj.insert()>
-	
-		<cfset obj1=createObject("component","tagCloud")>
-		<cfset s = obj1.init()>
-		<cfset d=obj1.process(s)>
-		<cfset obj1.output(d)>
+		<cfset s = obj.select()>
+		<cfset d=obj.process(s)>
+		<cfset obj.output(d)>
 	<cfelse>
 		*text files are only allowed
 	</cfif>		

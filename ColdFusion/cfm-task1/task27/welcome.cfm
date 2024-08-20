@@ -1,4 +1,4 @@
-<cfif structKeyExists(session,"result")>
+<cfif structKeyExists(session,"result") AND session.result EQ 1>
 	<cfif structKeyExists(form,"submit")>
 		session.result=0;
 		<cflocation url="index.cfm" addToken="no" statusCode="302">

@@ -1,4 +1,4 @@
-<cfinclude template="result20.cfc">
+<cfinclude template="result20.cfm">
 <!DOCTYPE html>
 <html lang="en">
  	<head>

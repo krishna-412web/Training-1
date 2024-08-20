@@ -20,7 +20,7 @@
 		<cfoutput><br></cfoutput>
 		<cfoutput>Row :#form.num# <br> FirstName:#firstName#</cfoutput>
 	<cfelse>
-			<cfoutput>ENTER NUMBERS FROM 1 TO 10</cfoutput>
+		<cfoutput>ENTER NUMBERS FROM 1 TO 10</cfoutput>
 	</cfif>
 </cfif>
 

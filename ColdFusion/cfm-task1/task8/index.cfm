@@ -1,25 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-  	<head>
-    		<meta charset="UTF-8">
-    		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-    		<title>task8</title>
-  	</head>
-  	<body>
-		<form action="" method="post" id="myForm">
-			<div>
-				<label for="key">Enter Key:</label>
-				<input type="text" name="keys" id="key" placeholder="key" required>
-			</div>
-			<div>
-				<label for="value">Enter Value:</label>
-				<input type="text" name="value" id="value" placeholder="value" required>
-			</div>
-			<input type="submit" id="submit" name="submit" value="submit" required>
-		</form>
- 	 </body>
-</html>
+<cfset session.s1 = StructNew()>
 
 
+<cfapplication
+	name="CFCTASK7"
+	sessionManagement="yes"
+	sessionTimeOut=#CreateTimeSpan(0,0,2,0)# >
 
+<cfinclude template="Index1.cfm">
+
+<cfoutput>
+<cfif structKeyExists(form,"submit")>
+		<cfif StructKeyExists(session.s1,"#form.keys#")>
+			#form.keys# already present.Cannot add again.
+		<cfelse>
+			<cfset session.s1["#form.keys#"]=#form.value# >
+		</cfif>
+		<cfdump var="#session.s1#">
+	</cfif>
+</cfoutput>

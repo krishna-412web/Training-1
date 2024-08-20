@@ -4,13 +4,13 @@
     		<meta charset="UTF-8">
     		<meta name="viewport" content="width=device-width, initial-scale=1.0">
     		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-    		<title>task7</title>
+    		<title>task8</title>
   	</head>
   	<body>
-    		<form action="" method="post" id="myForm">
+		<form action="" method="post" id="myForm">
 			<div>
 				<label for="key">Enter Key:</label>
-				<input type="text" name="keys" id="keys" placeholder="key" required>
+				<input type="text" name="keys" id="key" placeholder="key" required>
 			</div>
 			<div>
 				<label for="value">Enter Value:</label>
@@ -20,3 +20,6 @@
 		</form>
  	 </body>
 </html>
+
+
+

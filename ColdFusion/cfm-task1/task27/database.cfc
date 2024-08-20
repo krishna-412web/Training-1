@@ -47,7 +47,9 @@
 		<cfquery datasource="test1" name="createUser" result="r">
 			INSERT INTO 
 				USERS(username,hashedPassword,salt) 
-			VALUES ("#userName#","#hashedPassWord#","#salt#");
+			VALUES (<cfqueryparam value="#userName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#hashedPassWord#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#salt#" cfsqltype="cf_sql_varchar">);
 		</cfquery>
 	</cffunction>
 
