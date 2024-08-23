@@ -1,4 +1,4 @@
-<cfset session.s1 = StructNew()>
+<cfset session.s1 = []>
 
 
 <cfapplication

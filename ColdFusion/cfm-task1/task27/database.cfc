@@ -17,15 +17,13 @@
 		</cfquery>
 		<cfif r.RECORDCOUNT GT 0>
 			<cfoutput query="get">
-				<cfset local.hashedPassword="#hashedPassword#">
-				<cfset local.salt="#salt#">
+				<cfset local.checkPassword=HashPassword(arguments.passWord,#salt#)>
+				<cfif local.checkPassword EQ local.hashedPassword>
+					<cfreturn 1 >
+				<cfelse>
+					<cfreturn 0 >
+				</cfif>	
 			</cfoutput>
-			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
-			<cfif local.checkPassword EQ local.hashedPassword>
-				<cfreturn 1 >
-			<cfelse>
-				<cfreturn 0 >
-			</cfif>	
 		<cfelse> 
 			<cfreturn 0 >
 		</cfif>
@@ -46,7 +44,11 @@
 		<cfset hashedPassword = HashPassword(arguments.passWord,local.salt)>
 		<cfquery datasource="test1" name="createUser" result="r">
 			INSERT INTO 
-				USERS(username,hashedPassword,salt) 
+				USERS(
+					username,
+					hashedPassword,
+					salt
+				) 
 			VALUES (<cfqueryparam value="#userName#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#hashedPassWord#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#salt#" cfsqltype="cf_sql_varchar">);

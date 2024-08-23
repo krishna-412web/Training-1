@@ -70,12 +70,41 @@
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
 		<cfquery name="local.getData" datasource="test1" result="r">
 			SELECT 
-				pagename,pagedescs
+				pageid,pagename,pagedescs
 			FROM
 				page;
 		</cfquery>
+		<cfset local.data1 = serializeJSON(local.getData)>
+		<cfset session.tmpData = deserializeJSON(local.data1)>
 		<cfreturn local.getData/>
 	</cffunction>
 
+	<cffunction name="viewdata" access="remote" returnFormat="JSON">
+		<cfargument name="id" type="string">
+		<cfset local.index = Val(id)>
+		<cfset path = expandPath("./output.cfm")>
+		<cffile action="write" file="#path#" output=""/>
+		<cffile action="write" file="#path#" output="
+			<cfoutput>
+				#session.tmpData.DATA[local.index][2]#<br>
+				#session.tmpData.DATA[local.index][3]#
+			</cfoutput>"/>
+		<cfreturn 1/>	
+	</cffunction>
+
+	<cffunction name="getid" access="remote" returnFormat="JSON">
+		<cfargument name="id" type="string">
+		<cfset session.id = arguments.id>
+		<cfreturn 1/>
+	</cffunction>	
+		
+	<cffunction name="updateData">
+		<cfargument name="pageId" type="number">
+		<cfargument name="pageName" type="string">
+		<cfargument name="pageDesc" type="string">
+		<cfquery name="update" datasource="test1">
+			UPDATE  SET `pagename` = 'MyName' WHERE (`pagename` = 'Krishna');
+		</cfquery>
+	</cffunction>
 
 </cfcomponent>

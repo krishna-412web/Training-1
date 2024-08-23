@@ -1,4 +1,3 @@
-
 <cfif structKeyExists(session,"result") AND session.result EQ 1>
 	<cfif structKeyExists(form,"submit")>
 		session.result=0;
@@ -23,9 +22,10 @@
 				<button type="button" name="add" id="add">add</button>
 	    			<input type="submit" name="submit" value="Logout">
 			</form>
-			<div id="pageDisplay"></div>
 			<script src="./js/jQuery.js"></script>
 			<script src="./js/script.js"></script>	
+			<div id="pageDisplay"></div>
+			<cfdump var="#session#">
 		</body>
 	</html>
 </cfoutput>
