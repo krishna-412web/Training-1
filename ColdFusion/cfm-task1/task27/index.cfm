@@ -5,7 +5,7 @@
 	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
 	<cfoutput>
 		<cfif session.result EQ 1>
-			<cflocation url="welcome.cfm" addToken="yes" statusCode="302">
+			<cflocation url="welcome.cfm" addToken="no" statusCode="302">
 		<cfelse>
 			Unauthorized!!
 		</cfif>

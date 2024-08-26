@@ -1,9 +1,6 @@
 <cfcomponent>
-	<cfproperty name="c1" type="number">
 	<cfproperty name="s" type="string">
 	<cfproperty name="word" type="string">
-	<cfproperty name="count" type="number">
-	<cfset c1=0>
 
 	<cffunction name="init" access="public">
 		<cfargument name="s" type="string">
@@ -46,10 +43,11 @@
 
 	<cffunction name="output">	
 		<cfargument name="d" type="array">
+		<cfset local.c1=0>
 		<cfoutput>	
 			<cfloop array="#arguments.d#" index="i">
 				<cfset c1=c1+1>
-				-<span class="output" id="n#c1#" style="font-size:#i.count#em">#i.word# (#i.count#)</span><br>
+				-<span class="output" id="n#local.c1#" style="font-size:#i.count#em">#i.word# (#i.count#)</span><br>
 			</cfloop>
 			<script src="./js/script.js"></script>	
 		</cfoutput>

@@ -1,17 +1,14 @@
 <cfcomponent>
-	<cfproperty name="c1" type="number">
 	<cfproperty name="local.s" type="string">
 	<cfproperty name="word" type="string">
-	<cfproperty name="count" type="number">
-	
-	<cfset c1=0>
+
 	<cffunction name="init" access="public">
 		<cfargument name="s" type="string">
 		<cfset word=arguments.s>
 	</cffunction>
 
 	<cffunction name="select" access="public">
-		<cfquery name="select1" datasource="test1">
+		<cfquery name="local.selectData" datasource="test1">
 			SELECT 
 				word,
 				COUNT(word) AS count
@@ -25,7 +22,7 @@
 				count(word) DESC, length(word) DESC, word ASC;	
 		</cfquery>
 
-		<cfset local.s= SerializeJSON(select1,"struct")>
+		<cfset local.s= SerializeJSON(local.selectData,"struct")>
 		<cfreturn local.s>
 	</cffunction>
 
@@ -52,10 +49,11 @@
 
 	<cffunction name="output">	
 		<cfargument name="d" type="array">
+		<cfset local.c1 = 0>
 		<cfoutput>	
 			<cfloop array="#arguments.d#" index="local.i">
-				<cfset c1=c1+1>
-				-<span class="output" id="n#c1#" style="font-size:#local.i.count#em">#local.i.word# (#local.i.count#)</span><br>
+				<cfset local.c1=c1+1>
+				-<span class="output" id="n#local.c1#" style="font-size:#local.i.count#em">#local.i.word# (#local.i.count#)</span><br>
 			</cfloop>
 			<script src="./js/script.js"></script>
 		</cfoutput>

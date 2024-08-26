@@ -7,7 +7,7 @@
 			FROM
 				subscribe
 			WHERE
-				emailId="#arguments.email#";
+				emailId = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar"> ;
 		</cfquery>
 		<cfif r.RECORDCOUNT GT 0>
 			<cfset local.result="exists">

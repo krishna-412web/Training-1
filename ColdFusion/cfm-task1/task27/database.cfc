@@ -2,23 +2,22 @@
 	<cfproperty name="userName" type="string">
 	<cfproperty name="hashedPassword" type="string">
 	<cfproperty name="salt" type="string">
-	<cfproperty name="flag" type="number">
 
 	<cffunction name="getInfo" access="public" returnType="string">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
-		<cfquery datasource="test1" name="get" result="r">
+		<cfquery datasource="test1" name="local.get" result="r">
 			SELECT 
 				hashedPassword,salt 
 			FROM 
 				users 
 			WHERE 
-				username="#arguments.userName#";
+				username= <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">;
 		</cfquery>
 		<cfif r.RECORDCOUNT GT 0>
 			<cfoutput query="get">
 				<cfset local.checkPassword=HashPassword(arguments.passWord,#salt#)>
-				<cfif local.checkPassword EQ local.hashedPassword>
+				<cfif local.checkPassword EQ #hashedPassword#>
 					<cfreturn 1 >
 				<cfelse>
 					<cfreturn 0 >
@@ -42,7 +41,7 @@
 		<cfargument name="passWord" type="string">
 		<cfset local.salt=generateSecretKey("AES")>
 		<cfset hashedPassword = HashPassword(arguments.passWord,local.salt)>
-		<cfquery datasource="test1" name="createUser" result="r">
+		<cfquery datasource="test1" name="local.createUser" result="r">
 			INSERT INTO 
 				USERS(
 					username,
