@@ -2,23 +2,23 @@
 	<cfproperty name="userName" type="string">
 	<cfproperty name="hashedPassword" type="string">
 	<cfproperty name="salt" type="string">
-	<cfproperty name="flag" type="number">
 
 	<cffunction name="getInfo" access="public" returnType="string">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
 		<cfquery datasource="test1" name="get" result="r">
 			SELECT 
-				pwd,salt 
+				pwd,salt,role 
 			FROM 
 				user 
 			WHERE 
-				username="#arguments.userName#";
+				username= <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">;
 		</cfquery>
 		<cfif r.RECORDCOUNT GT 0>
 			<cfoutput query="get">
 				<cfset local.hashedPassword="#pwd#">
 				<cfset local.salt="#salt#">
+				<cfset session.role="#role#">
 			</cfoutput>
 			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
 			<cfif local.checkPassword EQ local.hashedPassword>
@@ -99,12 +99,28 @@
 	</cffunction>	
 		
 	<cffunction name="updateData">
-		<cfargument name="pageId" type="number">
+		<cfargument name="pageId" type="string">
 		<cfargument name="pageName" type="string">
 		<cfargument name="pageDesc" type="string">
 		<cfquery name="update" datasource="test1">
-			UPDATE  SET `pagename` = 'MyName' WHERE (`pagename` = 'Krishna');
+			UPDATE 
+				page
+			SET 
+				pagename = <cfqueryparam value="#arguments.pageName#" cfsqltype="cf_sql_varchar">,
+				pagedescs= <cfqueryparam value="#arguments.pageDesc#" cfsqltype="cf_sql_longvarchar">
+			WHERE 
+				pageid = <cfqueryparam value="#arguments.pageId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
+		<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+	</cffunction>
+
+	<cffunction name="deletePage" access="remote" returnFormat="JSON">
+		<cfquery name="delete" datasource="test1" result="r">
+			DELETE FROM 
+				page	 
+			WHERE (pageid = <cfqueryparam value="#session.tmpData.DATA[session.id][1]#" cfsqltype="cf_sql_integer">);
+		</cfquery>
+		<cfreturn 1/>
 	</cffunction>
 
 </cfcomponent>

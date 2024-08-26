@@ -23,10 +23,8 @@
 	    			<input type="submit" name="submit" value="Logout">
 			</form>
 			<script src="./js/jQuery.js"></script>
-			<script src="./js/script.js"></script>	
+			<script src="./js/script1.js"></script>	
 			<div id="pageDisplay"></div>
 		</body>
 	</html>
 </cfoutput>
-
-

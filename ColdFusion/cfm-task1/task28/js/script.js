@@ -76,7 +76,31 @@ $(document).ready(() => {
 
 	$(document).on('click','.deletebtn', function(event) {
 		let parentId= $(event.target).parent().parent().attr('id');
-		alert(parentId);
+		$.ajax({
+			url: './database.cfc?method=getid',
+			type: 'POST',
+			data: { id: parentId },
+			success: function(response) 
+			{	if(response == 1)
+				{	
+					$.ajax({
+							url: './database.cfc?method=deletePage',
+							type: 'GET',
+							success: function(data) 
+							{
+								if(data == 1)
+								{
+									alert("page deleted successfully");
+								}	
+			
+							}
+		
+					});
+				}
+			}
+		
+		});
+		window.location.href= 'welcome.cfm';
 	});
 	
 

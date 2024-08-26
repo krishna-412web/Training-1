@@ -29,5 +29,5 @@
 	<cfset obj= createObject('component','database')>
 	<cfset local.out = obj.addPage(form.pagename,form.pagedesc)>
 	<cfset session.result = 1>
-	<cfoutput>#local.out# <br> <a href="welcome.cfm">Go to Welcome Page!!</a></cfoutput>
+	<cflocation url="welcome.cfm" addToken="no" statusCode="302">
 </cfif>

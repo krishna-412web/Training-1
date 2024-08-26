@@ -5,7 +5,11 @@
 	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
 	<cfoutput>
 		<cfif session.result EQ 1>
-			<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+			<cfif session.role EQ "admin" OR session.role EQ "editor" >
+				<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+			<cfelse>
+				<cflocation url="welcomeUser.cfm" addToken="no" statusCode="302">
+			</cfif>
 		<cfelse>
 			Unauthorized!!
 		</cfif>
@@ -18,7 +22,7 @@
     		<meta charset="UTF-8">
     		<meta name="viewport" content="width=device-width, initial-scale=1.0">
     		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-    		<title>task27</title>
+    		<title>task28</title>
 	</head>
 	<body>
     		<form action="" method="post" enctype="multipart/form-data">

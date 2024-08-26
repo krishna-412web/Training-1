@@ -1,10 +1,11 @@
 <cfif structKeyExists(session,"id")>
+	<cfset pageId = session.tmpData.DATA[session.id][1]>
 	<cfset pageName = session.tmpData.DATA[session.id][2]>
 	<cfset pageDesc = session.tmpData.DATA[session.id][3]>
 	<cfif structKeyExists(form,"submit")>
 		<cfif pageName NEQ form.newPageName OR pageDesc NEQ form.newPageDesc >
 			<cfset obj= createObject('component','database')>
-			<cfset obj.updateData(session.tmpData.DATA[session.id][1],form.newPageName,form.newPageDesc)>
+			<cfset obj.updateData(pageId,form.newPageName,form.newPageDesc)>
 		</cfif>
 	</cfif>
 </cfif>

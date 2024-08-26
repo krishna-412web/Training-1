@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head><title>CreateUser</title></head>
 <body>
