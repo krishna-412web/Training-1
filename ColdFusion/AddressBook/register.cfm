@@ -17,7 +17,7 @@
 		</nav>
 		<div class="container-fluid d-flex flex-column flex-start justify-content-center col-lg-4 col-sm-5 col-xs-5 mt-5">
 			<div>
-				<form class="d-flex flex-column justify-content-start bg-success border-primary rounded p-3 m-5 gap-3" action="" method="post">
+				<form class="login d-flex flex-column justify-content-start bg-primary border-primary rounded p-3 m-5 gap-3" action="" method="post">
 					<div class="form-floating">
 						<input class="form-control" type="text" id="name" name="name" placeholder="Username"/>
 						<label for="userName" class="form-label">Enter name:</label>
@@ -35,7 +35,7 @@
 						<input class="form-control" type="password" id="passWord" name="passWord" placeholder="Jk*#@12354"/>
 						<label class="form-label" for="passWord">Enter New Password:</label>
 					</div>
-					<input class="form-control btn btn-primary " type="submit" name="submit" value="Register" disabled/>
+					<input class="form-control btn btn-success " type="submit" name="submit" value="Register" disabled/>
 				</form>
 			</div>
 		</div>
