@@ -1,4 +1,4 @@
-<cfcomponent>
+ <cfcomponent>
 	<cfproperty name="userName" type="string">
 	<cfproperty name="hashedPassword" type="string">
 	<cfproperty name="salt" type="string">
@@ -6,20 +6,18 @@
 	<cffunction name="getInfo" access="public" returnType="string">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
-		<cfquery datasource="test1" name="get" result="r">
+		<cfquery datasource="AddressBook" name="local.get" result="r">
 			SELECT 
-				pwd,salt,role 
+				password,salt
 			FROM 
 				user 
 			WHERE 
 				username= <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">;
 		</cfquery>
+		<cfdump var="#get.password#">
 		<cfif r.RECORDCOUNT GT 0>
-			<cfoutput query="get">
-				<cfset local.hashedPassword="#pwd#">
-				<cfset local.salt="#salt#">
-				<cfset session.role="#role#">
-			</cfoutput>
+			<cfset local.hashedPassword=local.get.password>
+			<cfset local.salt=local.get.salt>
 			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
 			<cfif local.checkPassword EQ local.hashedPassword>
 				<cfreturn 1 >
@@ -46,15 +44,37 @@
 		<cfargument name="passWord" type="string">
 		<cfset local.salt=generateSecretKey("AES")>
 		<cfset local.hashedPassword = HashPassword(arguments.passWord,local.salt)>
-		<cfquery datasource="AddressBook" name="createUser" result="r">
-			INSERT INTO 
-				USER(name,email,username,password,salt) 
-			VALUES (<cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.hashedPassWord#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.salt#" cfsqltype="cf_sql_varchar">);
+		<cfset local.returnVar= 0>
+
+		<cfquery datasource="AddressBook" name="local.checkUsername" result="r1">
+			SELECT uid FROM user WHERE username = <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar"> 
 		</cfquery>
+
+		<cfquery datasource="AddressBook" name="local.checkemail" result="r2">
+			SELECT uid FROM user WHERE email = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar"> 
+		</cfquery>
+		
+		<cfif r1.RECORDCOUNT EQ 0 AND r2.RECORDCOUNT EQ 0>
+			<!---<cfquery datasource="AddressBook" name="createUser" result="r">
+				INSERT INTO 
+					USER(name,email,username,password,salt) 
+				VALUES (<cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,       
+					<cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#local.hashedPassWord#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#local.salt#" cfsqltype="cf_sql_varchar">)
+			</cfquery>--->
+			<cfset local.returnVar = 1 />
+		<cfelseif local.checkUsername.uid EQ local.checkemail.uid>
+			<cfset session.errorMessage="*account already exists">
+		<cfelseif r1.RECORDCOUNT NEQ 0 AND r2.RECORDCOUNT NEQ 0>
+			<cfset session.errorMessage = "*username and email already used">
+		<cfelseif r1.RECORDCOUNT NEQ 0>
+			<cfset session.errorMessage = "*username already used">
+		<cfelseif r2.RECORDCOUNT NEQ 0>
+			<cfset session.errorMessage = "*email already used">
+		</cfif>
+		<cfreturn local.returnVar />
 	</cffunction>
 
 	<cffunction name="addPage" returnType="string">

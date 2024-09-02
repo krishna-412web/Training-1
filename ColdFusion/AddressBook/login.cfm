@@ -1,3 +1,18 @@
+<cfset session.result =0>
+<cfset errorMessage="">
+<cfif structKeyExists(form,"submit")>
+	<cfset obj = createObject('component','components.database')>
+	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
+	<cfoutput>
+		<cfif session.result EQ 1>
+				<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+		<cfelse>
+			<cfset errorMessage="*unauthorized user">
+		</cfif>
+	</cfoutput>
+</cfif>
+
+<cfoutput>
 <!DOCTYPE html>
 <html lang="en" >
   	<head>
@@ -23,9 +38,10 @@
 						<label for="userName" class="form-label">Enter Username:</label>
 					</div>
 					<div class="form-floating">
-						<input class="form-control" type="password" id="passWord" name="passWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" placeholder="Jk*#@12354" required/>
+						<input class="form-control" type="password" id="passWord" name="passWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" required/>
 						<label class="form-label" for="passWord">Enter Password:</label>
 					</div>
+					<span class="text-danger">#errorMessage#</span>
 					<input class="btn btn-primary" type="submit" name="submit" value="Login"/>
 					<div>
 						<label class="form-label text-warning">Not Signed in Yet?</label>
@@ -36,3 +52,4 @@
 		</div>
   	</body>
 </html>
+</cfoutput>
