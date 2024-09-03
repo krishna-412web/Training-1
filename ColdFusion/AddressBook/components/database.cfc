@@ -55,7 +55,7 @@
 		</cfquery>
 		
 		<cfif r1.RECORDCOUNT EQ 0 AND r2.RECORDCOUNT EQ 0>
-			<!---<cfquery datasource="AddressBook" name="createUser" result="r">
+			<cfquery datasource="AddressBook" name="createUser" result="r">
 				INSERT INTO 
 					USER(name,email,username,password,salt) 
 				VALUES (<cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,       
@@ -63,7 +63,7 @@
 					<cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#local.hashedPassWord#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#local.salt#" cfsqltype="cf_sql_varchar">)
-			</cfquery>--->
+			</cfquery>
 			<cfset local.returnVar = 1 />
 		<cfelseif local.checkUsername.uid EQ local.checkemail.uid>
 			<cfset session.errorMessage="*account already exists">
@@ -77,12 +77,12 @@
 		<cfreturn local.returnVar />
 	</cffunction>
 
-	<cffunction name="addPage" returnType="string">
+	<cffunction name="addContact" returnType="string">
 		<cfargument name="pageName" type="string">
 		<cfargument name="pageDesc" type="string">
-		<cfquery name="local.addData" datasource="test1" result="r">
+		<cfquery name="local.addData" datasource="AddressBook" result="r">
 			INSERT INTO 
-				PAGE(pagename,pagedescs) 
+				log_book(pagename,pagedescs) 
 			VALUES (<cfqueryparam value="#arguments.pagename#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#arguments.pageDesc#" cfsqltype="cf_sql_longvarchar">);
 		</cfquery>
@@ -90,7 +90,7 @@
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
-		<cfquery name="local.getData" datasource="test1" result="r">
+		<cfquery name="local.getData" datasource="AddressBook" result="r">
 			SELECT 
 				pageid,pagename,pagedescs
 			FROM
@@ -136,7 +136,7 @@
 		<cflocation url="welcome.cfm" addToken="no" statusCode="302">
 	</cffunction>
 
-	<cffunction name="deletePage" access="remote" returnFormat="JSON">
+	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
 		<cfquery name="delete" datasource="test1" result="r">
 			DELETE FROM 
 				page	 

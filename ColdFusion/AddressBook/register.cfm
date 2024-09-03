@@ -1,3 +1,14 @@
+<cfset session.errorMessage="">
+<cfset result = 0>
+<cfif structKeyExists(form,"submit")>
+	<cfset obj= createObject('component','components.database')>
+	<cfset result = obj.createUser(form.name,form.email,form.userName,form.passWord)>
+	<cfif result EQ 1>
+		<script>alert("User Created Successfully");</script>
+	</cfif>
+</cfif>
+
+<cfoutput>
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   	<head>
@@ -30,16 +41,22 @@
 						<input class="form-control" type="text" id="userName" name="userName" pattern="^\w{5,}$" placeholder="Username" required/>
 						<label for="userName" class="form-label">Username:</label>
 					</div>
-					<span id="usernameCheck"></span>
 					<div class="form-floating">
-						<input class="form-control" type="password" id="passWord" name="passWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" placeholder="Jk*#@12354" required/>
+						<input class="form-control" type="password" id="passWord" name="passWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" required/>
 						<label class="form-label" for="passWord">New Password:</label>
 					</div>
 					<div class="form-floating">
-						<input class="form-control" type="password" id="confirmPassWord" name="confirmPassWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" placeholder="Jk*#@12354" required/>
+						<input class="form-control" type="password" id="confirmPassWord" name="confirmPassWord" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$" required/>
 						<label class="form-label" for="passWord">Confirm Password:</label>
 					</div>
+					<div>
+						<span style="color:red;">#session.errorMessage#</span>
+					</div>
 					<input class="form-control btn btn-success disabled" id="submit" type="submit" name="submit" value="Register"/>
+					<div>
+						<label class="form-label text-warning">Go to login</label>
+						<a class="form-control btn btn-outline-info" href="login.cfm">Login</a>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -47,3 +64,4 @@
 		<script src="./js/register-script.js"></script>
   	</body>
 </html>
+</cfoutput>
