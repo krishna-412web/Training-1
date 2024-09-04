@@ -1,10 +1,25 @@
 $(document).ready(() => {
 	
-	$("#add").click(() => {
-		window.location.href= 'add.cfm';
-	});
-
+    	// Open the modal and show the respective content
+    	$("#btnAdd").click(function() {
+        	$("#myModal").modal('show');
+		$(".content-div").hide();
+        	$("#addDiv").show();
+    	});
 	
+    	$("#btnEdit").click(function() {
+        	$("#myModal").modal('show');
+		$(".content-div").hide();
+        	$("#editDiv").show();
+    	});
+
+   	$("#btnView").click(function() {
+        	$("#myModal").modal('show');
+		$(".content-div").hide();
+       		$("#viewDiv").show();
+    	});
+
+	/*
 	$.ajax({
 		url: './database.cfc?method=selectdata',
 		type: 'GET',
@@ -30,7 +45,7 @@ $(document).ready(() => {
 						`<button type="button" class="editbtn" name="edit">edit</button>\n`+
 						`<button type="button" class="deletebtn" name="delete">delete</button>\n`+
 						`</td>\n`;
-					tabContent+= `<tr id="${i+1}">`+row+`</tr>\n`;
+					tabContent+= `<tr scope="row" id="${i+1}">`+row+`</tr>\n`;
 					row="";					}
 					console.log(tabContent);		
 				}
@@ -101,7 +116,7 @@ $(document).ready(() => {
 		
 		});
 		window.location.href= 'welcome.cfm';
-	});
+	});*/
 	
 
 });
