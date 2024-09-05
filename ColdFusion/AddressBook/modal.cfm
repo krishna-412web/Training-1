@@ -1,4 +1,4 @@
-
+<cfinclude template="logic.cfm">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,7 +85,7 @@
                     			</div>
         				<div id="addDiv" class="content-div">
                         			<div class="container-fluid">
-							<form action="" method="post" enctype="multipart/form-data">
+							<form id="myForm1" action="" method="post" enctype="multipart/form-data">
 									<h3 class="text-center border-bottom border-primary">CREATE CONTACT</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
 									<div class="row">
@@ -103,7 +103,7 @@
    											 </select>
 										</div>
 										<div class="col-5"><input type="text" id="firstName" name="firstName"></div>
-										<div class="col-5"><input type="text" id="secondName" name="secondName"></div>
+										<div class="col-5"><input type="text" id="lastName" name="lastName"></div>
 									</div>
 									<div class="row">
 										<div class="col-6"><p class="text-dark fw-bold">Gender*</p></div>
@@ -111,7 +111,7 @@
 									</div>
 									<div class="row">
 										<div class="col-6">
-											 <select id="title" name="title">
+											 <select id="gender" name="gender">
       												<option value="" selected></option>
       												<option value="1">Male</option>
       												<option value="2">Female</option>
@@ -149,7 +149,8 @@
 										<div class="col-4"><input type="email" id="email" name="email"></div>				
 										<div class="col-4"><input type="number" id="phone" name="phone"></div>
 									</div>
-									<button class="btn btn-primary" type="submit" name="addButton">Add Contact</button>
+									<span class="text-danger">#session.errorMessage#<br></span>
+									<button class="btn btn-primary" type="submit" name="submit1">Add Contact</button>
 							</div>
 							</form>
 						</div>
@@ -220,7 +221,7 @@
 										<div class="col-4"><input type="email" id="email" name="email"></div>				
 										<div class="col-4"><input type="number" id="phone" name="phone"></div>
 									</div>
-									<button class="btn btn-primary" type="submit" name="editButton">Edit Contact</button>
+									<button class="btn btn-primary" type="submit" name="submit2">Edit Contact</button>
 							</div>
 						</div>
 						</form>

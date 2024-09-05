@@ -8,7 +8,7 @@
 		<cfargument name="passWord" type="string">
 		<cfquery datasource="AddressBook" name="local.get" result="r">
 			SELECT 
-				password,salt
+				uid,password,salt
 			FROM 
 				user 
 			WHERE 
@@ -16,6 +16,7 @@
 		</cfquery>
 		<cfdump var="#get.password#">
 		<cfif r.RECORDCOUNT GT 0>
+			<cfset session.uid=local.get.uid>
 			<cfset local.hashedPassword=local.get.password>
 			<cfset local.salt=local.get.salt>
 			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
@@ -78,13 +79,50 @@
 	</cffunction>
 
 	<cffunction name="addContact" returnType="string">
-		<cfargument name="pageName" type="string">
-		<cfargument name="pageDesc" type="string">
+		<cfargument name="title" type="string">
+		<cfargument name="firstName" type="string">
+		<cfargument name="lastName" type="string">
+		<cfargument name="gender" type="string">
+		<cfargument name="dob" type="date">
+		<cfargument name="profile" type="string">
+		<cfargument name="house_flat" type="string">
+		<cfargument name="street" type="string">
+		<cfargument name="city" type="string">
+		<cfargument name="state" type="string">
+		<cfargument name="pincode" type="string">
+		<cfargument name="email" type="string">	
+		<cfargument name="phone" type="string">
+			
 		<cfquery name="local.addData" datasource="AddressBook" result="r">
 			INSERT INTO 
-				log_book(pagename,pagedescs) 
-			VALUES (<cfqueryparam value="#arguments.pagename#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.pageDesc#" cfsqltype="cf_sql_longvarchar">);
+				log_book(user_id,
+					title,
+					firstname,
+					lastname,
+					gender,
+					dob,
+					profile,
+					house_flat,
+					street,
+					city,
+					state,
+					pincode,
+					email,
+					phone) 
+			VALUES (<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date">,
+				<cfqueryparam value="#arguments.profile#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.house_flat#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">)
 		</cfquery>
 		<cfreturn "Data Inserted Successfully"/>
 	</cffunction>
@@ -92,9 +130,24 @@
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
 		<cfquery name="local.getData" datasource="AddressBook" result="r">
 			SELECT 
-				pageid,pagename,pagedescs
+				log_id,
+				title,
+				firstname,
+				lastname,
+				gender,
+				dob,
+				profile,
+				house_flat,
+				street,
+				city,
+				state,
+				pincode,
+				email,
+				phone
 			FROM
-				page;
+				log_book
+			WHERE 	
+				user_id= <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;
 		</cfquery>
 		<cfset local.data1 = serializeJSON(local.getData)>
 		<cfset session.tmpData = deserializeJSON(local.data1)>

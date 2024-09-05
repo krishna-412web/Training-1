@@ -1,13 +1,14 @@
 $(document).ready(() => {
 	
+	var obj;
     	// Open the modal and show the respective content
-    	$("#btnAdd").click(function() {
+    	/*$("#btnAdd").click(function() {
         	$("#myModal").modal('show');
 		$(".content-div").hide();
         	$("#addDiv").show();
     	});
 	
-    	$("#btnEdit").click(function() {
+    	$(".edit").click(function() {
         	$("#myModal").modal('show');
 		$(".content-div").hide();
         	$("#editDiv").show();
@@ -18,14 +19,24 @@ $(document).ready(() => {
 		$(".content-div").hide();
        		$("#viewDiv").show();
     	});
+	
+	$("#myForm1").submit(function(event) {
+		
+		event.preventDefault();
+		let imgPath = $("#profile").val();
+		let title = $("#title").val();
+		let firstName = $("#firstName").val();
+		let secondName = $("#secondName").val();
+		alert(imgPath);
+	});*/
 
-	/*
+	
 	$.ajax({
-		url: './database.cfc?method=selectdata',
+		url: './components/database.cfc?method=selectdata',
 		type: 'GET',
 		success: function(data) 
 		{	
-			let obj= JSON.parse(data);
+			obj= JSON.parse(data);
 			console.log(obj);
 			let tab="";
 			let tabContent="";
@@ -40,23 +51,59 @@ $(document).ready(() => {
 				let j = 0;
 				for(let i=0;i< obj.DATA.length;i++)
 				{	
-					row += `\n<td class="menu">${obj.DATA[i][1]}</td>\n`;
-					row +=  `<td>`+
-						`<button type="button" class="editbtn" name="edit">edit</button>\n`+
-						`<button type="button" class="deletebtn" name="delete">delete</button>\n`+
-						`</td>\n`;
-					tabContent+= `<tr scope="row" id="${i+1}">`+row+`</tr>\n`;
-					row="";					}
+					row += `\n<td>${i+1}</td>\n`+
+						`<td class="menu">${obj.DATA[i][2]+" "+obj.DATA[i][3]}</td>\n`+
+						`<td class="menu">${obj.DATA[i][12]}</td>\n`+
+						`<td class="menu">${obj.DATA[i][13]}</td>\n`;
+					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
+						`<td><button type="button" class=" btn btn-sm btn-success edit" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
+						`<td><button type="button" class=" btn btn-sm btn-success">Delete</button></td>`;
+					tabContent+= `<tr id="${i+1}">`+row+`</tr>\n`;
+					row="";					
 					console.log(tabContent);		
 				}
-				tab="<table border=\"1px solid black\">"+tabContent+"</table>";
-				$("#pageDisplay").html(tab);
-
+				$("#pageDisplay").html(tabContent);
 			}
+		}
 		
-		});
+	});
+	
+	$(document).on('click', '[data-bs-toggle="modal"]', function() {
+		console.log(obj);
+		var button = $(this);
+		var buttonClass = button.attr('class'); 
+		if (buttonClass.includes('add')) {
+			$('.content-div').hide();
+            		$('#addDiv').show();
+
+       		} 
+		if (buttonClass.includes('edit')) {
+                       	$('.content-div').hide();
+			let i = $(this).parent().parent().children().first().html();
+			let rowSelected = obj.DATA[i-1];
+			let log_id = rowSelected[0];
+			$("#title1").val(rowSelected[1]);
+			$("#firstName1").val(rowSelected[2]);
+			$("#secondName1").val(rowSelected[3]);
+			$("#gender1").val(rowSelected[4]);
+			let date1 = Date.parse(rowSelected[5]);
+			$("#houseName1").val(rowSelected[7]);
+			$("#street1").val(rowSelected[8]);
+			$("#city1").val(rowSelected[9]);
+			$("#state1").val(rowSelected[10]);
+			$("#pincode1").val(rowSelected[11]);
+			$("#email1").val(rowSelected[12]);
+			$("#phone1").val(rowSelected[13]);
+			
+            		$('#editDiv').show();
+        	} 	
+		if (buttonClass.includes('view')) {
+            		$('.content-div').hide();
+            		$('#viewDiv').show();
+       	 	}
+	});
 		
-	$(document).on('click','.menu', function(event) {
+	/*$(document).on('click','.menu', function(event) {
 		let parentId= $(event.target).parent().attr('id');
 		$.ajax({
 			url: './database.cfc?method=viewdata',
