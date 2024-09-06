@@ -1,0 +1,36 @@
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+@media print {
+    body {
+        font-size: 12pt;
+        margin: 1in;
+    }
+    
+
+    .no-print {
+        display: none;
+    }
+
+
+    .print-only {
+        display: block;
+    }
+
+
+    header, footer {
+        display: none;
+    }
+
+
+    .page-break {
+        page-break-before: always;
+    }
+
+
+    .content {
+        width: 100%;
+    }
+}

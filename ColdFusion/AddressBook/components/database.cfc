@@ -190,10 +190,11 @@
 	</cffunction>
 
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
-		<cfquery name="delete" datasource="test1" result="r">
+		<cfargument name="logId" type="string">
+		<cfquery name="delete" datasource="AddressBook" result="r">
 			DELETE FROM 
-				page	 
-			WHERE (pageid = <cfqueryparam value="#session.tmpData.DATA[session.id][1]#" cfsqltype="cf_sql_integer">);
+				log_book	 
+			WHERE (log_id = <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">);
 		</cfquery>
 		<cfreturn 1/>
 	</cffunction>
