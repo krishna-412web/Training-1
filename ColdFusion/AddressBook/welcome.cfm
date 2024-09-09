@@ -5,14 +5,14 @@
   	<title>Bootstrap Example</title>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<link rel="stylesheet" href="./css/print.css" media="print">
  	<link href="./css/bootstrap.min.css" rel="stylesheet">
   	<script src="./js/bootstrap.bundle.min.js"></script>
   	<script src="./js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/print.css" media="print">
 </head>
 <body>
 	<div class="container-fluid p-0">
-		<div class="container-fluid p-0">
+		<div class="container-fluid p-0 no-print">
 			<nav class="navbar navbar-expand-sm bg-primary navbar-dark container-fluid ">
   				<div class="container-fluid row">
   						<h1 class="navbar-brand text-center col-11 m-0">AddressBook</h1>
@@ -25,7 +25,7 @@
 		<div class="container">
 				
 		</div>
-		<div class="container">
+		<div class="container no-print">
 			<div class="row">
 				<div class="card mt-2 row">
 					<div class="card-body row d-flex flex-row justify-content-end">
@@ -38,7 +38,7 @@
 		</div>
 		<div class="container">
 			<div class="row">
-				<div class="card mt-2 col-2">
+				<div class="card mt-2 col-2 no-print">
 					<div class="d-flex flex-column justify-content-center card-body">
 						<p class="text-center">Krishna Renjith</p>
 						<button type="button" class="btn btn-info add" id="btnAdd" data-bs-toggle="modal" data-bs-target="#myModal">Add Contact</button>
@@ -50,15 +50,15 @@
 							<h2 class="text-center text-secondary m-0">Contacts</h2>
 						</div>
 					</div>--->
-					<table class="table table-bordered table-sm">	
+					<table class="table table-bordered table-sm" id="contactList">	
 						<thead>
 							<th>#</th>
 							<th>Name</th>
 							<th>Email</th>
 							<th>Phone</th>
-							<th>View</th>
-							<th>Edit</th>
-							<th>Delete</th>
+							<th class="no-print">View</th>
+							<th class="no-print">Edit</th>
+							<th class="no-print">Delete</th>
 						</thead>
 						<tbody  id="pageDisplay">
 							<tr>
@@ -273,4 +273,4 @@
 </body>
 </html>
 
-<cfdump var="#form#">
+

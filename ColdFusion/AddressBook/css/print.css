@@ -1,36 +1,24 @@
-body {
-    font-family: Arial, sans-serif;
-    color: #333;
-}
 
 @media print {
-    body {
-        font-size: 12pt;
-        margin: 1in;
-    }
-    
-
-    .no-print {
-        display: none;
-    }
-
-
-    .print-only {
-        display: block;
-    }
-
-
-    header, footer {
-        display: none;
-    }
-
-
-    .page-break {
-        page-break-before: always;
-    }
-
-
-    .content {
-        width: 100%;
-    }
+ 	.no-print{
+		display: none;
+	}
+	
+	#contactList th,tr,td {
+		border: 0;
+	} 
+	
+	#contactList tr{
+		border: 1px solid black;
+	}
+	
+	#contactList tr th:first-child,
+	#contactList tr td:first-child,
+	#contactList tr th:nth-child(2),
+	#contactList tr td:nth-child(2),
+	#contactList tr th:nth-child(3),
+	#contactList tr td:nth-child(3)
+	{
+		border: 1px solid black;
+	}   
 }

@@ -25,9 +25,9 @@ $(document).ready(() => {
 						`<td class="menu">${obj.DATA[i][2]+" "+obj.DATA[i][3]}</td>\n`+
 						`<td class="menu">${obj.DATA[i][12]}</td>\n`+
 						`<td class="menu">${obj.DATA[i][13]}</td>\n`;
-					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
-						`<td><button type="button" class=" btn btn-sm btn-success edit" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
-						`<td><button type="button" class=" btn btn-sm btn-success delete">Delete</button></td>`;
+					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view no-print" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
+						`<td><button type="button" class=" btn btn-sm btn-success edit no-print" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
+						`<td><button type="button" class=" btn btn-sm btn-success delete no-print">Delete</button></td>`;
 					tabContent+= `<tr id="${i+1}">`+row+`</tr>\n`;
 					row="";					
 					console.log(tabContent);		
@@ -44,6 +44,10 @@ $(document).ready(() => {
 	
 	$("#excelFeature").click(function(){
 		window.location.href="excelFeature.cfm";
+	});
+	
+	$("#printFeature").click(function(){
+        	window.print();
 	});
 
 	$(document).on('click', '[data-bs-toggle="modal"]', function() {
@@ -103,29 +107,10 @@ $(document).ready(() => {
 			
 			$('#viewDiv').show();
        	 	}
-		/*if(buttonClass.includes('delete')) {
-			$('.content-div').hide();
-			let i = $(this).parent().parent().children().first().html();
-			let rowSelected = obj.DATA[i-1];
-			$.ajax({
-				url: './database.cfc?method=deletePage',
-				type: 'POST',
-				data: { logId: rowSelected[0] },
-				success: function(response) 
-				{
-					if(response == 1)
-					{
-						alert("page deleted successfully");
-					}	
-			
-				}
 		
-				});		
-			window.location.href= 'welcome.cfm';
-		}*/
 	});
 		
-		$(document).on('click','.delete', function(event) {
+	$(document).on('click','.delete', function(event) {
 
 		let i = $(this).parent().parent().children().first().html();
 		let rowSelected = obj.DATA[i-1];
