@@ -8,7 +8,7 @@
 		<cfargument name="passWord" type="string">
 		<cfquery datasource="AddressBook" name="local.get" result="r">
 			SELECT 
-				uid,password,salt
+				uid,name,password,salt
 			FROM 
 				user 
 			WHERE 
@@ -17,6 +17,7 @@
 		<cfdump var="#get.password#">
 		<cfif r.RECORDCOUNT GT 0>
 			<cfset session.uid=local.get.uid>
+			<cfset session.user=local.get.name>
 			<cfset local.hashedPassword=local.get.password>
 			<cfset local.salt=local.get.salt>
 			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
@@ -128,7 +129,7 @@
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
-		<cfquery name="local.getData" datasource="AddressBook" result="r">
+		<cfquery name="local.getData" datasource="AddressBook" returnType="struct">
 			SELECT 
 				log_id,
 				title,
@@ -149,9 +150,7 @@
 			WHERE 	
 				user_id= <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;
 		</cfquery>
-		<cfset local.data1 = serializeJSON(local.getData)>
-		<cfset session.tmpData = deserializeJSON(local.data1)>
-		<cfreturn local.getData/>
+		<cfreturn local.getData.RESULTSET/>
 	</cffunction>
 
 	<cffunction name="viewdata" access="remote" returnFormat="JSON">

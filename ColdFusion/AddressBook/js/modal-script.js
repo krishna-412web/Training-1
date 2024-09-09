@@ -19,18 +19,17 @@ $(document).ready(() => {
 				tabContent="";
 				let row = ""
 				let j = 0;
-				for(let i=0;i< obj.DATA.length;i++)
+				for(let i=0;i< obj.length;i++)
 				{	
 					row += `\n<td>${i+1}</td>\n`+
-						`<td class="menu">${obj.DATA[i][2]+" "+obj.DATA[i][3]}</td>\n`+
-						`<td class="menu">${obj.DATA[i][12]}</td>\n`+
-						`<td class="menu">${obj.DATA[i][13]}</td>\n`;
+						`<td class="menu">${obj[i].firstname+" "+obj[i].lastname}</td>\n`+
+						`<td class="menu">${obj[i].email}</td>\n`+
+						`<td class="menu">${obj[i].phone}</td>\n`;
 					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view no-print" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
 						`<td><button type="button" class=" btn btn-sm btn-success edit no-print" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
 						`<td><button type="button" class=" btn btn-sm btn-success delete no-print">Delete</button></td>`;
 					tabContent+= `<tr id="${i+1}">`+row+`</tr>\n`;
-					row="";					
-					console.log(tabContent);		
+					row="";							
 				}
 				$("#pageDisplay").html(tabContent);
 			}
@@ -62,47 +61,47 @@ $(document).ready(() => {
 		if (buttonClass.includes('edit')) {
                        	$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
-			let rowSelected = obj.DATA[i-1];
-			$("#logId").val(rowSelected[0]);
-			$("#title1").val(rowSelected[1]);
-			$("#firstName1").val(rowSelected[2]);
-			$("#secondName1").val(rowSelected[3]);
-			$("#gender1").val(rowSelected[4]);
-			let date = new Date(rowSelected[5]);
+			let rowSelected = obj[i-1];
+			$("#logId").val(rowSelected.log_id);
+			$("#title1").val(rowSelected.title);
+			$("#firstName1").val(rowSelected.firstname);
+			$("#secondName1").val(rowSelected.lastname);
+			$("#gender1").val(rowSelected.gender);
+			let date = new Date(rowSelected.dob);
 			date.setDate(date.getDate() + 1);
 			let formatdate = date.toISOString().split('T')[0];
 			$("#dob1").val(formatdate);
-			$("#houseName1").val(rowSelected[7]);
-			$("#street1").val(rowSelected[8]);
-			$("#city1").val(rowSelected[9]);
-			$("#state1").val(rowSelected[10]);
-			$("#pincode1").val(rowSelected[11]);
-			$("#email1").val(rowSelected[12]);
-			$("#phone1").val(rowSelected[13]);
+			$("#houseName1").val(rowSelected.house_flat);
+			$("#street1").val(rowSelected.street);
+			$("#city1").val(rowSelected.city);
+			$("#state1").val(rowSelected.state);
+			$("#pincode1").val(rowSelected.pincode);
+			$("#email1").val(rowSelected.email);
+			$("#phone1").val(rowSelected.phone);
 			
             		$('#editDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
             		$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
-			let rowSelected = obj.DATA[i-1];
-			$("#title1").val(rowSelected[1]);
+			let rowSelected = obj[i-1];
+			$("#title1").val(rowSelected.title);
 			let title = $('#title1 option:selected').text();
-			$("#gender1").val(rowSelected[4]);
+			$("#gender1").val(rowSelected.gender);
 			let gender = $('#gender1 option:selected').text();
-			let date = new Date(rowSelected[5]);
+			let date = new Date(rowSelected.dob);
 			date.setDate(date.getDate() + 1);
 			let formatdate = date.toISOString().split('T')[0];
-			let address = `${rowSelected[7]},${rowSelected[8]},<br>${rowSelected[9]},${rowSelected[10]}`;
+			let address = `${rowSelected.house_flat},${rowSelected.street},<br>${rowSelected.city},${rowSelected.state}`;
 			
-			let name = `${title} ${rowSelected[2]} ${rowSelected[3]}`;
+			let name = `${title} ${rowSelected.firstname} ${rowSelected.lastname}`;
 			$("#nameView").text(name);
 			$("#genderView").text(gender);
 			$("#dobView").text(formatdate);
 			$("#AddressView").html(address);
-			$("#pincodeView").text(rowSelected[11]);
-			$("#mailView").text(rowSelected[12]);
-			$("#phoneView").text(rowSelected[13]);
+			$("#pincodeView").text(rowSelected.pincode);
+			$("#mailView").text(rowSelected.email);
+			$("#phoneView").text(rowSelected.phone);
 			
 			
 			$('#viewDiv').show();
@@ -113,12 +112,12 @@ $(document).ready(() => {
 	$(document).on('click','.delete', function(event) {
 
 		let i = $(this).parent().parent().children().first().html();
-		let rowSelected = obj.DATA[i-1];
-		alert(rowSelected[0]);
+		let rowSelected = obj[i-1];
+		alert(rowSelected.log_id);
 		$.ajax({
 				url: './components/database.cfc?method=deleteContact',
 				type: 'POST',
-				data: { logId: rowSelected[0] },
+				data: { logId: rowSelected.log_id },
 				success: function(response) 
 				{
 					if(response == 1)

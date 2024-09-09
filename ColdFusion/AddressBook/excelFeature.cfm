@@ -5,16 +5,36 @@
 <cfset spreadsheetObj = SpreadsheetNew("AddressBook",false)>
 
 
-<cfset SpreadsheetAddRow(spreadsheetObj,'Name,email,phone')>
+ <cfset myFormat=StructNew()>
+ <cfset myFormat.bold="true">
 
 
-<cfoutput query="get">
+<cfset data={color="white",fgcolor="grey_50_percent"}>
 
-    <cfset fullName = firstname & " " & lastname>
-    
+<cfset SpreadsheetAddRow(spreadsheetObj,'#session.user#,,#dateFormat(now(), "dd/mm/yyyy HH:mm:ss me")#')>
+<cfset SpreadsheetMergeCells(spreadsheetObj,1,1,1,2)>
 
-    <cfset SpreadsheetAddRow(spreadsheetObj,'#fullName#,#email#,#phone#')>
-</cfoutput>
+
+<cfset SpreadsheetAddRow(spreadsheetObj,'NAME,EMAIL,PHONE')>
+
+<cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
+<cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 2)>
+
+<cfloop array="#get#" index="item">
+
+    <cfset fullName = item.firstname & " " & item.lastname>
+    <cfset SpreadsheetAddRow(spreadsheetObj,'#fullName#,#item.email#,#item.phone#')>
+</cfloop>
+
+<cfloop from="3" to="#1+ArrayLen(get)#" index="i">
+	<cfif i%2 EQ 0>
+		<cfset SpreadsheetFormatRow(spreadsheetObj,data,i)>
+	</cfif>
+</cfloop>
+
+<cfloop from="1" to="#SpreadsheetGetColumnCount(spreadsheetObj,'AddressBook')#" index="i">
+	<cfset SpreadSheetSetColumnWidth (spreadsheetobj,i,30)>
+</cfloop>
 
 
 

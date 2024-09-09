@@ -180,7 +180,7 @@
 										<div class="col-4"><input type="email" id="email" name="email"></div>				
 										<div class="col-4"><input type="number" id="phone" name="phone"></div>
 									</div>
-									<span class="text-danger">#session.errorMessage#<br></span>
+									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
 									<button class="btn btn-primary" type="submit" name="submit1">Add Contact</button>
 							</div>
 							</form>

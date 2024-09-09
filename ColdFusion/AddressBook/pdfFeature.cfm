@@ -1,5 +1,6 @@
 <cfset obj = CreateObject("component","components.database")>
-<cfset get = obj.selectdata()>
+<cfset data = obj.selectdata()>
+
 <cfheader name="Content-Disposition" value="attachment; filename=example.pdf">
 <cfheader name="Content-Type" value="application/pdf">
 
@@ -17,12 +18,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<cfoutput query="get">
-				<tr>
-					<td>#firstname# #lastname#</td>
-					<td>#email#</td>
-					<td>#phone#</td>
-				</tr>
+			<cfoutput>
+				<cfloop array="#data#" index="item">
+					<tr>
+						<td>#item.firstname# #item.lastname#</td>
+						<td>#item.email#</td>
+						<td>#item.phone#</td>
+					</tr>
+				</cfloop>
 			</cfoutput>
 		</tbody>
 	</table>
