@@ -62,7 +62,11 @@ $(document).ready(() => {
                        	$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
 			let rowSelected = obj[i-1];
-			$("#logId").val(rowSelected.log_id);
+			$.ajax({
+				url: './components/database.cfc?method=setid',
+				type: 'POST',
+				data: { logId: rowSelected.log_id }
+			});
 			$("#title1").val(rowSelected.title);
 			$("#firstName1").val(rowSelected.firstname);
 			$("#secondName1").val(rowSelected.lastname);
@@ -85,6 +89,7 @@ $(document).ready(() => {
             		$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
 			let rowSelected = obj[i-1];
+
 			$("#title1").val(rowSelected.title);
 			let title = $('#title1 option:selected').text();
 			$("#gender1").val(rowSelected.gender);

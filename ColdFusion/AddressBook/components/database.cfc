@@ -166,36 +166,46 @@
 		<cfreturn 1/>	
 	</cffunction>
 
-	<cffunction name="getid" access="remote" returnFormat="JSON">
-		<cfargument name="id" type="string">
-		<cfset session.id = arguments.id>
+	<cffunction name="setid" access="remote" returnFormat="JSON">
+		<cfargument name="logId" type="string">
+		<cfset session.logId = arguments.logId>
 		<cfreturn 1/>
 	</cffunction>	
 		
-	<cffunction name="updateData">
-		<cfargument name="pageId" type="string">
-		<cfargument name="pageName" type="string">
-		<cfargument name="pageDesc" type="string">
-		<cfquery name="update" datasource="test1">
-			UPDATE 
-				page
-			SET 
-				pagename = <cfqueryparam value="#arguments.pageName#" cfsqltype="cf_sql_varchar">,
-				pagedescs= <cfqueryparam value="#arguments.pageDesc#" cfsqltype="cf_sql_longvarchar">
-			WHERE 
-				pageid = <cfqueryparam value="#arguments.pageId#" cfsqltype="cf_sql_integer">;
+	<cffunction name="updateContact">
+		<cfargument name="form" type="struct">
+		<cfif structKeyExists(form, "profile") AND Len(Trim(form.profile)) GT 0>
+			<cfinclude template="image.cfm">		
+		</cfif>
+		<cfif structKeyExists(form, "dob") AND Len(Trim(form.dob)) GT 0>
+			<cfquery name="update" datasource="AddressBook">
+				UPDATE 
+					log_book
+				SET 
+					dob = <cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">
+				WHERE 
+					log_id= <cfqueryparam value="#session.logId#" cfsqltype="cf_sql_integer">
+			</cfquery>
+		</cfif>	
+		<cfquery name="updateRest" datasource="AddressBook">
+			UPDATE
+				log_book
+			SET
+				title= <cfqueryparam value="#form.title#" cfsqltype="cf_sql_integer">,
+				firstname= <cfqueryparam value="#form.firstName#" cfsqltype="cf_sql_varchar">,
+				lastname= <cfqueryparam value="#form.secondName#" cfsqltype="cf_sql_varchar">,
+				gender= <cfqueryparam value="#form.gender#" cfsqltype="cf_sql_varchar">,
+				house_flat= <cfqueryparam value="#form.houseName#" cfsqltype="cf_sql_varchar">,
+				street= <cfqueryparam value="#form.street#" cfsqltype="cf_sql_varchar">,
+				city= <cfqueryparam value="#form.city#" cfsqltype="cf_sql_varchar">,
+				state= <cfqueryparam value="#form.state#" cfsqltype="cf_sql_varchar">,
+				pincode= <cfqueryparam value="#form.pincode#" cfsqltype="cf_sql_integer">,
+				email= <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
+				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">
+			WHERE
+				log_id= <cfqueryparam value="#session.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
-		<cflocation url="welcome.cfm" addToken="no" statusCode="302">
-	</cffunction>
-
-	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
-		<cfargument name="logId" type="string">
-		<cfquery name="delete" datasource="AddressBook" result="r">
-			DELETE FROM 
-				log_book	 
-			WHERE (log_id = <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">);
-		</cfquery>
-		<cfreturn 1/>
+		<script>alert("Contact edited successfully");</script>
 	</cffunction>
 
 </cfcomponent>

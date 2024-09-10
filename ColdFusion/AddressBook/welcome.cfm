@@ -120,20 +120,29 @@
 									<h3 class="text-center border-bottom border-primary">CREATE CONTACT</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
 									<div class="row">
-										<div class="col-2"><p class="text-dark fw-bold">Title*</p></div>
-										<div class="col-5"><p class="text-dark fw-bold">Firstname*</p></div>
+										<div class="col-2">
+											<div class="form-floating">
+												<select id="title" name="title" class="form-select">
+      													<option value="" selected></option>
+      													<option value="1">Mr.</option>
+      													<option value="2">Mrs.</option>
+      													<option value="3">Ms.</option>
+   											 	</select>
+												<label class="text-dark fw-bold form-label">Title*</label>
+											</div>
+										</div>
+										<div class="col-5">
+											<div class="form-floating">
+												<input class="form-control" type="text" id="firstName" name="firstName" placeholder="">														<label for="firstName" class="text-dark fw-bold form-label">Firstname*</label>
+											</div>
+										</div>
 										<div class="col-5"><p class="text-dark fw-bold">Secondname*</p></div>
 									</div>
 									<div class="row">
 										<div class="col-2">
-											 <select id="title" name="title">
-      												<option value="" selected></option>
-      												<option value="1">Mr.</option>
-      												<option value="2">Mrs.</option>
-      												<option value="3">Ms.</option>
-   											 </select>
+											 
 										</div>
-										<div class="col-5"><input type="text" id="firstName" name="firstName"></div>
+										<div class="col-5"></div>
 										<div class="col-5"><input type="text" id="lastName" name="lastName"></div>
 									</div>
 									<div class="row">
@@ -252,7 +261,6 @@
 										<div class="col-4"><input type="email" id="email1" name="email"></div>				
 										<div class="col-4"><input type="number" id="phone1" name="phone"></div>
 									</div>
-									<input type="hidden" id="logId" name="logId" value="">
 									<button class="btn btn-primary" type="submit" name="submit2">Edit Contact</button>
 							</div>
 						</div>
@@ -272,5 +280,6 @@
 	<script src="./js/modal-script.js"></script>
 </body>
 </html>
+<cfdump var="#form#">
 
 
