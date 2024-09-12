@@ -2,6 +2,7 @@
 	<cfproperty name="userName" type="string">
 	<cfproperty name="hashedPassword" type="string">
 	<cfproperty name="salt" type="string">
+	<cfset variables.key="baiYIM2yvVW258BNOmovjQ==">
 
 	<cffunction name="getInfo" access="public" returnType="string">
 		<cfargument name="userName" type="string">
@@ -150,21 +151,20 @@
 			WHERE 	
 				user_id= <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;
 		</cfquery>
+		
+		<cfloop array="#local.getData.RESULTSET#" index="i">
+			<cfset local.encryptedText= encrypt(toString(i.log_id),variables.key,"AES","Hex")>
+			<cfset i.log_id= local.encryptedText >
+		</cfloop>
 		<cfreturn local.getData.RESULTSET/>
 	</cffunction>
 
-	<cffunction name="viewdata" access="remote" returnFormat="JSON">
-		<cfargument name="id" type="string">
-		<cfset local.index = Val(id)>
-		<cfset path = expandPath("./output.cfm")>
-		<cffile action="write" file="#path#" output=""/>
-		<cffile action="write" file="#path#" output="
-			<cfoutput>
-				#session.tmpData.DATA[local.index][2]#<br>
-				#session.tmpData.DATA[local.index][3]#
-			</cfoutput>"/>
-		<cfreturn 1/>	
+	<cffunction name="decryptData">
+		<cfargument name="encryptedText" type="string">
+		<cfset local.decryptedText= decrypt(encryptedText,variables.key,"AES","Hex")>
+		<cfreturn local.decryptedText/>
 	</cffunction>
+	
 
 	<cffunction name="setid" access="remote" returnFormat="JSON">
 		<cfargument name="logId" type="string">
@@ -174,8 +174,18 @@
 		
 	<cffunction name="updateContact">
 		<cfargument name="form" type="struct">
+		<cfset local.logId = decryptData(form.logId)>
 		<cfif structKeyExists(form, "profile") AND Len(Trim(form.profile)) GT 0>
-			<cfinclude template="image.cfm">		
+			<cfinclude template="../image.cfm">
+			<cfquery name="update" datasource="AddressBook">
+				UPDATE 
+					log_book
+				SET 
+					profile = <cfqueryparam value="#imgPath#" cfsqltype="cf_sql_varchar">
+				WHERE 
+					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+			</cfquery>
+					
 		</cfif>
 		<cfif structKeyExists(form, "dob") AND Len(Trim(form.dob)) GT 0>
 			<cfquery name="update" datasource="AddressBook">
@@ -184,7 +194,7 @@
 				SET 
 					dob = <cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">
 				WHERE 
-					log_id= <cfqueryparam value="#session.logId#" cfsqltype="cf_sql_integer">
+					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfif>	
 		<cfquery name="updateRest" datasource="AddressBook">
@@ -193,7 +203,7 @@
 			SET
 				title= <cfqueryparam value="#form.title#" cfsqltype="cf_sql_integer">,
 				firstname= <cfqueryparam value="#form.firstName#" cfsqltype="cf_sql_varchar">,
-				lastname= <cfqueryparam value="#form.secondName#" cfsqltype="cf_sql_varchar">,
+				lastname= <cfqueryparam value="#form.lastName#" cfsqltype="cf_sql_varchar">,
 				gender= <cfqueryparam value="#form.gender#" cfsqltype="cf_sql_varchar">,
 				house_flat= <cfqueryparam value="#form.houseName#" cfsqltype="cf_sql_varchar">,
 				street= <cfqueryparam value="#form.street#" cfsqltype="cf_sql_varchar">,
@@ -203,9 +213,19 @@
 				email= <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
 				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">
 			WHERE
-				log_id= <cfqueryparam value="#session.logId#" cfsqltype="cf_sql_integer">;
+				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
 		<script>alert("Contact edited successfully");</script>
+	</cffunction>
+
+	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
+		<cfargument name="logId" type="string">
+		<cfset local.logId = decryptData(arguments.logId)>
+		<cfquery name="delete" datasource="AddressBook" result="r">
+			DELETE FROM 
+				log_book	 
+			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
+		</cfquery>
 	</cffunction>
 
 </cfcomponent>

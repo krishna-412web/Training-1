@@ -22,13 +22,19 @@ $(document).ready(() => {
 				for(let i=0;i< obj.length;i++)
 				{	
 					row += `\n<td>${i+1}</td>\n`+
+						`<td class="menu no-print"><img style="height:40px;width:40px;padding:0;margin:0 auto;" src="${obj[i].profile}" class="img-fluid" alt="pic"/></td>\n`+
 						`<td class="menu">${obj[i].firstname+" "+obj[i].lastname}</td>\n`+
 						`<td class="menu">${obj[i].email}</td>\n`+
 						`<td class="menu">${obj[i].phone}</td>\n`;
 					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view no-print" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
 						`<td><button type="button" class=" btn btn-sm btn-success edit no-print" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
-						`<td><button type="button" class=" btn btn-sm btn-success delete no-print">Delete</button></td>`;
-					tabContent+= `<tr id="${i+1}">`+row+`</tr>\n`;
+						`<td>
+							<form action="" method="post" id="form${i+1}">
+								<input type="hidden" name="logId" id="inp${i+1}"/>
+								<button type="submit" class=" btn btn-sm btn-success delete no-print" name="delete">Delete</button>
+							</form>
+						</td>`;
+					tabContent+= `<tr id="${obj[i].log_id}">`+row+`</tr>\n`;
 					row="";							
 				}
 				$("#pageDisplay").html(tabContent);
@@ -61,15 +67,12 @@ $(document).ready(() => {
 		if (buttonClass.includes('edit')) {
                        	$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
+			let j = $(this).parent().parent().attr('id');
 			let rowSelected = obj[i-1];
-			$.ajax({
-				url: './components/database.cfc?method=setid',
-				type: 'POST',
-				data: { logId: rowSelected.log_id }
-			});
+			$("#logId1").val(j);
 			$("#title1").val(rowSelected.title);
 			$("#firstName1").val(rowSelected.firstname);
-			$("#secondName1").val(rowSelected.lastname);
+			$("#lastName1").val(rowSelected.lastname);
 			$("#gender1").val(rowSelected.gender);
 			let date = new Date(rowSelected.dob);
 			date.setDate(date.getDate() + 1);
@@ -115,25 +118,13 @@ $(document).ready(() => {
 	});
 		
 	$(document).on('click','.delete', function(event) {
+		let row = $(this).parent().parent().parent().attr('id');
+		let i = $(this).parent();
+		let inp = i.children().first();
+		inp.attr('value',row);
+		alert(inp.attr('value'))
+		$(i).submit();
 
-		let i = $(this).parent().parent().children().first().html();
-		let rowSelected = obj[i-1];
-		alert(rowSelected.log_id);
-		$.ajax({
-				url: './components/database.cfc?method=deleteContact',
-				type: 'POST',
-				data: { logId: rowSelected.log_id },
-				success: function(response) 
-				{
-					if(response == 1)
-					{
-						alert("page deleted successfully");
-					}	
-			
-				}
-				
-			});
-		window.location.href= 'welcome.cfm';
 	});
 	
 

@@ -10,6 +10,7 @@
 
 
 <cfset data={color="white",fgcolor="grey_50_percent"}>
+<cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true"}>
 
 <cfset SpreadsheetAddRow(spreadsheetObj,'#session.user#,,#dateFormat(now(), "dd/mm/yyyy HH:mm:ss me")#')>
 <cfset SpreadsheetMergeCells(spreadsheetObj,1,1,1,2)>
@@ -18,7 +19,7 @@
 <cfset SpreadsheetAddRow(spreadsheetObj,'NAME,EMAIL,PHONE')>
 
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
-<cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 2)>
+<cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
 <cfloop array="#get#" index="item">
 
