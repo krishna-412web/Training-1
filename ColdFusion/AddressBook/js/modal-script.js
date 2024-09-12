@@ -102,6 +102,8 @@ $(document).ready(() => {
 			let formatdate = date.toISOString().split('T')[0];
 			let address = `${rowSelected.house_flat},${rowSelected.street},<br>${rowSelected.city},${rowSelected.state}`;
 			
+			$("#profilePic").attr('src',`${rowSelected.profile}`);
+
 			let name = `${title} ${rowSelected.firstname} ${rowSelected.lastname}`;
 			$("#nameView").text(name);
 			$("#genderView").text(gender);

@@ -13,7 +13,7 @@
 			FROM 
 				user 
 			WHERE 
-				username= <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar">;
+				username= <cfqueryparam value="#arguments.userName#" cfsqltype="varchar">;
 		</cfquery>
 		<cfdump var="#get.password#">
 		<cfif r.RECORDCOUNT GT 0>

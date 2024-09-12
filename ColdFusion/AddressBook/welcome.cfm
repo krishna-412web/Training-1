@@ -85,36 +85,42 @@
         				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       				</div>
            			<div class="modal-body">
-					<div id="viewDiv" class="content-div">
-                        			<h3 class="text-center border-bottom text-primary border-dark">VIEW CONTACT</h3>
-                        			<div class="row">
-							<h4 class="text-primary col-4">Name:</h4>
-							<h5 class="text-dark col-auto" id="nameView">Krishna Renjith</h5>
+					<div id="viewDiv" class="content-div row">
+						<div class="col-9">
+                        				<h3 class="text-center border-bottom text-primary border-dark">VIEW CONTACT</h3>
+                        				<div class="row">
+								<h4 class="text-primary col-4">Name:</h4>
+								<h5 class="text-dark col-auto" id="nameView">Krishna Renjith</h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Gender:</h4>
+								<h5 class="text-dark col-auto" id="genderView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Date of Birth:</h4>
+								<h5 class="text-dark col-auto" id="dobView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Address:</h4>
+								<h5 class="text-dark col-auto" id="AddressView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Pincode:</h4>
+								<h5 class="text-dark col-auto" id="pincodeView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Email:</h4>
+								<h5 class="text-dark col-auto" id="mailView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Phone:</h4>
+								<h5 class="text-dark col-auto" id="phoneView"></h5>
+							</div>
 						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Gender:</h4>
-							<h5 class="text-dark col-auto" id="genderView"></h5>
+						<div class="col-3 bg-secondary d-flex flex-column justify-content-center">
+							<img src="" class="img-fluid rounded" id="profilePic" alt="profile-pic">
 						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Date of Birth:</h4>
-							<h5 class="text-dark col-auto" id="dobView"></h5>
-						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Address:</h4>
-							<h5 class="text-dark col-auto" id="AddressView"></h5>
-						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Pincode:</h4>
-							<h5 class="text-dark col-auto" id="pincodeView"></h5>
-						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Email:</h4>
-							<h5 class="text-dark col-auto" id="mailView"></h5>
-						</div>
-						<div class="row">
-							<h4 class="text-primary col-4">Phone:</h4>
-							<h5 class="text-dark col-auto" id="phoneView"></h5>
-						</div>		
+								
                     			</div>
         				<div id="addDiv" class="content-div">
                         			<div class="container-fluid">

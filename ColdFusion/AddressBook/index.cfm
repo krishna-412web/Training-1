@@ -35,7 +35,7 @@
 				<div>
 					<form class="login d-flex flex-column justify-content-start bg-success was-validated order-primary rounded p-3 m-5 gap-3" action="" method="post">
 						<div class="form-floating">
-							<input class="form-control" type="text" id="userName" name="userName" pattern="^\w{5,}$" placeholder="Username" autofocus required/>
+							<input class="form-control" type="text" id="userName" name="userName" placeholder="Username" autofocus required/>
 							<label for="userName" class="form-label">Enter Username:</label>
 						</div>
 						<div class="form-floating">

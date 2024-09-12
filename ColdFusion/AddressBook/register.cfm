@@ -55,7 +55,7 @@
 					<input class="form-control btn btn-success disabled" id="submit" type="submit" name="submit" value="Register"/>
 					<div>
 						<label class="form-label text-warning">Go to login</label>
-						<a class="form-control btn btn-outline-info" href="login.cfm">Login</a>
+						<a class="form-control btn btn-outline-info" href="index.cfm">Login</a>
 					</div>
 				</form>
 			</div>

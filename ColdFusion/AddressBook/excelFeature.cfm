@@ -27,7 +27,7 @@
     <cfset SpreadsheetAddRow(spreadsheetObj,'#fullName#,#item.email#,#item.phone#')>
 </cfloop>
 
-<cfloop from="3" to="#1+ArrayLen(get)#" index="i">
+<cfloop from="3" to="#3+ArrayLen(get)#" index="i">
 	<cfif i%2 EQ 0>
 		<cfset SpreadsheetFormatRow(spreadsheetObj,data,i)>
 	</cfif>
