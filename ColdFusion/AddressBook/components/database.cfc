@@ -4,7 +4,7 @@
 	<cfproperty name="salt" type="string">
 	<cfset variables.key="baiYIM2yvVW258BNOmovjQ==">
 
-	<cffunction name="getInfo" access="public" returnType="string">
+	<cffunction name="getInfo" access="public" returnType="struct">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
 		<cfquery datasource="AddressBook" name="local.get" result="r">
@@ -15,21 +15,22 @@
 			WHERE 
 				username= <cfqueryparam value="#arguments.userName#" cfsqltype="varchar">;
 		</cfquery>
-		<cfdump var="#get.password#">
 		<cfif r.RECORDCOUNT GT 0>
-			<cfset session.uid=local.get.uid>
-			<cfset session.user=local.get.name>
 			<cfset local.hashedPassword=local.get.password>
 			<cfset local.salt=local.get.salt>
 			<cfset local.checkPassword=HashPassword(arguments.passWord,local.salt)>
 			<cfif local.checkPassword EQ local.hashedPassword>
-				<cfreturn 1 >
+				<cfset local.result = structNew()>
+				<cfset local.result.value = 1 >
+				<cfset session.uid=local.get.uid>
+				<cfset session.user=local.get.name>
 			<cfelse>
-				<cfreturn 0 >
+				<cfset local.result.value = 0 >
 			</cfif>	
 		<cfelse> 
-			<cfreturn 0 >
+			<cfset local.result.value = 0>
 		</cfif>
+		<cfreturn local.result>
 	</cffunction>
 	
 	<cffunction name="HashPassword">
@@ -220,7 +221,6 @@
 			WHERE
 				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
-		<script>alert("Contact edited successfully");</script>
 	</cffunction>
 
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">

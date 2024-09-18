@@ -2,9 +2,10 @@
 <cfset errorMessage="">
 <cfif structKeyExists(form,"submit")>
 	<cfset obj = createObject('component','components.database')>
+	<cfset session.result= structNew()>
 	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
 	<cfoutput>
-		<cfif session.result EQ 1>
+		<cfif session.result.value EQ 1>
 				<cflocation url="welcome.cfm" addToken="no" statusCode="302">
 		<cfelse>
 			<cfset errorMessage="*unauthorized user">

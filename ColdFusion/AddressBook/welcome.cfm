@@ -153,7 +153,7 @@
                     			</div>
         				<div id="addDiv" class="content-div">
                         			<div class="container-fluid">
-							<form class="was-validated" id="myForm1" action="" method="post" enctype="multipart/form-data">
+							<form id="myForm1" action="" method="post" enctype="multipart/form-data">
 									<h3 class="text-center border-bottom border-primary">CREATE CONTACT</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
 									<div class="row">
