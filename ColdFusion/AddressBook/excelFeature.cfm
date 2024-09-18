@@ -8,7 +8,6 @@
  <cfset myFormat=StructNew()>
  <cfset myFormat.bold="true">
 
-
 <cfset data={color="white",fgcolor="grey_50_percent"}>
 <cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true"}>
 
@@ -21,15 +20,19 @@
 <cfset spreadsheetSetCellValue(spreadsheetObj, "NAME", 2, 1)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 2, 2)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 2, 3)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES", 2, 4)>
 
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
 <cfloop from="1" to="#ArrayLen(get)#" index="i">
 	<cfset fullName = get[i].firstname & " " & get[i].lastname>
+	<cfset hobbieId = obj.viewHobbies(get[i].hobbies)>
+	<cfset hobbieList = ArrayToList(hobbieId)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#fullName#", i+2, 1)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].email#", i+2, 2)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].phone#", i+2, 3)>
+	<cfset spreadsheetSetCellValue(spreadsheetObj, "#hobbieList#", i+2, 4)>
 </cfloop>
 
 <cfloop from="3" to="#3+ArrayLen(get)#" index="i">
@@ -39,7 +42,7 @@
 </cfloop>
 
 <cfloop from="1" to="#SpreadsheetGetColumnCount(spreadsheetObj,'AddressBook')#" index="i">
-	<cfset SpreadSheetSetColumnWidth (spreadsheetobj,i,30)>
+	<cfset SpreadSheetSetColumnWidth (spreadsheetobj,i,35)>
 </cfloop>
 
 
