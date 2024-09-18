@@ -21,6 +21,7 @@
 <cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 2, 2)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 2, 3)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES", 2, 4)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PHOTO", 2, 5)>
 
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
@@ -33,6 +34,9 @@
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].email#", i+2, 2)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].phone#", i+2, 3)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#hobbieList#", i+2, 4)>
+	<cfset myImage = expandPath(get[i].profile)>
+	<cfset SpreadsheetAddImage(SpreadsheetObj,myImage,"#i+2#,5,#i+2#,6")>
+	<cfset SpreadsheetSetRowHeight(spreadsheetObj,i+2,60)>
 </cfloop>
 
 <cfloop from="3" to="#3+ArrayLen(get)#" index="i">
@@ -42,7 +46,7 @@
 </cfloop>
 
 <cfloop from="1" to="#SpreadsheetGetColumnCount(spreadsheetObj,'AddressBook')#" index="i">
-	<cfset SpreadSheetSetColumnWidth (spreadsheetobj,i,35)>
+	<cfset SpreadSheetSetColumnWidth(spreadsheetobj,i,35)>
 </cfloop>
 
 
