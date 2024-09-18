@@ -204,7 +204,7 @@
 									<div class="row">
 										<div class="col-6">
 											<div class="form-floating">
-												<input class="form-control" type="file" name="profile" id ="profile" required>
+												<input class="form-control" type="file" name="profile" id ="profile" accept="image/jpeg, image/png" required>
 												<label for="profile" class="form-label text-decoration-underline text-primary text-start">Upload Photo</label>	
 											</div>
 										</div>
@@ -341,7 +341,7 @@
 									<div class="row">
 										<div class="col-6">
 											<div class="form-floating">
-												<input class="form-control" type="file" name="profile" id ="profile1">
+												<input class="form-control" type="file" name="profile" id ="profile1" accept="image/jpeg, image/png">
 												<label for="profile1" class="form-label text-decoration-underline text-primary text-start">Upload Photo</label>	
 											</div>
 										</div>

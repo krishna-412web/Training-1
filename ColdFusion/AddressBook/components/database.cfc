@@ -7,7 +7,7 @@
 	<cffunction name="getInfo" access="public" returnType="struct">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
-		<cfquery datasource="AddressBook" name="local.get" result="r">
+		<cfquery name="local.get" result="r">
 			SELECT 
 				uid,name,password,salt
 			FROM 
@@ -48,18 +48,19 @@
 		<cfargument name="passWord" type="string">
 		<cfset local.salt=generateSecretKey("AES")>
 		<cfset local.hashedPassword = HashPassword(arguments.passWord,local.salt)>
-		<cfset local.returnVar= 0>
+		<cfset local.createResult = structNew()>
+		<cfset local.createResult.value = 0>
 
-		<cfquery datasource="AddressBook" name="local.checkUsername" result="r1">
+		<cfquery name="local.checkUsername" result="r1">
 			SELECT uid FROM user WHERE username = <cfqueryparam value="#arguments.userName#" cfsqltype="cf_sql_varchar"> 
 		</cfquery>
 
-		<cfquery datasource="AddressBook" name="local.checkemail" result="r2">
+		<cfquery name="local.checkemail" result="r2">
 			SELECT uid FROM user WHERE email = <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar"> 
 		</cfquery>
 		
 		<cfif r1.RECORDCOUNT EQ 0 AND r2.RECORDCOUNT EQ 0>
-			<cfquery datasource="AddressBook" name="createUser" result="r">
+			<cfquery name="createUser" result="r">
 				INSERT INTO 
 					USER(name,email,username,password,salt) 
 				VALUES (<cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,       
@@ -68,7 +69,7 @@
 					<cfqueryparam value="#local.hashedPassWord#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#local.salt#" cfsqltype="cf_sql_varchar">)
 			</cfquery>
-			<cfset local.returnVar = 1 />
+			<cfset local.createResult.value = 1 />
 		<cfelseif local.checkUsername.uid EQ local.checkemail.uid>
 			<cfset session.errorMessage="*account already exists">
 		<cfelseif r1.RECORDCOUNT NEQ 0 AND r2.RECORDCOUNT NEQ 0>
@@ -78,7 +79,7 @@
 		<cfelseif r2.RECORDCOUNT NEQ 0>
 			<cfset session.errorMessage = "*email already used">
 		</cfif>
-		<cfreturn local.returnVar />
+		<cfreturn local.createResult />
 	</cffunction>
 
 	<cffunction name="addContact" returnType="string">
@@ -97,7 +98,7 @@
 		<cfargument name="phone" type="string">
 		<cfargument name="hobbies" type="string">
 			
-		<cfquery name="local.addData" datasource="AddressBook" result="r">
+		<cfquery name="local.addData" result="r">
 			INSERT INTO 
 				log_book(user_id,
 					title,
@@ -134,7 +135,7 @@
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
-		<cfquery name="local.getData" datasource="AddressBook" returnType="struct">
+		<cfquery name="local.getData" returnType="struct">
 			SELECT 
 				log_id,
 				title,
@@ -182,7 +183,7 @@
 		<cfset local.logId = decryptData(form.logId)>
 		<cfif structKeyExists(form, "profile") AND Len(Trim(form.profile)) GT 0>
 			<cfinclude template="../image.cfm">
-			<cfquery name="update" datasource="AddressBook">
+			<cfquery name="update">
 				UPDATE 
 					log_book
 				SET 
@@ -193,7 +194,7 @@
 					
 		</cfif>
 		<cfif structKeyExists(form, "dob") AND Len(Trim(form.dob)) GT 0>
-			<cfquery name="update" datasource="AddressBook">
+			<cfquery name="update">
 				UPDATE 
 					log_book
 				SET 
@@ -202,7 +203,7 @@
 					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfif>	
-		<cfquery name="updateRest" datasource="AddressBook">
+		<cfquery name="updateRest">
 			UPDATE
 				log_book
 			SET
@@ -226,7 +227,7 @@
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
 		<cfargument name="logId" type="string">
 		<cfset local.logId = decryptData(arguments.logId)>
-		<cfquery name="delete" datasource="AddressBook" result="r">
+		<cfquery name="delete" result="r">
 			DELETE FROM 
 				log_book	 
 			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
@@ -235,7 +236,7 @@
 
 	<cffunction name="selectContact" access="remote" returnFormat="JSON">
 		<cfargument name="logId" type="string">
-		<cfquery name="local.getContact" datasource="AddressBook" returnType="struct">
+		<cfquery name="local.getContact" returnType="struct">
 			SELECT
 				log_id,
 				title,
@@ -265,7 +266,7 @@
 		<cfset local.result = arrayNew(1)>
 		<cfset local.hobbie = listToArray(arguments.hobbieId)>
 		<cfloop array="#local.hobbie#" index="i">
-			<cfquery name="local.getHobby" datasource="AddressBook" returnType="struct">
+			<cfquery name="local.getHobby" returnType="struct">
 				SELECT 
 					hobbieName
 				FROM

@@ -2,9 +2,10 @@
 <cfset result = 0>
 <cfif structKeyExists(form,"submit")>
 	<cfset obj= createObject('component','components.database')>
-	<cfset result = obj.createUser(form.name,form.email,form.userName,form.passWord)>
-	<cfif result EQ 1>
+	<cfset createResult = obj.createUser(form.name,form.email,form.userName,form.passWord)>
+	<cfif createResult.value EQ 1>
 		<script>alert("User Created Successfully");</script>
+		<cflocation url="index.cfm" addToken="no" statusCode="302">
 	</cfif>
 </cfif>
 

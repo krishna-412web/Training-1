@@ -82,6 +82,15 @@ $(document).ready(() => {
 			$("#email1").val(rowSelected.email);
 			$("#phone1").val(rowSelected.phone);
 			
+			let strArray = rowSelected.hobbies.split(',');
+			let numArray = strArray.map(Number); 
+
+			$('#hobbies1 option').prop('selected', false);
+
+			$.each(numArray, function(index, value) {
+        			$('#hobbies1 option[value="' + value + '"]').prop('selected', true);
+    			});
+			
             		$('#editDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
