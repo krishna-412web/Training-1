@@ -18,13 +18,18 @@
 
 <cfset SpreadsheetAddRow(spreadsheetObj,'NAME,EMAIL,PHONE')>
 
+<cfset spreadsheetSetCellValue(spreadsheetObj, "NAME", 2, 1)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 2, 2)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 2, 3)>
+
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
-<cfloop array="#get#" index="item">
-
-    <cfset fullName = item.firstname & " " & item.lastname>
-    <cfset SpreadsheetAddRow(spreadsheetObj,'#fullName#,#item.email#,#item.phone#')>
+<cfloop from="1" to="#ArrayLen(get)#" index="i">
+	<cfset fullName = get[i].firstname & " " & get[i].lastname>
+	<cfset spreadsheetSetCellValue(spreadsheetObj, "#fullName#", i+2, 1)>
+	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].email#", i+2, 2)>
+	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].phone#", i+2, 3)>
 </cfloop>
 
 <cfloop from="3" to="#3+ArrayLen(get)#" index="i">

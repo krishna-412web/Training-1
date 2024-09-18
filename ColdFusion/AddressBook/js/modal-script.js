@@ -28,12 +28,8 @@ $(document).ready(() => {
 						`<td class="menu">${obj[i].phone}</td>\n`;
 					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view no-print" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
 						`<td><button type="button" class=" btn btn-sm btn-success edit no-print" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
-						`<td>
-							<form action="" method="post" id="form${i+1}">
-								<input type="hidden" name="logId" id="inp${i+1}"/>
-								<button type="submit" class=" btn btn-sm btn-success delete no-print" name="delete">Delete</button>
-							</form>
-						</td>`;
+						`<td><button type="submit" class=" btn btn-sm btn-success delete no-print" name="delete" data-bs-toggle="modal" data-bs-target="#delModal">Delete</button></td>`+
+						`<td><button type="button" class=" btn btn-sm btn-success edit no-print printContact">Print</button></td>`;
 					tabContent+= `<tr id="${obj[i].log_id}">`+row+`</tr>\n`;
 					row="";							
 				}
@@ -89,6 +85,8 @@ $(document).ready(() => {
             		$('#editDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
+			var hobbieResult = [];
+			var hobbyText='';
             		$('.content-div').hide();
 			let i = $(this).parent().parent().children().first().html();
 			let rowSelected = obj[i-1];
@@ -113,6 +111,22 @@ $(document).ready(() => {
 			$("#mailView").text(rowSelected.email);
 			$("#phoneView").text(rowSelected.phone);
 			
+
+			$.ajax({
+				url: './components/database.cfc?method=viewHobbies',
+				type: 'GET',
+				data: { hobbieId: rowSelected.hobbies },
+				success: function(response) 
+				{	
+					var hobbieResult= JSON.parse(response);
+					console.log(hobbieResult);
+					for(let j=0; j<hobbieResult.length; j++){
+						hobbyText +=`${hobbieResult[j]}<br>\n`;
+					}
+					$("#hobbieView1").html(hobbyText);
+				}
+			});
+			
 			
 			$('#viewDiv').show();
        	 	}
@@ -120,13 +134,32 @@ $(document).ready(() => {
 	});
 		
 	$(document).on('click','.delete', function(event) {
-		let row = $(this).parent().parent().parent().attr('id');
-		let i = $(this).parent();
-		let inp = i.children().first();
-		inp.attr('value',row);
-		alert(inp.attr('value'))
-		$(i).submit();
+		let row = $(this).parent().parent().attr('id');
+		$("#delInp").attr('value',row);
+	});
+		
+	$(document).on('click','.printContact', function(event) {
+		let cid= $(this).parent().parent().attr('id');
+		let i = $(this).parent().parent().children().first().html();
+		let rowSelected = obj[i-1];
 
+		$("#title1").val(rowSelected.title);
+		let title = $('#title1 option:selected').text();
+		$("#gender1").val(rowSelected.gender);
+		let gender = $('#gender1 option:selected').text(); 
+		$.ajax({
+			url: './components/database.cfc?method=viewContact',
+			type: 'POST',
+			data: { logId: cid,
+				title: title,
+				gender: gender },
+			success: function(response) 
+			{
+				if(response){
+					window.open('output.cfm','_blank');
+				}	
+			}
+		});
 	});
 	
 

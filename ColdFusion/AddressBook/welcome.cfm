@@ -61,6 +61,7 @@
 							<th class="no-print">View</th>
 							<th class="no-print">Edit</th>
 							<th class="no-print">Delete</th>
+							<th class="no-print">Print</th>
 						</thead>
 						<tbody  id="pageDisplay">
 							<tr>
@@ -70,12 +71,36 @@
 								<td><button type="button" class="btn btn-sm btn-success" id="btnView" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>
 								<td><button type="button" class="btn btn-sm btn-success" id="btnEdit" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>
 								<td><button type="button" class="btn btn-sm btn-success">Delete</button></td>
+								<td><button type="button" class="btn btn-sm btn-success">Print</button></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		<div>
+	</div>
+
+	<div class="modal" id="delModal">
+  		<div class="modal-dialog ">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      				</div>
+           			<div class="modal-body">
+					<form action="" method="post">
+						<div class="row">
+							<h5 class="text-dark">Do you wish to delete the contact?</h5>
+						</div>
+						<input type="hidden" id="delInp" name="logId" />
+						<div class="row">
+							<div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" name="deleteSubmit">Yes</button></div>
+							<div class="col-4"></div>
+							<div class="col-4"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#delModal">No</button></div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="modal" id="myModal">
@@ -115,6 +140,10 @@
 							<div class="row">
 								<h4 class="text-primary col-4">Phone:</h4>
 								<h5 class="text-dark col-auto" id="phoneView"></h5>
+							</div>
+							<div class="row">
+								<h4 class="text-primary col-4">Hobbies:</h4>
+								<h5 class="text-dark col-auto" id="hobbieView1"></h5>
 							</div>
 						</div>
 						<div class="col-3 bg-secondary d-flex flex-column justify-content-center">
@@ -229,6 +258,27 @@
 											<div class="form-floating">
 												<input class="form-control" type="text" id="phone" name="phone" pattern="[0-9]{10}" placeholder="" required>
 												<label class="form-label text-dark fw-bold">phone</label>
+											</div>
+										</div>
+									</div>
+									<h5 class="text-decoration-underline text-primary text-start">Hobbies</h5>
+									<div class="row">
+										<div class="col-5">
+											<div >
+											 	<select class="form-control" id="hobbies" name="hobbies" placeholder="" multiple required>
+      													<option value="" selected></option>
+      													<option value="1">Reading</option>
+      													<option value="2">Gardening</option>
+													<option value="3">Photography</option>
+													<option value="4">Cooking</option>
+													<option value="5">Hiking</option>
+													<option value="6">Painting</option>
+													<option value="7">Cycling</option>
+													<option value="8">Writing</option>
+													<option value="9">Knitting</option>
+													<option value="10">Music</option>
+   												 </select>
+												<label for="gender" class="text-dark fw-bold form-label">Gender*</label>
 											</div>
 										</div>
 									</div>
@@ -348,6 +398,27 @@
 											</div>
 										</div>
 									</div>
+									<h5 class="text-decoration-underline text-primary text-start">Hobbies</h5>
+									<div class="row">
+										<div class="col-5">
+											<div >
+											 	<select class="form-control" id="hobbies1" name="hobbies" placeholder="" multiple required>
+      													<option value="" selected></option>
+      													<option value="1">Reading</option>
+      													<option value="2">Gardening</option>
+													<option value="3">Photography</option>
+													<option value="4">Cooking</option>
+													<option value="5">Hiking</option>
+													<option value="6">Painting</option>
+													<option value="7">Cycling</option>
+													<option value="8">Writing</option>
+													<option value="9">Knitting</option>
+													<option value="10">Music</option>
+   												 </select>
+												<label for="hobbies1" class="text-dark fw-bold form-label">Gender*</label>
+											</div>
+										</div>
+									</div>
 									<input type="hidden" class="form-control" name="logId" id="logId1">
 
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
@@ -368,5 +439,6 @@
 	<script src="./js/modal-script.js"></script>
 </body>
 </html>
+
 
 
