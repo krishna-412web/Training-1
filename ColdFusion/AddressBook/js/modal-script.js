@@ -22,7 +22,7 @@ $(document).ready(() => {
 				for(let i=0;i< obj.length;i++)
 				{	
 					row += `\n<td>${i+1}</td>\n`+
-						`<td class="menu no-print"><img style="height:40px;width:40px;padding:0;margin:0 auto;" src="${obj[i].profile}" class="img-fluid" alt="pic"/></td>\n`+
+						`<td class="menu"><img style="height:40px;width:40px;padding:0;margin:0 auto;" src="${obj[i].profile}" class="img-fluid" alt="pic"/></td>\n`+
 						`<td class="menu">${obj[i].firstname+" "+obj[i].lastname}</td>\n`+
 						`<td class="menu">${obj[i].email}</td>\n`+
 						`<td class="menu">${obj[i].phone}</td>\n`;
@@ -142,6 +142,9 @@ $(document).ready(() => {
 		
 	});
 		
+	$("#myForm1").submit(function(event){
+		$(this).addClass("was-validated");
+	});
 	$(document).on('click','.delete', function(event) {
 		let row = $(this).parent().parent().attr('id');
 		$("#delInp").attr('value',row);

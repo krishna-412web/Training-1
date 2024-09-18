@@ -82,7 +82,7 @@
 		<cfreturn local.createResult />
 	</cffunction>
 
-	<cffunction name="addContact" returnType="string">
+	<cffunction name="addContact" returnType="struct">
 		<cfargument name="title" type="string">
 		<cfargument name="firstName" type="string">
 		<cfargument name="lastName" type="string">
@@ -97,6 +97,8 @@
 		<cfargument name="email" type="string">	
 		<cfargument name="phone" type="string">
 		<cfargument name="hobbies" type="string">
+	
+		<cfset local.message = structNew()>
 			
 		<cfquery name="local.addData" result="r">
 			INSERT INTO 
@@ -131,7 +133,8 @@
 				<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">,
 				<cfqueryparam value="#arguments.hobbies#" cfsqltype="cf_sql_varchar">)
 		</cfquery>
-		<cfreturn "Data Inserted Successfully"/>
+		<cfset local.message.value = "Data Inserted Successfully">
+		<cfreturn local.message/>
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">

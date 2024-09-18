@@ -5,11 +5,12 @@
 <cfset spreadsheetObj = SpreadsheetNew("AddressBook",false)>
 
 
- <cfset myFormat=StructNew()>
- <cfset myFormat.bold="true">
+<cfset myFormat=StructNew()>
+<cfset myFormat.bold="true">
+<cfset myFormat.alignV="center">
 
-<cfset data={color="white",fgcolor="grey_50_percent"}>
-<cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true"}>
+<cfset data={color="white",fgcolor="grey_50_percent",alignV="center"}>
+<cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true",alignV="center"}>
 
 <cfset SpreadsheetAddRow(spreadsheetObj,'#session.user#,,#dateFormat(now(), "dd/mm/yyyy HH:mm:ss me")#')>
 <cfset SpreadsheetMergeCells(spreadsheetObj,1,1,1,2)>
@@ -45,11 +46,11 @@
 	</cfif>
 </cfloop>
 
-<cfloop from="1" to="#SpreadsheetGetColumnCount(spreadsheetObj,'AddressBook')#" index="i">
-	<cfset SpreadSheetSetColumnWidth(spreadsheetobj,i,35)>
+<cfloop from="1" to="3" index="i">
+	<cfset SpreadSheetSetColumnWidth(spreadsheetobj,i,25)>
 </cfloop>
 
-
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,4,35)>
 
 
 <cfset binary = SpreadsheetReadBinary(spreadsheetObj)>

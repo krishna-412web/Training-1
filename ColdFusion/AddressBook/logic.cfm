@@ -11,7 +11,6 @@
         		<cfset obj1=CreateObject("component","components.database")>
 			<cfset message=obj1.addContact(form.title,form.firstName,form.lastName,form.gender,form.dob,
 						"#imgPath#",form.houseName,form.street,form.city,form.state,form.pincode,form.email,form.phone,form.hobbies)>
-			<script>alert("#message#");</script>
 			<cflocation url="welcome.cfm" addToken="no" statusCode="302">	
 		</cfif>
 		<cfif structKeyExists(form,"submit2")>
