@@ -239,6 +239,7 @@
 
 	<cffunction name="selectContact" access="remote" returnFormat="JSON">
 		<cfargument name="logId" type="string">
+		<cfset local.logId = decryptData(arguments.logId)>
 		<cfquery name="local.getContact" returnType="struct">
 			SELECT
 				log_id,
@@ -259,7 +260,7 @@
 
 			FROM 
 				log_book	 
-			WHERE (log_id = <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">);
+			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
 		</cfquery>
 		<cfreturn local.getContact.RESULTSET />
 	</cffunction>

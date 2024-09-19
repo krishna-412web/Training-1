@@ -1,8 +1,14 @@
-<cfset session.result =0>
+<cfif structKeyExists(session,"result")>
+	<cfif session.result.value EQ 1>
+		<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+	</cfif>
+<cfelse>
+	<cfset session.result = structNew()>
+	<cfset session.result.value=0>
+</cfif>
 <cfset errorMessage="">
 <cfif structKeyExists(form,"submit")>
 	<cfset obj = createObject('component','components.database')>
-	<cfset session.result= structNew()>
 	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
 	<cfoutput>
 		<cfif session.result.value EQ 1>

@@ -1,8 +1,7 @@
 <cfoutput>
-
 	<cfif structKeyExists(session,"result") AND session.result.value EQ 1>
 		<cfif structKeyExists(form,"submit")>
-			session.result.value=0;
+			<cfset session.result.value = 0>
 			<cflocation url="index.cfm" addToken="no" statusCode="302">
 		</cfif>
 

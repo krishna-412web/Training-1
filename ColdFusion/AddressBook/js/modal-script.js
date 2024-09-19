@@ -151,15 +151,20 @@ $(document).ready(() => {
 	});
 		
 	$(document).on('click','.printContact', function(event) {
-		let cid= $(this).parent().parent().attr('id');
+		let id= $(this).parent().parent().attr('id');
 		let i = $(this).parent().parent().children().first().html();
 		let rowSelected = obj[i-1];
 
 		$("#title1").val(rowSelected.title);
 		let title = $('#title1 option:selected').text();
 		$("#gender1").val(rowSelected.gender);
-		let gender = $('#gender1 option:selected').text(); 
-		$.ajax({
+		let gender = $('#gender1 option:selected').text();
+
+		let encodedTitle = encodeURIComponent(title);
+		let encodedGender = encodeURIComponent(gender);
+
+		 window.open(`output.cfm?id=${id}&title=${title}&gender=${gender}`,'_blank');
+		/*$.ajax({
 			url: './components/database.cfc?method=viewContact',
 			type: 'POST',
 			data: { logId: cid,
@@ -171,7 +176,7 @@ $(document).ready(() => {
 					window.open('output.cfm','_blank');
 				}	
 			}
-		});
+		});*/
 	});
 	
 
