@@ -82,23 +82,11 @@
 		<cfreturn local.createResult />
 	</cffunction>
 
-	<cffunction name="addContact" returnType="struct">
-		<cfargument name="title" type="string">
-		<cfargument name="firstName" type="string">
-		<cfargument name="lastName" type="string">
-		<cfargument name="gender" type="string">
-		<cfargument name="dob" type="date">
+	<cffunction name="addContact">
 		<cfargument name="profile" type="string">
-		<cfargument name="house_flat" type="string">
-		<cfargument name="street" type="string">
-		<cfargument name="city" type="string">
-		<cfargument name="state" type="string">
-		<cfargument name="pincode" type="string">
-		<cfargument name="email" type="string">	
-		<cfargument name="phone" type="string">
-		<cfargument name="hobbies" type="string">
-	
 		<cfset local.message = structNew()>
+
+		<cfset hobbies = ListToArray(form.hobbies)>
 			
 		<cfquery name="local.addData" result="r">
 			INSERT INTO 
@@ -115,26 +103,43 @@
 					state,
 					pincode,
 					email,
-					phone,
-					hobbies) 
+					phone) 
 			VALUES (<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">,
-				<cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_integer">,
-				<cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date">,
-				<cfqueryparam value="#arguments.profile#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.house_flat#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_integer">,
-				<cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">,
-				<cfqueryparam value="#arguments.hobbies#" cfsqltype="cf_sql_varchar">)
+				<cfqueryparam value="#form.title#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#form.firstName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.lastName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.gender#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">,
+				<cfqueryparam value="#form.profile#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.houseName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.street#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.city#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.state#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.pincode#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">);
 		</cfquery>
+		<cfquery name="local.getContactId" returnType="struct">
+    			SELECT LAST_INSERT_ID() AS contactid;
+		</cfquery>
+		<cfquery name="local.insertHobbies">
+			INSERT INTO
+				contacthobbies(
+					log_id,
+					hobbieid
+				)
+			VALUES
+				<cfloop list="#form.hobbies#" index="i">
+					(
+						<cfqueryparam value="#local.getContactId.RESULTSET[1].contactid#" cfsqltype="cf_sql_integer">,
+						<cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
+					)
+					<cfif i NEQ listLast(form.hobbies,",")>,</cfif>
+				</cfloop>
+			;
+		</cfquery>	
 		<cfset local.message.value = "Data Inserted Successfully">
-		<cfreturn local.message/>
+		<cfreturn message/>
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
@@ -153,8 +158,7 @@
 				state,
 				pincode,
 				email,
-				phone,
-				hobbies
+				phone
 			FROM
 				log_book
 			WHERE 	
@@ -221,7 +225,6 @@
 				pincode= <cfqueryparam value="#form.pincode#" cfsqltype="cf_sql_integer">,
 				email= <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
 				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">,
-				hobbies= <cfqueryparam value="#form.hobbies#" cfsqltype="cf_sql_varchar">
 			WHERE
 				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
@@ -255,12 +258,11 @@
 				state,
 				pincode,
 				email,
-				phone,
-				hobbies
-
+				phone
 			FROM 
 				log_book	 
 			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
+			
 		</cfquery>
 		<cfreturn local.getContact.RESULTSET />
 	</cffunction>
@@ -281,83 +283,6 @@
 			<cfset arrayappend(local.result,local.getHobby.RESULTSET[1].hobbieName)>
 		</cfloop>
 		<cfreturn local.result />
-	</cffunction>
-	
-
-	<cffunction name="viewContact" access="remote" returnFormat="JSON">
-		<cfargument name="logId" type="string">
-		<cfargument name="title" type="string">
-		<cfargument name="gender" type="string">
-		<cfset local.logId = decryptData(arguments.logId)>
-		<cfset local.get= selectContact(local.logId)>
-		<cfset local.hobbieList = viewHobbies(local.get[1].hobbies)>
-		<cfset local.hobbieListText = "">
-		<cfloop array="#local.hobbieList#" index="i">
-			<cfset local.hobbieListText = local.hobbieListText & i & "<br>">
-		</cfloop>
-		<cfset path = expandPath("../output.cfm")>
-		<cffile action="write" file="#path#" output=""/>
-		<cfoutput>
-			<cffile action="write" file="#path#" output='
-				<!DOCTYPE html>
-				<html lang="en">
-					<head>
-  						<title>ContactPage</title>
-  						<meta charset="utf-8">
-  						<meta name="viewport" content="width=device-width, initial-scale=1">
- 						<link href="./css/bootstrap.min.css" rel="stylesheet">
-  						<script src="./js/bootstrap.bundle.min.js"></script>
-  						<script src="./js/bootstrap.min.js"></script>
-						<link rel="stylesheet" href="./css/printContact.css" media="print">
-					</head>
-					<body>
-						<div class="border-bottom border-2 border-dark no-print"></div>
-						<div id="viewDiv" class="content-div row">
-							<div class="col-9">
-                        					<h3 class="text-center border-bottom text-primary border-dark">VIEW CONTACT</h3>
-                        					<div class="row">
-									<h4 class="text-primary col-4">Name:</h4>
-									<h5 class="text-dark col-auto" id="nameView">#arguments.title# #local.get[1].firstname# #local.get[1].lastname#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Gender:</h4>
-									<h5 class="text-dark col-auto" id="genderView">#arguments.gender#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Date of Birth:</h4>
-									<h5 class="text-dark col-auto" id="dobView">#local.get[1].dob#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Address:</h4>
-									<h5 class="text-dark col-auto" id="AddressView">#local.get[1].house_flat#,#local.get[1].street#<br>#local.get[1].city#,#local.get[1].state#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Pincode:</h4>
-									<h5 class="text-dark col-auto" id="pincodeView">#local.get[1].pincode#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Email:</h4>
-									<h5 class="text-dark col-auto" id="mailView">#local.get[1].email#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Phone:</h4>
-									<h5 class="text-dark col-auto" id="phoneView">#local.get[1].phone#</h5>
-								</div>
-								<div class="row">
-									<h4 class="text-primary col-4">Hobbies:</h4>
-									<h5 class="text-dark col-auto" id="hobbieView">#local.hobbieListText#</h5>
-								</div>
-							</div>
-							<div class="col-3 bg-secondary d-flex flex-column justify-content-center align-items-center no-print">
-								<img src="#local.get[1].profile#" class="img-fluid rounded w-50 h-50" id="profilePic" alt="profile-pic">
-							</div>
-                    				</div>
-						<div class="border-bottom border-2 border-dark no-print"></div>
-					</body>
-				</html>
-			'/>
-		</cfoutput>
-		<cfreturn 1/>	
 	</cffunction>
 
 </cfcomponent>

@@ -82,15 +82,6 @@ $(document).ready(() => {
 			$("#email1").val(rowSelected.email);
 			$("#phone1").val(rowSelected.phone);
 			
-			let strArray = rowSelected.hobbies.split(',');
-			let numArray = strArray.map(Number); 
-
-			$('#hobbies1 option').prop('selected', false);
-
-			$.each(numArray, function(index, value) {
-        			$('#hobbies1 option[value="' + value + '"]').prop('selected', true);
-    			});
-			
             		$('#editDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
@@ -164,19 +155,7 @@ $(document).ready(() => {
 		let encodedGender = encodeURIComponent(gender);
 
 		 window.open(`output.cfm?id=${id}&title=${title}&gender=${gender}`,'_blank');
-		/*$.ajax({
-			url: './components/database.cfc?method=viewContact',
-			type: 'POST',
-			data: { logId: cid,
-				title: title,
-				gender: gender },
-			success: function(response) 
-			{
-				if(response){
-					window.open('output.cfm','_blank');
-				}	
-			}
-		});*/
+
 	});
 	
 

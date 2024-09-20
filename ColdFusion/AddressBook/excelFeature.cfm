@@ -21,22 +21,18 @@
 <cfset spreadsheetSetCellValue(spreadsheetObj, "NAME", 2, 1)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 2, 2)>
 <cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 2, 3)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES", 2, 4)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "PHOTO", 2, 5)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PHOTO", 2, 4)>
 
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
 <cfloop from="1" to="#ArrayLen(get)#" index="i">
 	<cfset fullName = get[i].firstname & " " & get[i].lastname>
-	<cfset hobbieId = obj.viewHobbies(get[i].hobbies)>
-	<cfset hobbieList = ArrayToList(hobbieId)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#fullName#", i+2, 1)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].email#", i+2, 2)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#get[i].phone#", i+2, 3)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#hobbieList#", i+2, 4)>
 	<cfset myImage = expandPath(get[i].profile)>
-	<cfset SpreadsheetAddImage(SpreadsheetObj,myImage,"#i+2#,5,#i+2#,6")>
+	<cfset SpreadsheetAddImage(SpreadsheetObj,myImage,"#i+2#,4,#i+2#,5")>
 	<cfset SpreadsheetSetRowHeight(spreadsheetObj,i+2,60)>
 </cfloop>
 
@@ -50,7 +46,7 @@
 	<cfset SpreadSheetSetColumnWidth(spreadsheetobj,i,25)>
 </cfloop>
 
-<cfset SpreadSheetSetColumnWidth(spreadsheetobj,4,35)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,3,35)>
 
 
 <cfset binary = SpreadsheetReadBinary(spreadsheetObj)>

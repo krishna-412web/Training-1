@@ -1,11 +1,7 @@
 <cfif structKeyExists(url,"id") AND structKeyExists(url,"title") AND structKeyExists(url,"gender")>
 	<cfset obj = createObject("component","components.database")>
 	<cfset get = obj.selectContact(URL.id)>
-	<cfset hobbieList = obj.viewHobbies(get[1].hobbies)>
-	<cfset hobbieListText = "">
-	<cfloop array="#hobbieList#" index="i">
-		<cfset hobbieListText = hobbieListText & i & "<br>">
-	</cfloop>
+	
 </cfif>
 
 <cfoutput>
@@ -55,7 +51,7 @@
 				</div>
 				<div class="row">
 					<h4 class="text-primary col-4">Hobbies:</h4>
-					<h5 class="text-dark col-auto" id="hobbieView">#hobbieListText#</h5>
+					<!---<h5 class="text-dark col-auto" id="hobbieView">#hobbieListText#</h5>--->
 				</div>
 			</div>
 			<div class="col-3 bg-secondary d-flex flex-column justify-content-center align-items-center no-print">
