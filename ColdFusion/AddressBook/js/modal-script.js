@@ -81,7 +81,20 @@ $(document).ready(() => {
 			$("#pincode1").val(rowSelected.pincode);
 			$("#email1").val(rowSelected.email);
 			$("#phone1").val(rowSelected.phone);
+
+			$("#hobbies1 option").each(function() {
+ 				$(this).prop('selected', false);          	
+           	 	});
+
+			$("#hobbies1 option").each(function() {
+                		var optionText = $(this).text();
+   
+                		if (rowSelected.hobbies.includes(optionText)) {
+                    			$(this).prop('selected', true);          
+				}	
+           	 	});	
 			
+
             		$('#editDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
@@ -91,10 +104,6 @@ $(document).ready(() => {
 			let i = $(this).parent().parent().children().first().html();
 			let rowSelected = obj[i-1];
 
-			$("#title1").val(rowSelected.title);
-			let title = $('#title1 option:selected').text();
-			$("#gender1").val(rowSelected.gender);
-			let gender = $('#gender1 option:selected').text();
 			let date = new Date(rowSelected.dob);
 			date.setDate(date.getDate() + 1);
 			let formatdate = date.toISOString().split('T')[0];
@@ -102,30 +111,20 @@ $(document).ready(() => {
 			
 			$("#profilePic").attr('src',`${rowSelected.profile}`);
 
-			let name = `${title} ${rowSelected.firstname} ${rowSelected.lastname}`;
+			let name = `${rowSelected.titleName} ${rowSelected.firstname} ${rowSelected.lastname}`;
 			$("#nameView").text(name);
-			$("#genderView").text(gender);
+			$("#genderView").text(rowSelected.genderName);
 			$("#dobView").text(formatdate);
 			$("#AddressView").html(address);
 			$("#pincodeView").text(rowSelected.pincode);
 			$("#mailView").text(rowSelected.email);
 			$("#phoneView").text(rowSelected.phone);
-			
 
-			$.ajax({
-				url: './components/database.cfc?method=viewHobbies',
-				type: 'GET',
-				data: { hobbieId: rowSelected.hobbies },
-				success: function(response) 
-				{	
-					var hobbieResult= JSON.parse(response);
-					console.log(hobbieResult);
-					for(let j=0; j<hobbieResult.length; j++){
-						hobbyText +=`${hobbieResult[j]}<br>\n`;
-					}
-					$("#hobbieView1").html(hobbyText);
-				}
-			});
+			for(let j=0; j<rowSelected.hobbies.length; j++){
+				hobbyText +=`${rowSelected.hobbies[j]}<br>\n`;
+			}
+			$("#hobbieView1").html(hobbyText);
+
 			
 			
 			$('#viewDiv').show();
@@ -154,9 +153,7 @@ $(document).ready(() => {
 		let encodedTitle = encodeURIComponent(title);
 		let encodedGender = encodeURIComponent(gender);
 
-		 window.open(`output.cfm?id=${id}&title=${title}&gender=${gender}`,'_blank');
+		 window.open(`output.cfm?id=${rowSelected.log_id}`);
 
 	});
-	
-
 });

@@ -6,10 +6,9 @@
 		</cfif>
 
 		<cfif structKeyExists(form, "submit1")>
-			<cfinclude template ="image.cfm">
         		<cfset obj1=CreateObject("component","components.database")>
+			<cfinclude template ="image.cfm">
 			<cfset message=obj1.addContact(imgPath)>
-			<cflocation url="welcome.cfm" addToken="no" statusCode="302">	
 		</cfif>
 		<cfif structKeyExists(form,"submit2")>
 			<cfset obj2=CreateObject("component","components.database")>

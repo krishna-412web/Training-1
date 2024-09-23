@@ -8,3 +8,4 @@
         nameConflict="makeunique">
 <cfset uploadedFileName = cffile.serverFile>
 <cfset imgPath="./images/#uploadedFileName#">
+

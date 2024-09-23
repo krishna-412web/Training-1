@@ -1,7 +1,6 @@
-<cfif structKeyExists(url,"id") AND structKeyExists(url,"title") AND structKeyExists(url,"gender")>
+<cfif structKeyExists(url,"id")>
 	<cfset obj = createObject("component","components.database")>
-	<cfset get = obj.selectContact(URL.id)>
-	
+	<cfset get = obj.selectdata(URL.id)>	
 </cfif>
 
 <cfoutput>
@@ -23,11 +22,11 @@
                         	<h3 class="text-center border-bottom text-primary border-dark">VIEW CONTACT</h3>
                         	<div class="row">
 					<h4 class="text-primary col-4">Name:</h4>
-					<h5 class="text-dark col-auto" id="nameView">#URL.title# #get[1].firstname# #get[1].lastname#</h5>
+					<h5 class="text-dark col-auto" id="nameView">#get[1].titleName# #get[1].firstname# #get[1].lastname#</h5>
 				</div>
 				<div class="row">
 					<h4 class="text-primary col-4">Gender:</h4>
-					<h5 class="text-dark col-auto" id="genderView">#URL.gender#</h5>
+					<h5 class="text-dark col-auto" id="genderView">#get[1].genderName#</h5>
 				</div>
 				<div class="row">
 					<h4 class="text-primary col-4">Date of Birth:</h4>
@@ -49,9 +48,14 @@
 					<h4 class="text-primary col-4">Phone:</h4>
 					<h5 class="text-dark col-auto" id="phoneView">#get[1].phone#</h5>
 				</div>
+				
 				<div class="row">
 					<h4 class="text-primary col-4">Hobbies:</h4>
-					<!---<h5 class="text-dark col-auto" id="hobbieView">#hobbieListText#</h5>--->
+					<h5 class="text-dark col-auto" id="hobbieView">
+						<cfloop array="#get[1].hobbies#" index="i">
+							#i#<br>
+						</cfloop>
+					</h5>
 				</div>
 			</div>
 			<div class="col-3 bg-secondary d-flex flex-column justify-content-center align-items-center no-print">

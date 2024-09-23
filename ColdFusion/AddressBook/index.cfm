@@ -9,7 +9,7 @@
 <cfset errorMessage="">
 <cfif structKeyExists(form,"submit")>
 	<cfset obj = createObject('component','components.database')>
-	<cfset session.result = obj.getInfo(form.userName,form.passWord)>
+	<cfset session.result = obj.access(form.userName,form.passWord)>
 	<cfoutput>
 		<cfif session.result.value EQ 1>
 				<cflocation url="welcome.cfm" addToken="no" statusCode="302">

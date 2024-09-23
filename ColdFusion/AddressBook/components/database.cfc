@@ -4,7 +4,7 @@
 	<cfproperty name="salt" type="string">
 	<cfset variables.key="baiYIM2yvVW258BNOmovjQ==">
 
-	<cffunction name="getInfo" access="public" returnType="struct">
+	<cffunction name="access" access="public" returnType="struct">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
 		<cfquery name="local.get" result="r">
@@ -110,7 +110,7 @@
 				<cfqueryparam value="#form.lastName#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.gender#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">,
-				<cfqueryparam value="#form.profile#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.profile#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.houseName#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.street#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.city#" cfsqltype="cf_sql_varchar">,
@@ -124,7 +124,7 @@
 		</cfquery>
 		<cfquery name="local.insertHobbies">
 			INSERT INTO
-				contacthobbies(
+				hobbiecontact(
 					log_id,
 					hobbieid
 				)
@@ -143,33 +143,55 @@
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
-		<cfquery name="local.getData" returnType="struct">
+		<cfargument name="log_id" type="string" required="false">
+		<cfif structKeyExists(arguments,"log_id")>
+			<cfset local.logId = decryptData(arguments.log_id)>	
+		</cfif>
+		<cfquery name="local.getContacts" returnType="struct">
 			SELECT 
-				log_id,
-				title,
-				firstname,
-				lastname,
-				gender,
-				dob,
-				profile,
-				house_flat,
-				street,
-				city,
-				state,
-				pincode,
-				email,
-				phone
-			FROM
-				log_book
-			WHERE 	
-				user_id= <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;
+            			log_book.log_id,
+				log_book.title,
+            			title.value AS titleName,
+            			log_book.firstname,
+            			log_book.lastname,
+				log_book.gender,
+            			gender.gendername AS genderName,
+            			log_book.dob,
+            			log_book.profile,
+            			log_book.house_flat,
+            			log_book.street,
+            			log_book.city,
+            			log_book.state,
+            			log_book.pincode,
+            			log_book.email,
+            			log_book.phone,
+            			GROUP_CONCAT(hobbies.hobbieName) AS hobbies
+        		FROM
+            			log_book
+        		LEFT JOIN
+            			hobbieContact ON log_book.log_id = hobbieContact.log_id
+        		LEFT JOIN
+         	   		hobbies ON hobbieContact.hobbieid = hobbies.hobbieid
+			LEFT JOIN
+				title ON log_book.title = title.id
+			LEFT JOIN
+				gender ON log_book.gender = gender.genderid
+        		WHERE 
+				<cfif structKeyExists(arguments,"log_id")>
+					log_book.log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+				<cfelse>	
+            				log_book.user_id = <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">
+				</cfif>
+        		GROUP BY
+            			log_book.log_id;
 		</cfquery>
-		
-		<cfloop array="#local.getData.RESULTSET#" index="i">
+		<cfloop array="#local.getContacts.RESULTSET#" index="i">
 			<cfset local.encryptedText= encrypt(toString(i.log_id),variables.key,"AES","Hex")>
 			<cfset i.log_id= local.encryptedText >
+			<cfset local.hobbieArray = listToArray(i.hobbies)>
+			<cfset i.hobbies = local.hobbieArray>
 		</cfloop>
-		<cfreturn local.getData.RESULTSET/>
+		<cfreturn local.getContacts.RESULTSET/>
 	</cffunction>
 
 	<cffunction name="decryptData">
@@ -224,15 +246,43 @@
 				state= <cfqueryparam value="#form.state#" cfsqltype="cf_sql_varchar">,
 				pincode= <cfqueryparam value="#form.pincode#" cfsqltype="cf_sql_integer">,
 				email= <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
-				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">,
+				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">
 			WHERE
 				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
+		</cfquery>
+		<cfquery name="deleteHobby">
+			DELETE FROM
+				hobbiecontact
+			WHERE 
+				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
+		</cfquery>
+		<cfquery name="updateHobby">
+			INSERT INTO
+				hobbiecontact(
+					log_id,
+					hobbieid
+				)
+			VALUES
+				<cfloop list="#form.hobbies#" index="i">
+					(
+						<cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">,
+						<cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
+					)
+					<cfif i NEQ listLast(form.hobbies,",")>,</cfif>
+				</cfloop>
+			;
 		</cfquery>
 	</cffunction>
 
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">
 		<cfargument name="logId" type="string">
 		<cfset local.logId = decryptData(arguments.logId)>
+		<cfquery name="deleteHobby">
+			DELETE FROM
+				hobbiecontact
+			WHERE 
+				log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
+		</cfquery>
 		<cfquery name="delete" result="r">
 			DELETE FROM 
 				log_book	 
