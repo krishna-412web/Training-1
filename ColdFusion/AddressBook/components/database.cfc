@@ -151,11 +151,9 @@
 			SELECT 
             			log_book.log_id,
 				log_book.title,
-            			title.value AS titleName,
             			log_book.firstname,
             			log_book.lastname,
 				log_book.gender,
-            			gender.gendername AS genderName,
             			log_book.dob,
             			log_book.profile,
             			log_book.house_flat,
@@ -165,6 +163,8 @@
             			log_book.pincode,
             			log_book.email,
             			log_book.phone,
+				title.value AS titleName,
+				gender.gendername AS genderName,
             			GROUP_CONCAT(hobbies.hobbieName) AS hobbies
         		FROM
             			log_book
@@ -188,8 +188,10 @@
 		<cfloop array="#local.getContacts.RESULTSET#" index="i">
 			<cfset local.encryptedText= encrypt(toString(i.log_id),variables.key,"AES","Hex")>
 			<cfset i.log_id= local.encryptedText >
-			<cfset local.hobbieArray = listToArray(i.hobbies)>
-			<cfset i.hobbies = local.hobbieArray>
+			<cfif structKeyExists(i,"hobbies")>
+				<cfset local.hobbieArray = listToArray(i.hobbies)>
+				<cfset i.hobbies = local.hobbieArray>
+			</cfif>
 		</cfloop>
 		<cfreturn local.getContacts.RESULTSET/>
 	</cffunction>
@@ -288,51 +290,6 @@
 				log_book	 
 			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
 		</cfquery>
-	</cffunction>
-
-	<cffunction name="selectContact" access="remote" returnFormat="JSON">
-		<cfargument name="logId" type="string">
-		<cfset local.logId = decryptData(arguments.logId)>
-		<cfquery name="local.getContact" returnType="struct">
-			SELECT
-				log_id,
-				title,
-				firstname,
-				lastname,
-				gender,
-				dob,
-				profile,
-				house_flat,
-				street,
-				city,
-				state,
-				pincode,
-				email,
-				phone
-			FROM 
-				log_book	 
-			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
-			
-		</cfquery>
-		<cfreturn local.getContact.RESULTSET />
-	</cffunction>
-
-	<cffunction name="viewHobbies" access="remote" returnFormat="JSON">
-		<cfargument name="hobbieId" type="string">
-		<cfset local.result = arrayNew(1)>
-		<cfset local.hobbie = listToArray(arguments.hobbieId)>
-		<cfloop array="#local.hobbie#" index="i">
-			<cfquery name="local.getHobby" returnType="struct">
-				SELECT 
-					hobbieName
-				FROM
-					hobbies
-				WHERE 
-					hobbieId = <cfqueryparam value="#i#" cfsqltype="cf_sql_integer">;
-			</cfquery>
-			<cfset arrayappend(local.result,local.getHobby.RESULTSET[1].hobbieName)>
-		</cfloop>
-		<cfreturn local.result />
 	</cffunction>
 
 </cfcomponent>
