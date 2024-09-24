@@ -52,8 +52,8 @@
 				<div class="row">
 					<h4 class="text-primary col-4">Hobbies:</h4>
 					<h5 class="text-dark col-auto" id="hobbieView">
-						<cfloop array="#get[1].hobbies#" index="i">
-							#i#<br>
+						<cfloop array="#get[1].hobbies#" index="local.i">
+							#local.i#<br>
 						</cfloop>
 					</h5>
 				</div>

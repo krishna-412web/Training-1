@@ -87,9 +87,8 @@ $(document).ready(() => {
            	 	});
 
 			$("#hobbies1 option").each(function() {
-                		var optionText = $(this).text();
-   
-                		if (rowSelected.hobbies.includes(optionText)) {
+                		var optionText = $(this).attr('value');
+                		if (rowSelected.hobbieid.includes(optionText)) {
                     			$(this).prop('selected', true);          
 				}	
            	 	});	

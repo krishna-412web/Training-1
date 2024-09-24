@@ -4,6 +4,8 @@
 	<cfproperty name="salt" type="string">
 	<cfset variables.key="baiYIM2yvVW258BNOmovjQ==">
 
+	
+
 	<cffunction name="access" access="public" returnType="struct">
 		<cfargument name="userName" type="string">
 		<cfargument name="passWord" type="string">
@@ -119,9 +121,6 @@
 				<cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">);
 		</cfquery>
-		<cfquery name="local.getContactId" returnType="struct">
-    			SELECT LAST_INSERT_ID() AS contactid;
-		</cfquery>
 		<cfquery name="local.insertHobbies">
 			INSERT INTO
 				hobbiecontact(
@@ -129,17 +128,17 @@
 					hobbieid
 				)
 			VALUES
-				<cfloop list="#form.hobbies#" index="i">
+				<cfloop list="#form.hobbies#" index="local.i">
 					(
-						<cfqueryparam value="#local.getContactId.RESULTSET[1].contactid#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
+						<cfqueryparam value="#r.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
+						<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
 					)
 					<cfif i NEQ listLast(form.hobbies,",")>,</cfif>
 				</cfloop>
 			;
 		</cfquery>	
 		<cfset local.message.value = "Data Inserted Successfully">
-		<cfreturn local.messagemessage/>
+		<cfreturn local.message/>
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
@@ -165,6 +164,7 @@
             			log_book.phone,
 				title.value AS titleName,
 				gender.gendername AS genderName,
+				GROUP_CONCAT(hobbieContact.hobbieid) AS hobbieid,
             			GROUP_CONCAT(hobbies.hobbieName) AS hobbies
         		FROM
             			log_book
@@ -189,12 +189,12 @@
         		GROUP BY
             			log_book.log_id;
 		</cfquery>
-		<cfloop array="#local.getContacts.RESULTSET#" index="i">
-			<cfset local.encryptedText= encrypt(toString(i.log_id),variables.key,"AES","Hex")>
-			<cfset i.log_id= local.encryptedText >
-			<cfif structKeyExists(i,"hobbies")>
-				<cfset local.hobbieArray = listToArray(i.hobbies)>
-				<cfset i.hobbies = local.hobbieArray>
+		<cfloop array="#local.getContacts.RESULTSET#" index="local.i">
+			<cfset local.encryptedText= encrypt(toString(local.i.log_id),variables.key,"AES","Hex")>
+			<cfset local.i.log_id= local.encryptedText >
+			<cfif structKeyExists(local.i,"hobbies")>
+				<cfset local.hobbieArray = listToArray(local.i.hobbies)>
+				<cfset local.i.hobbies = local.hobbieArray>
 			</cfif>
 		</cfloop>
 		<cfreturn local.getContacts.RESULTSET/>
@@ -269,10 +269,10 @@
 					hobbieid
 				)
 			VALUES
-				<cfloop list="#form.hobbies#" index="i">
+				<cfloop list="#form.hobbies#" index="local.i">
 					(
 						<cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
+						<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
 					)
 					<cfif i NEQ listLast(form.hobbies,",")>,</cfif>
 				</cfloop>
@@ -294,6 +294,32 @@
 				log_book	 
 			WHERE (log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">);
 		</cfquery>
+	</cffunction>
+	<cffunction name="formValidate">
+		<cfargument name="form" type="struct">
+		<cfset local.message=structNew()>
+		<cfset local.message.errors=[]>
+		<cfset local.mesage.flag = false >
+
+		<cfif len(trim(form.firstName)) eq 0>
+    			<cfset arrayAppend(formErrors, "*firstname is required.")>
+		</cfif>
+
+		<cfif len(trim(form.lastName)) eq 0>
+    			<cfset arrayAppend(formErrors, "*lastname is required.")>
+		</cfif>
+
+		<cfif len(trim(form.email)) eq 0>
+    			<cfset arrayAppend(formErrors, "*email is required.")>
+		</cfif>
+
+		<cfif len(trim(form.message)) eq 0>
+    			<cfset arrayAppend(formErrors, "Message is required.")>
+		</cfif>
+
+		
+			
+		<cfreturn local.message>
 	</cffunction>
 
 </cfcomponent>
