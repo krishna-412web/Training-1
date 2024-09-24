@@ -139,7 +139,7 @@
 			;
 		</cfquery>	
 		<cfset local.message.value = "Data Inserted Successfully">
-		<cfreturn message/>
+		<cfreturn local.messagemessage/>
 	</cffunction>
 
 	<cffunction name="selectdata" access="remote" returnFormat="JSON">
@@ -177,11 +177,15 @@
 			LEFT JOIN
 				gender ON log_book.gender = gender.genderid
         		WHERE 
+            			log_book.user_id = <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">
+
 				<cfif structKeyExists(arguments,"log_id")>
+					AND
 					log_book.log_id = <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
-				<cfelse>	
-            				log_book.user_id = <cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">
+
 				</cfif>
+
+
         		GROUP BY
             			log_book.log_id;
 		</cfquery>

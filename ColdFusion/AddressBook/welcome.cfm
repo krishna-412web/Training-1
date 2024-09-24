@@ -435,6 +435,11 @@
     			</div>
   		</div>
 	</div>
+	<div class="container error">
+		<span class="text-danger">*this is an error message</span>
+		<br>
+		<span class="text-danger">*this is an error message</span>
+	</div>
 	<script src="./js/jQuery.js"></script>
 	<script src="./js/modal-script.js"></script>
 </body>
