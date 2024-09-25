@@ -1,6 +1,7 @@
 $(document).ready(() => {
 	
 	var obj;
+	var prevHobbieList;
 	$.ajax({
 		url: './components/database.cfc?method=selectdata',
 		type: 'GET',
@@ -57,6 +58,11 @@ $(document).ready(() => {
 		var buttonClass = button.attr('class'); 
 		if (buttonClass.includes('add')) {
 			$('.content-div').hide();
+			$("#myForm1")[0].reset();
+			$("#myForm1").attr('class','add');
+			$("#profile").prop('required',true);
+			$("#heading").text("CREATE CONTACT");
+			$("#submit1").text("Add Contact");
             		$('#addDiv').show();
 
        		} 
@@ -65,36 +71,43 @@ $(document).ready(() => {
 			let i = $(this).parent().parent().children().first().html();
 			let j = $(this).parent().parent().attr('id');
 			let rowSelected = obj[i-1];
-			$("#logId1").val(j);
-			$("#title1").val(rowSelected.title);
-			$("#firstName1").val(rowSelected.firstname);
-			$("#lastName1").val(rowSelected.lastname);
-			$("#gender1").val(rowSelected.gender);
+			prevHobbieList='';
+			$("#myForm1").attr('class','edit');
+			$("#heading").text("EDIT CONTACT");
+			$("#logId").val(j);
+			$("#title").val(rowSelected.title);
+			$("#firstName").val(rowSelected.firstname);
+			$("#lastName").val(rowSelected.lastname);
+			$("#gender").val(rowSelected.gender);
 			let date = new Date(rowSelected.dob);
 			date.setDate(date.getDate() + 1);
 			let formatdate = date.toISOString().split('T')[0];
-			$("#dob1").val(formatdate);
-			$("#houseName1").val(rowSelected.house_flat);
-			$("#street1").val(rowSelected.street);
-			$("#city1").val(rowSelected.city);
-			$("#state1").val(rowSelected.state);
-			$("#pincode1").val(rowSelected.pincode);
-			$("#email1").val(rowSelected.email);
-			$("#phone1").val(rowSelected.phone);
-
-			$("#hobbies1 option").each(function() {
+			$("#dob").val(formatdate);
+			$("#profile").prop('required',false);
+			$("#houseName").val(rowSelected.house_flat);
+			$("#street").val(rowSelected.street);
+			$("#city").val(rowSelected.city);
+			$("#state").val(rowSelected.state);
+			$("#pincode").val(rowSelected.pincode);
+			$("#email").val(rowSelected.email);
+			$("#phone").val(rowSelected.phone);
+			prevHobbieList = rowSelected.hobbieid;
+			
+			$("#hobbies option").each(function() {
  				$(this).prop('selected', false);          	
            	 	});
 
-			$("#hobbies1 option").each(function() {
+			$("#hobbies option").each(function() {
                 		var optionText = $(this).attr('value');
-                		if (rowSelected.hobbieid.includes(optionText)) {
-                    			$(this).prop('selected', true);          
+				if(optionText != ''){
+		        		if (rowSelected.hobbieid.includes(optionText)) {
+                	    			$(this).prop('selected', true);          
+					}
 				}	
-           	 	});	
-			
-
-            		$('#editDiv').show();
+           	 	});
+			$("#submit1").text("Edit Contact");
+				
+            		$('#addDiv').show();
         	} 	
 		if (buttonClass.includes('view')) {
 			var hobbieResult = [];
@@ -132,7 +145,22 @@ $(document).ready(() => {
 	});
 		
 	$("#myForm1").submit(function(event){
-		$(this).addClass("was-validated");
+		var class1 = $(this).attr('class');
+		var field1;
+		var field2; 	
+		if(class1 == "add")
+		{
+			$(this).addClass("was-validated");
+			field1 = $('<input>').attr('type', 'hidden').attr('name', 'operation').val('add');
+			$(this).append(field1);
+		}
+		if(class1 == "edit"){
+			field1 = $('<input>').attr('type', 'hidden').attr('name', 'operation').val('edit');
+			field2 = $('<input>').attr('type', 'hidden').attr('name', 'prevHobbieList').val(prevHobbieList);
+			$(this).append(field1);
+			$(this).append(field2);	
+		}
+		
 	});
 	$(document).on('click','.delete', function(event) {
 		let row = $(this).parent().parent().attr('id');

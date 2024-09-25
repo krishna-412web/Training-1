@@ -85,11 +85,9 @@
 	</cffunction>
 
 	<cffunction name="addContact">
-		<cfargument name="profile" type="string">
 		<cfset local.message = structNew()>
-
+		<cfinclude template="../image.cfm">
 		<cfset hobbies = ListToArray(form.hobbies)>
-			
 		<cfquery name="local.addData" result="r">
 			INSERT INTO 
 				log_book(user_id,
@@ -112,7 +110,7 @@
 				<cfqueryparam value="#form.lastName#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.gender#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">,
-				<cfqueryparam value="#arguments.profile#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#imgPath#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.houseName#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.street#" cfsqltype="cf_sql_varchar">,
 				<cfqueryparam value="#form.city#" cfsqltype="cf_sql_varchar">,
@@ -200,6 +198,35 @@
 		<cfreturn local.getContacts.RESULTSET/>
 	</cffunction>
 
+	<cffunction name="dynamicForm" returnType="struct">
+		<cfset local.result = structNew()>
+		<cfquery name="local.getTitle" returnType="struct">
+			SELECT 
+				id,
+				value
+			FROM
+				title;
+		</cfquery>
+		<cfquery name="local.getGender" returnType="struct">
+			SELECT 
+				genderid,
+				gendername
+			FROM
+				gender;
+		</cfquery>
+		<cfquery name="local.getHobbies" returnType="struct">
+			SELECT 
+				hobbieid,
+				hobbieName
+			FROM
+				hobbies;
+		</cfquery>
+		<cfset local.result.title = local.getTitle.RESULTSET>
+		<cfset local.result.gender = local.getGender.RESULTSET>
+		<cfset local.result.hobbies = local.getHobbies.RESULTSET>
+		<cfreturn local.result>
+	</cffunction>
+
 	<cffunction name="decryptData">
 		<cfargument name="encryptedText" type="string">
 		<cfset local.decryptedText= decrypt(encryptedText,variables.key,"AES","Hex")>
@@ -211,11 +238,39 @@
 		<cfargument name="logId" type="string">
 		<cfset session.logId = arguments.logId>
 		<cfreturn 1/>
+	</cffunction>
+
+	<cffunction name="ArrayDiff">
+		<cfargument name="pastHobbyArray" type="array">
+		<cfargument name="presentHobbyArray" type="array">
+		<cfset local.result = {}>
+		<cfset local.insertArray=[]>
+		<cfset local.deleteArray=[]>
+		<cfloop array="#arguments.presentHobbyArray#" index="local.i">
+			<cfif NOT ArrayContains(pastHobbyArray,#local.i#)>
+				<cfset ArrayAppend(local.insertArray,#local.i#)>
+			</cfif>
+		</cfloop>
+		<cfloop array="#arguments.pastHobbyArray#" index="local.i">
+			<cfif NOT ArrayContains(presentHobbyArray,#local.i#)>
+				<cfset ArrayAppend(local.deleteArray,#local.i#)>
+			</cfif>
+		</cfloop>
+		<cfif NOT ArrayIsEmpty(local.insertArray)>
+			<cfset local.result.insertList = ArraytoList(local.insertArray)>
+		</cfif>
+		<cfif NOT ArrayIsEmpty(local.deleteArray)>
+			<cfset local.result.deleteList = ArraytoList(local.deleteArray)>
+		</cfif>
+		<cfreturn local.result>
+		
 	</cffunction>	
 		
 	<cffunction name="updateContact">
-		<cfargument name="form" type="struct">
 		<cfset local.logId = decryptData(form.logId)>
+		<cfset previousHobbyArray = listToArray(form.prevHobbieList)>
+		<cfset presentHobbyArray = listToArray(form.hobbies)>
+		<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
 		<cfif structKeyExists(form, "profile") AND Len(Trim(form.profile)) GT 0>
 			<cfinclude template="../image.cfm">
 			<cfquery name="update">
@@ -228,16 +283,6 @@
 			</cfquery>
 					
 		</cfif>
-		<cfif structKeyExists(form, "dob") AND Len(Trim(form.dob)) GT 0>
-			<cfquery name="update">
-				UPDATE 
-					log_book
-				SET 
-					dob = <cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">
-				WHERE 
-					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
-			</cfquery>
-		</cfif>	
 		<cfquery name="updateRest">
 			UPDATE
 				log_book
@@ -252,32 +297,43 @@
 				state= <cfqueryparam value="#form.state#" cfsqltype="cf_sql_varchar">,
 				pincode= <cfqueryparam value="#form.pincode#" cfsqltype="cf_sql_integer">,
 				email= <cfqueryparam value="#form.email#" cfsqltype="cf_sql_varchar">,
-				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">
+				phone= <cfqueryparam value="#form.phone#" cfsqltype="cf_sql_decimal">,
+				dob= <cfqueryparam value="#form.dob#" cfsqltype="cf_sql_date">
 			WHERE
 				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
-		<cfquery name="deleteHobby">
-			DELETE FROM
-				hobbiecontact
-			WHERE 
-				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
-		</cfquery>
-		<cfquery name="updateHobby">
-			INSERT INTO
-				hobbiecontact(
-					log_id,
-					hobbieid
-				)
-			VALUES
-				<cfloop list="#form.hobbies#" index="local.i">
-					(
-						<cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
+		
+		<cfif structKeyExists(local.result,'deleteList')>
+			<cfquery name="deleteHobby">
+				DELETE FROM
+					hobbiecontact
+				WHERE 
+					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+				AND
+					hobbieid IN 
+						(<cfqueryparam value="#local.result.deleteList#" cfsqltype="cf_sql_integer" list="true">);
+			</cfquery>
+		</cfif>
+		
+		<cfif structKeyExists(local.result,'insertList')>
+			<cfquery name="updateHobby">
+				INSERT INTO
+					hobbiecontact(
+						log_id,
+						hobbieid
 					)
-					<cfif i NEQ listLast(form.hobbies,",")>,</cfif>
-				</cfloop>
-			;
-		</cfquery>
+				VALUES
+					<cfloop list="#local.result.insertList#" index="local.i">
+						(
+							<cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
+						)
+						<cfif i NEQ listLast(local.result.insertList,",")>,</cfif>
+					</cfloop>
+				;
+			</cfquery>
+		</cfif>
+		<cfreturn local.result>
 	</cffunction>
 
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">

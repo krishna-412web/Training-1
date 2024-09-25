@@ -1,5 +1,9 @@
 <cfset session.key= generateSecretKey("AES")>
 <cfinclude template="logic.cfm">
+<cfinvoke 
+	component = "components.database" 	
+	method = "dynamicForm" 
+	returnVariable = "variables.result">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -151,19 +155,20 @@
 						</div>
 								
                     			</div>
+					<cfoutput>
         				<div id="addDiv" class="content-div">
                         			<div class="container-fluid">
 							<form id="myForm1" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary">CREATE CONTACT</h3>
+									<h3 class="text-center border-bottom border-primary" id="heading">CREATE CONTACT</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
 									<div class="row">
 										<div class="col-2">
 											<div class="form-floating">
 												<select id="title" name="title" class="form-select" placeholder="" required>
       													<option value="" selected></option>
-      													<option value="1">Mr.</option>
-      													<option value="2">Mrs.</option>
-      													<option value="3">Ms.</option>
+													<cfloop array="#variables.result.title#" index="i">
+														<option value="#i.id#">#i.value#</option>
+													</cfloop>
    											 	</select>
 												<label for="title" class="text-dark fw-bold form-label">Title*</label>
 											</div>
@@ -186,8 +191,9 @@
 											<div class="form-floating">
 											 	<select class="form-select" id="gender" name="gender" placeholder="" required>
       													<option value="" selected></option>
-      													<option value="1">Male</option>
-      													<option value="2">Female</option>
+      													<cfloop array="#variables.result.gender#" index="i">
+														<option value="#i.genderid#">#i.gendername#</option>
+													</cfloop>
    												 </select>
 												<label for="gender" class="text-dark fw-bold form-label">Gender*</label>
 											</div>
@@ -266,168 +272,21 @@
 										<div class="col-5">
 											<div >
 											 	<select class="form-control" id="hobbies" name="hobbies" placeholder="" multiple required>
-      													<option value="" selected></option>
-      													<option value="1">Reading</option>
-      													<option value="2">Gardening</option>
-													<option value="3">Photography</option>
-													<option value="4">Cooking</option>
-													<option value="5">Hiking</option>
-													<option value="6">Painting</option>
-													<option value="7">Cycling</option>
-													<option value="8">Writing</option>
-													<option value="9">Knitting</option>
-													<option value="10">Music</option>
+      													<cfloop array="#variables.result.hobbies#" index="i">
+														<option value="#i.hobbieid#">#i.hobbieName#</option>
+													</cfloop>
    												 </select>
-												<label for="gender" class="text-dark fw-bold form-label">Gender*</label>
 											</div>
 										</div>
 									</div>
+									<input type="hidden" class="form-control" name="logId" id="logId">	
 
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
-									<button class="btn btn-primary w-100" type="submit" name="submit1">Add Contact</button>
+									<button class="btn btn-primary w-100" type="submit" name="submit1" id="submit1">Add Contact</button>
 							</form>
 						</div>
                     			</div>
-                    			<div id="editDiv" class="content-div" style="display:none;">
-                        			<div class="container-fluid">
-							<form id="myForm2" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary">EDIT CONTACT</h3>
-									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
-									<div class="row">
-										<div class="col-2">
-											<div class="form-floating">
-												<select id="title1" name="title" class="form-select" placeholder="">
-      													<option value="" selected></option>
-      													<option value="1">Mr.</option>
-      													<option value="2">Mrs.</option>
-      													<option value="3">Ms.</option>
-   											 	</select>
-												<label for="title1" class="text-dark fw-bold form-label">Title*</label>
-											</div>
-										</div>
-										<div class="col-5">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="firstName1" name="firstName" placeholder="">																						<label for="firstName1" class="text-dark fw-bold form-label">Firstname*</label>
-											</div>
-										</div>
-										<div class="col-5">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="lastName1" name="lastName" placeholder="">
-												<label for="lastName1" class="text-dark fw-bold form-label">lastname*</label>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-5">
-											<div class="form-floating">
-											 	<select class="form-select" id="gender1" name="gender" placeholder="">
-      													<option value="" selected></option>
-      													<option value="1">Male</option>
-      													<option value="2">Female</option>
-   												 </select>
-												<label for="gender1" class="text-dark fw-bold form-label">Gender*</label>
-											</div>
-										</div>
-								
-										<div class="col-5">
-											<div class="form-floating">
-												<input class="form-control" type="date" id="dob1" name="dob">
-												<label for="dob1" class="form-label text-dark fw-bold">Date Of Birth*</label>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-6">
-											<div class="form-floating">
-												<input class="form-control" type="file" name="profile" id ="profile1" accept="image/jpeg, image/png">
-												<label for="profile1" class="form-label text-decoration-underline text-primary text-start">Upload Photo</label>	
-											</div>
-										</div>
-									</div>
-									<h5 class="text-decoration-underline text-primary text-start">Address</h5>
-									<div class="row">
-										<div class="col-4">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="houseName1" name="houseName" placeholder="">
-												<label for="houseName1" class="form-label text-dark fw-bold">House name</label>
-											</div>
-										</div>
-										<div class="col-5">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="street1" name="street" placeholder="">
-												<label for="street1" class="form-label text-dark fw-bold">Street</label>
-											</div>
-										</div>
-										<div class="col-3">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="city1" name="city" placeholder="">
-												<label for="city1" class="form-label text-dark fw-bold">City</label>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-4">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="state1" name="state" placeholder="">
-												<label for="state1" class="form-label text-dark fw-bold">State</label>
-											</div>
-										</div>
-										<div class="col-4">
-											<div class="form-floating">
-												<input class="form-control" type="text" id="pincode1" name="pincode" placeholder="">
-												<label for="pincode1" class="form-label text-dark fw-bold">Pincode</label>
-											</div>
-										</div>
-									</div>
-
-									<h5 class="text-decoration-underline text-primary text-start">Contact Details</h5>
-									<div class="row">
-										<div class="col-4">
-											<div class="form-floating">
-												<input class="form-control" type="email" id="email1" name="email" placeholder="">
-												<label class="form-label text-dark fw-bold">Email</label>
-											</div>
-										</div>
-										<div class="col-4">
-											<div class="form-floating">
-												<input class="form-control" type="number" id="phone1" name="phone" placeholder="">
-												<label class="form-label text-dark fw-bold">phone</label>
-											</div>
-										</div>
-									</div>
-									<h5 class="text-decoration-underline text-primary text-start">Hobbies</h5>
-									<div class="row">
-										<div class="col-5">
-											<div >
-											 	<select class="form-control" id="hobbies1" name="hobbies" placeholder="" multiple required>
-      													<option value="" selected></option>
-      													<option value="1">Reading</option>
-      													<option value="2">Gardening</option>
-													<option value="3">Photography</option>
-													<option value="4">Cooking</option>
-													<option value="5">Hiking</option>
-													<option value="6">Painting</option>
-													<option value="7">Cycling</option>
-													<option value="8">Writing</option>
-													<option value="9">Knitting</option>
-													<option value="10">Music</option>
-   												 </select>
-												<label for="hobbies1" class="text-dark fw-bold form-label">Gender*</label>
-											</div>
-										</div>
-									</div>
-									<input type="hidden" class="form-control" name="logId" id="logId1">
-
-									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
-									<button class="btn btn-info w-100" type="submit" name="submit2">Edit Contact</button>
-							</div>
-							</form>
-						</div>	
-      				</div>
-
+					</cfoutput>
       				<!---<div class="modal-footer">
         				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
       				</div>--->
@@ -435,11 +294,11 @@
     			</div>
   		</div>
 	</div>
-	<div class="container error">
+	<!---<div class="container error">
 		<span class="text-danger">*this is an error message</span>
 		<br>
 		<span class="text-danger">*this is an error message</span>
-	</div>
+	</div>--->
 	<script src="./js/jQuery.js"></script>
 	<script src="./js/modal-script.js"></script>
 </body>
