@@ -294,11 +294,17 @@
     			</div>
   		</div>
 	</div>
-	<!---<div class="container error">
-		<span class="text-danger">*this is an error message</span>
-		<br>
-		<span class="text-danger">*this is an error message</span>
-	</div>--->
+	</div>
+	<cfoutput>
+		<div class="container error">
+			<cfif structKeyExists(variables,'message') AND structKeyExists(variables.message,'errors') AND variables.message.flag EQ 0>
+					<cfloop array="#variables.message.errors#" index="local.i">
+						<span class="text-danger">#local.i#</span>
+						<br>
+					</cfloop>
+			</cfif>
+		</div>
+	</cfoutput>
 	<script src="./js/jQuery.js"></script>
 	<script src="./js/modal-script.js"></script>
 </body>

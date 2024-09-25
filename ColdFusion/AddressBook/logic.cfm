@@ -6,13 +6,15 @@
 		</cfif>
 		<cfset obj1=CreateObject("component","components.database")>
 		<cfif structKeyExists(form, "submit1")>
-			<cfif structKeyExists(form,"operation")>
-				<cfif form.operation EQ "add">	
-					<cfset message=obj1.addContact()>
-				</cfif>
-				<cfif form.operation EQ "edit">
-					<cfset result = obj1.updateContact()>
-					<cfdump var="#result#">					
+			<cfset variables.message = obj1.formValidate()>
+			<cfif variables.message.flag EQ 1>
+				<cfif structKeyExists(form,"operation")>
+					<cfif form.operation EQ "add">	
+						<cfset message=obj1.addContact()>
+					</cfif>
+					<cfif form.operation EQ "edit">
+						<cfset result = obj1.updateContact()>				
+					</cfif>
 				</cfif>
 			</cfif>
 		</cfif>

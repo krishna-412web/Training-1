@@ -150,7 +150,7 @@ $(document).ready(() => {
 		var field2; 	
 		if(class1 == "add")
 		{
-			$(this).addClass("was-validated");
+			//$(this).addClass("was-validated");
 			field1 = $('<input>').attr('type', 'hidden').attr('name', 'operation').val('add');
 			$(this).append(field1);
 		}

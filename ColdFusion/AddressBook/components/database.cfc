@@ -352,29 +352,55 @@
 		</cfquery>
 	</cffunction>
 	<cffunction name="formValidate">
-		<cfargument name="form" type="struct">
+		<!---<cfargument name="form" type="struct">--->
 		<cfset local.message=structNew()>
 		<cfset local.message.errors=[]>
-		<cfset local.mesage.flag = false >
+		<cfset local.message.flag = 1 >
 
 		<cfif len(trim(form.firstName)) eq 0>
-    			<cfset arrayAppend(formErrors, "*firstname is required.")>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.lastName)) eq 0>
-    			<cfset arrayAppend(formErrors, "*lastname is required.")>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*lastname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.email)) eq 0>
-    			<cfset arrayAppend(formErrors, "*email is required.")>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*email is required.")>
 		</cfif>
 
-		<cfif len(trim(form.message)) eq 0>
-    			<cfset arrayAppend(formErrors, "Message is required.")>
+		<cfif len(trim(form.houseName)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*housename is required.")>
 		</cfif>
 
+		<cfif len(trim(form.street)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*street is required.")>
+		</cfif>
+
+		<cfif len(trim(form.city)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*city is required.")>
+		</cfif>
+
+		<cfif len(trim(form.state)) eq 0>
+			<cfset local.message.flag = false >
+    			<cfset arrayAppend(local.message.errors, "*state is required.")>
+		</cfif>
+
+		<cfif NOT Len(trim(form.phone)) EQ 10 OR NOT REFind("^[0-9]{10}$", form.phone)>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*phone no is required/not in valid format.")>
+		</cfif>
 		
-			
+		<cfif len(trim(form.pincode)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*pincode is required.")>
+		</cfif>
 		<cfreturn local.message>
 	</cffunction>
 
