@@ -254,13 +254,6 @@
 		<cfreturn local.decryptedText/>
 	</cffunction>
 	
-
-	<cffunction name="setid" access="remote" returnFormat="JSON">
-		<cfargument name="logId" type="string">
-		<cfset session.logId = arguments.logId>
-		<cfreturn 1/>
-	</cffunction>
-
 	<cffunction name="ArrayDiff">
 		<cfargument name="pastHobbyArray" type="array">
 		<cfargument name="presentHobbyArray" type="array">
@@ -387,6 +380,7 @@
 
 		<cfif len(trim(form.firstName)) eq 0>
 			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.lastName)) eq 0>
@@ -397,6 +391,11 @@
 		<cfif len(trim(form.email)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
+		<cfelse>
+			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
+				<cfset local.message.flag = 0 >
+				<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
+			</cfif>
 		</cfif>
 
 		<cfif len(trim(form.houseName)) eq 0>
@@ -476,9 +475,9 @@
 				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image field is required.")>
 			</cfif>
-		<cfelse> 	
-			<cfset local.extension = listLast(form.profile,".")>
-			<cfif NOT listFindNoCase(local.allowedExtensions, local.extension)>
+		<cfelse> 
+			<cfinclude template="../temp.cfm">	
+			<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
 				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
 			</cfif>			
@@ -495,6 +494,48 @@
 		</cfif>
 
 		<cfreturn local.message>
+	</cffunction>
+	<cffunction name="registerValidate">
+		<cfargument name="form" type="struct">
+		<cfset local.message=structNew()>
+		<cfset local.message.errors = []>
+		<cfif len(trim(form.name)) eq 0>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
+		</cfif>
+		<cfif len(trim(form.email)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*email is required.")>
+		<cfelse>
+			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
+				<cfset local.message.flag = 0 >
+				<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
+			</cfif>
+		</cfif>
+		<cfif len(trim(form.userName)) eq 0>
+			<cfset local.message.flag = 0 >
+    			<cfset arrayAppend(local.message.errors, "*userName is required.")>
+		<cfelse>
+			<cfif NOT REFind("^\w{5,}$", form.userName)>
+				<cfset local.message.flag = 0 >
+				<cfset arrayAppend(local.message.errors, "*userName input is invalid.")>
+			</cfif>
+		</cfif>
+		<cfif len(trim(form.passWord)) eq 0 AND len(trim(form.confirmPassWord)) eq 0>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*passwords must not left empty.")>
+		<cfelseif len(trim(form.passWord)) eq 0 AND NOT REFind("^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$", form.passWord)>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*password must not left empty/invalid input.")>
+		<cfelseif len(trim(form.confirmPassWord)) eq 0 AND NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.confirmPassWord)>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*confirm password must not left empty/invalid input.")>
+		<cfelse>
+			<cfif form.passWord NEQ form.confirmPassWord>
+				<cfset local.message.flag = 0 >
+				<cfset arrayAppend(local.message.errors, "*passwords do not match.")>
+			</cfif>
+		</cfif>
 	</cffunction>
 
 </cfcomponent>
