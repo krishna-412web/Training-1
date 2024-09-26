@@ -200,6 +200,12 @@
 
 	<cffunction name="dynamicForm" returnType="struct">
 		<cfset local.result = structNew()>
+		<cfset local.genderArray = []>
+		<cfset local.result.genderList = "">
+		<cfset local.titleArray = []>
+		<cfset local.result.titleList = "">
+		<cfset local.HobbieArray = []>
+		<cfset local.result.HobbieList = "">
 		<cfquery name="local.getTitle" returnType="struct">
 			SELECT 
 				id,
@@ -221,9 +227,24 @@
 			FROM
 				hobbies;
 		</cfquery>
+
+		<cfloop array="#local.getTitle.RESULTSET#" index="local.i">
+			<cfset ArrayAppend(local.titleArray,local.i.id)>
+		</cfloop>
+		<cfloop array="#local.getGender.RESULTSET#" index="local.i">
+			<cfset ArrayAppend(local.genderArray,local.i.genderid)>
+		</cfloop>
+		<cfloop array="#local.getHobbies.RESULTSET#" index="local.i">
+			<cfset ArrayAppend(local.hobbieArray,local.i.hobbieid)>
+		</cfloop>
+
 		<cfset local.result.title = local.getTitle.RESULTSET>
+		<cfset local.result.titleList = ArrayToList(local.titleArray)>
 		<cfset local.result.gender = local.getGender.RESULTSET>
+		<cfset local.result.genderList = ArrayToList(local.genderArray)>
 		<cfset local.result.hobbies = local.getHobbies.RESULTSET>
+		<cfset local.result.hobbieList = ArrayToList(local.hobbieArray)>
+
 		<cfreturn local.result>
 	</cffunction>
 
@@ -354,12 +375,18 @@
 	<cffunction name="formValidate">
 		<!---<cfargument name="form" type="struct">--->
 		<cfset local.message=structNew()>
-		<cfset local.message.errors=[]>
+		<cfset local.message.errors = []>
+		<cfset local.addErrorMessage="*add operation unsuccessfull">
+		<cfset local.editErrorMessage="*edit operation unsuccessfull">
 		<cfset local.message.flag = 1 >
+		<cfset local.message.tflag = 1>
+		<cfset local.message.gflag = 1>
+		<cfset local.message.hflag = 1>
+		<cfset local.allowedExtensions = "jpg,jpeg,png,gif,bmp,tiff">
+		<cfset local.result = dynamicForm()>
 
 		<cfif len(trim(form.firstName)) eq 0>
 			<cfset local.message.flag = 0 >
-    			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.lastName)) eq 0>
@@ -401,6 +428,72 @@
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*pincode is required.")>
 		</cfif>
+		
+		<cfif len(trim(form.gender)) EQ 0>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*gender field is required.")>
+		<cfelse>
+			<cfif NOT listFind(local.result.genderList,form.gender)>
+				<cfset local.message.flag=0>
+				<cfset local.message.gflag=0>
+			</cfif>
+			<cfif local.message.gflag EQ 0>
+				<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
+			</cfif>
+		</cfif>
+
+	
+		<cfif len(trim(form.title)) EQ 0>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*title field is required.")>
+		<cfelse>
+			<cfif NOT listFind(local.result.titleList,form.title)>
+				<cfset local.message.flag=0>
+				<cfset local.message.tflag=0>
+			</cfif>
+			<cfif local.message.tflag EQ 0>
+				<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
+			</cfif>
+		</cfif>
+
+		<cfif structKeyExists(form,"hobbies")>
+			<cfloop list="#form.hobbies#" index="local.i">
+				<cfif NOT listFind(local.result.hobbieList,local.i)>
+					<cfset local.message.flag=0>
+					<cfset local.message.hflag=0>
+				</cfif>
+			</cfloop>
+			<cfif local.message.hflag EQ 0>
+				<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
+			</cfif>
+		<cfelse> 
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*hobbies field is required.")>
+		</cfif>
+
+		<cfif len(trim(form.profile)) EQ 0 >
+			<cfif form.operation NEQ "edit">
+				<cfset local.message.flag=0>
+				<cfset arrayAppend(local.message.errors,"*image field is required.")>
+			</cfif>
+		<cfelse> 	
+			<cfset local.extension = listLast(form.profile,".")>
+			<cfif NOT listFindNoCase(local.allowedExtensions, local.extension)>
+				<cfset local.message.flag=0>
+				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
+			</cfif>			
+		</cfif>
+		
+		<cfif len(trim(form.dob)) EQ 0>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*date field is required.")>
+		<cfelse>
+			<cfif NOT isDate(form.dob)>
+				<cfset local.message.flag=0>
+				<cfset arrayAppend(local.message.errors,"*date input is invalid.")>
+			</cfif>
+		</cfif>
+
 		<cfreturn local.message>
 	</cffunction>
 

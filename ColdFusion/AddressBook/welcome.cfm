@@ -1,9 +1,9 @@
-<cfset session.key= generateSecretKey("AES")>
 <cfinclude template="logic.cfm">
 <cfinvoke 
 	component = "components.database" 	
 	method = "dynamicForm" 
 	returnVariable = "variables.result">
+<!---<cfdump var="#variables.result#">--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
