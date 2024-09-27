@@ -187,6 +187,30 @@
         		GROUP BY
             			log_book.log_id;
 		</cfquery>
+		<cfset local.metadataStruct = {
+        		type = "struct",
+     			fields = {
+            		log_id: {type = "string"},
+            		title: {name: "tt", type: "numeric"},
+            		firstname: {type = "string"},
+            		lastname: {type = "string"},
+            		gender: {type = "string"},
+            		dob: {type = "date"},
+            		profile: {type = "string"},
+           	 	house_flat: {type = "string"},
+            		street: {type = "string"},
+            		city: {type = "string"},
+            		state: {type = "string"},
+            		pincode: {type = "numeric"},
+            		email: {type = "string"},
+           		phone: {type = "numeric"},
+            		titleName: {type = "string"},
+            		genderName: {type = "string"},
+            		hobbieid: {type = "string"},
+            		hobbies: {type = "array", items = "string"}
+        		}
+    		}>
+		<!---<cfset arraySetMetaData(local.getContacts.RESULTSET, local.metadataStruct)>--->
 		<cfloop array="#local.getContacts.RESULTSET#" index="local.i">
 			<cfset local.encryptedText= encrypt(toString(local.i.log_id),variables.key,"AES","Hex")>
 			<cfset local.i.log_id= local.encryptedText >
@@ -194,7 +218,9 @@
 				<cfset local.hobbieArray = listToArray(local.i.hobbies)>
 				<cfset local.i.hobbies = local.hobbieArray>
 			</cfif>
+			<cfset structSetMetaData(local.i, local.metadataStruct)>
 		</cfloop>
+		<!---<cfdump var="#structGetMetaData(local.getContacts.RESULTSET[1])#">--->
 		<cfreturn local.getContacts.RESULTSET/>
 	</cffunction>
 
