@@ -499,43 +499,45 @@
 		<cfargument name="form" type="struct">
 		<cfset local.message=structNew()>
 		<cfset local.message.errors = []>
-		<cfif len(trim(form.name)) eq 0>
+		<cfset local.message.flag = 1>
+		<cfif len(trim(arguments.form.name)) eq 0>
 			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
-		<cfif len(trim(form.email)) eq 0>
+		<cfif len(trim(arguments.form.email)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
 		<cfelse>
-			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
+			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.form.email)>
 				<cfset local.message.flag = 0 >
 				<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
 			</cfif>
 		</cfif>
-		<cfif len(trim(form.userName)) eq 0>
+		<cfif len(trim(arguments.form.userName)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*userName is required.")>
 		<cfelse>
-			<cfif NOT REFind("^\w{5,}$", form.userName)>
+			<cfif NOT REFind("^\w{5,}$", arguments.form.userName)>
 				<cfset local.message.flag = 0 >
 				<cfset arrayAppend(local.message.errors, "*userName input is invalid.")>
 			</cfif>
 		</cfif>
-		<cfif len(trim(form.passWord)) eq 0 AND len(trim(form.confirmPassWord)) eq 0>
+		<cfif len(trim(arguments.form.passWord)) eq 0 AND len(trim(arguments.form.confirmPassWord)) eq 0>
 			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*passwords must not left empty.")>
-		<cfelseif len(trim(form.passWord)) eq 0 AND NOT REFind("^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$", form.passWord)>
+		<cfelseif len(trim(arguments.form.passWord)) eq 0 AND NOT REFind("^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W).{8,}$", arguments.form.passWord)>
 			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*password must not left empty/invalid input.")>
-		<cfelseif len(trim(form.confirmPassWord)) eq 0 AND NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.confirmPassWord)>
+		<cfelseif len(trim(arguments.form.confirmPassWord)) eq 0 AND NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.form.confirmPassWord)>
 			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*confirm password must not left empty/invalid input.")>
 		<cfelse>
-			<cfif form.passWord NEQ form.confirmPassWord>
+			<cfif arguments.form.passWord NEQ arguments.form.confirmPassWord>
 				<cfset local.message.flag = 0 >
 				<cfset arrayAppend(local.message.errors, "*passwords do not match.")>
 			</cfif>
 		</cfif>
+		<cfreturn local.message>
 	</cffunction>
 
 </cfcomponent>

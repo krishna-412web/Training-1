@@ -2,10 +2,13 @@
 <cfset result = 0>
 <cfif structKeyExists(form,"submit")>
 	<cfset obj= createObject('component','components.database')>
-	<cfset createResult = obj.createUser(form.name,form.email,form.userName,form.passWord)>
-	<cfif createResult.value EQ 1>
-		<script>alert("User Created Successfully");</script>
-		<cflocation url="index.cfm" addToken="no" statusCode="302">
+	<cfset variables.message = obj.registerValidate(form)>
+	<cfif variables.message.flag EQ 1>
+		<cfset createResult = obj.createUser(form.name,form.email,form.userName,form.passWord)>
+		<cfif createResult.value EQ 1>
+			<script>alert("User Created Successfully");</script>
+			<cflocation url="index.cfm" addToken="no" statusCode="302">
+		</cfif>
 	</cfif>
 </cfif>
 
@@ -52,6 +55,12 @@
 					</div>
 					<div>
 						<span style="color:red;">#session.errorMessage#</span>
+						<cfif structKeyExists(variables,'message') AND structKeyExists(variables.message,'errors') AND variables.message.flag EQ 0>
+							<cfloop array="#variables.message.errors#" index="local.i">
+								<span class="text-danger">#local.i#</span>
+								<br>
+							</cfloop>
+						</cfif>
 					</div>
 					<input class="form-control btn btn-success disabled" id="submit" type="submit" name="submit" value="Register"/>
 					<div>
