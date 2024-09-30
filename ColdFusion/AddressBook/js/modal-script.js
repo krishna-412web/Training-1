@@ -2,6 +2,7 @@ $(document).ready(() => {
 	
 	var obj;
 	var prevHobbieList;
+	var logId="";
 	$.ajax({
 		url: './components/database.cfc?method=selectdata',
 		type: 'GET',
@@ -55,6 +56,9 @@ $(document).ready(() => {
 	$(document).on('click', '[data-bs-toggle="modal"]', function() {
 		console.log(obj);
 		var button = $(this);
+		if($("#logId").length>0){
+			$("#logId").remove();
+		}
 		var buttonClass = button.attr('class'); 
 		if (buttonClass.includes('add')) {
 			$('.content-div').hide();
@@ -74,7 +78,6 @@ $(document).ready(() => {
 			prevHobbieList='';
 			$("#myForm1").attr('class','edit');
 			$("#heading").text("EDIT CONTACT");
-			$("#logId").val(j);
 			$("#title").val(rowSelected.title);
 			$("#firstName").val(rowSelected.firstname);
 			$("#lastName").val(rowSelected.lastname);
@@ -92,6 +95,10 @@ $(document).ready(() => {
 			$("#email").val(rowSelected.email);
 			$("#phone").val(rowSelected.phone);
 			prevHobbieList = rowSelected.hobbieid;
+			let field3 = $('<input>').attr('type', 'hidden').attr('name', 'logId').attr('id','logId');
+			$("#myForm1").append(field3);
+			$("#logId").val(j);
+
 			
 			$("#hobbies option").each(function() {
  				$(this).prop('selected', false);          	
@@ -147,7 +154,8 @@ $(document).ready(() => {
 	$("#myForm1").submit(function(event){
 		var class1 = $(this).attr('class');
 		var field1;
-		var field2; 	
+		var field2;
+		var field3; 	
 		if(class1 == "add")
 		{
 			//$(this).addClass("was-validated");

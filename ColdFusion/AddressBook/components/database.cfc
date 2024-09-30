@@ -191,7 +191,7 @@
         		type = "struct",
      			fields = {
             		log_id: {type = "string"},
-            		title: {name: "tt", type: "numeric"},
+            		title: {type: "numeric"},
             		firstname: {type = "string"},
             		lastname: {type = "string"},
             		gender: {type = "string"},
@@ -210,7 +210,6 @@
             		hobbies: {type = "array", items = "string"}
         		}
     		}>
-		<!---<cfset arraySetMetaData(local.getContacts.RESULTSET, local.metadataStruct)>--->
 		<cfloop array="#local.getContacts.RESULTSET#" index="local.i">
 			<cfset local.encryptedText= encrypt(toString(local.i.log_id),variables.key,"AES","Hex")>
 			<cfset local.i.log_id= local.encryptedText >
@@ -287,8 +286,8 @@
 		<cfset local.insertArray=[]>
 		<cfset local.deleteArray=[]>
 		<cfloop array="#arguments.presentHobbyArray#" index="local.i">
-			<cfif NOT ArrayContains(pastHobbyArray,#local.i#)>
-				<cfset ArrayAppend(local.insertArray,#local.i#)>
+			<cfif NOT ArrayContains(pastHobbyArray,local.i)>
+				<cfset ArrayAppend(local.insertArray,local.i)>
 			</cfif>
 		</cfloop>
 		<cfloop array="#arguments.pastHobbyArray#" index="local.i">
@@ -298,9 +297,6 @@
 		</cfloop>
 		<cfif NOT ArrayIsEmpty(local.insertArray)>
 			<cfset local.result.insertList = ArraytoList(local.insertArray)>
-		</cfif>
-		<cfif NOT ArrayIsEmpty(local.deleteArray)>
-			<cfset local.result.deleteList = ArraytoList(local.deleteArray)>
 		</cfif>
 		<cfreturn local.result>
 		
@@ -343,17 +339,16 @@
 				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
 		
-		<cfif structKeyExists(local.result,'deleteList')>
-			<cfquery name="deleteHobby">
-				DELETE FROM
-					hobbiecontact
-				WHERE 
-					log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
-				AND
-					hobbieid IN 
-						(<cfqueryparam value="#local.result.deleteList#" cfsqltype="cf_sql_integer" list="true">);
-			</cfquery>
-		</cfif>
+		<cfquery name="deleteHobby">
+			DELETE FROM
+				hobbiecontact
+			WHERE 
+				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+			AND
+				hobbieid NOT IN 
+					(<cfqueryparam value="#form.hobbies#" cfsqltype="cf_sql_integer" list="true">);
+		</cfquery>
+
 		
 		<cfif structKeyExists(local.result,'insertList')>
 			<cfquery name="updateHobby">
@@ -471,14 +466,9 @@
 		<cfif len(trim(form.title)) EQ 0>
 			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*title field is required.")>
-		<cfelse>
-			<cfif NOT listFind(local.result.titleList,form.title)>
+		<cfelseif NOT listFind(local.result.titleList,form.title)>
 				<cfset local.message.flag=0>
-				<cfset local.message.tflag=0>
-			</cfif>
-			<cfif local.message.tflag EQ 0>
 				<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
-			</cfif>
 		</cfif>
 
 		<cfif structKeyExists(form,"hobbies")>

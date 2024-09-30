@@ -278,9 +278,7 @@
    												 </select>
 											</div>
 										</div>
-									</div>
-									<input type="hidden" class="form-control" name="logId" id="logId">	
-
+									</div>	
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
 									<button class="btn btn-primary w-100" type="submit" name="submit1" id="submit1">Add Contact</button>
 							</form>
