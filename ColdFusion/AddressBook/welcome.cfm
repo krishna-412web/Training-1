@@ -35,7 +35,8 @@
 				<div class="card mt-2 row">
 					<div class="card-body row d-flex flex-row justify-content-end">
 						<button type="button" id="pdfFeature" class="btn btn-info col-1 mx-1">pdf</button>
-						<button type="button" id="excelFeature" class="btn btn-info col-1 mx-1">excel</button>
+						<button type="button" id="excelFeature" class="btn btn-sm btn-info col-1 mx-1">Excel(Data)</button>
+						<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-1 mx-1">Excel(Plain)</button>
 						<button type="button" id="printFeature" class="btn btn-info col-1 mx-1">print</button>
 					</div>
 				</div>
@@ -47,6 +48,7 @@
 						<div class="d-flex flex-column justify-content-center card-body">
 							<p class="text-center"><cfoutput>#session.user#</cfoutput></p>
 							<button type="button" class="btn btn-info add" id="btnAdd" data-bs-toggle="modal" data-bs-target="#myModal">Add Contact</button>
+							<button type="button" id="btnUpload" class="btn btn-outline-success mt-2 upload" data-bs-toggle="modal" data-bs-target="#uploadModal">Upload</button>
 						</div>
 				</div>
 				<div class="col-10">
@@ -106,6 +108,32 @@
 			</div>
 		</div>
 	</div>
+
+	
+	<div class="modal" id="uploadModal">
+  		<div class="modal-dialog ">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      				</div>
+           			<div class="modal-body">
+					<form action="" method="post">
+						<div class="row">
+							<h5 class="text-dark text-center">UPLOAD SPREADSHEET</h5>
+						</div>
+						<input type="file" id="spreadsheet" name="spreadsheet" accept=".xls, .xlsx, .csv"/>
+						<div class="mt-2"></div>
+						<div class="row">
+							<div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" name="uploadSubmit">Yes</button></div>
+							<div class="col-4"></div>
+							<div class="col-4"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">No</button></div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<div class="modal" id="myModal">
   		<div class="modal-dialog modal-lg">

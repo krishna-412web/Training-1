@@ -48,6 +48,10 @@ $(document).ready(() => {
 	$("#excelFeature").click(function(){
 		window.location.href="excelFeature.cfm";
 	});
+
+	$("#excelFeature1").click(function(){
+		window.location.href="excelPlain.cfm";
+	});
 	
 	$("#printFeature").click(function(){
         	window.print();
@@ -61,7 +65,7 @@ $(document).ready(() => {
 		}
 		var buttonClass = button.attr('class'); 
 		if (buttonClass.includes('add')) {
-			$('.content-div').hide();
+			$('.content-div:visible').hide();
 			$("#myForm1")[0].reset();
 			$("#myForm1").attr('class','add');
 			$("#profile").prop('required',true);
@@ -71,7 +75,7 @@ $(document).ready(() => {
 
        		} 
 		if (buttonClass.includes('edit')) {
-                       	$('.content-div').hide();
+                       	$('.content-div:visible').hide();
 			let i = $(this).parent().parent().children().first().html();
 			let j = $(this).parent().parent().attr('id');
 			let rowSelected = obj[i-1];
@@ -119,7 +123,7 @@ $(document).ready(() => {
 		if (buttonClass.includes('view')) {
 			var hobbieResult = [];
 			var hobbyText='';
-            		$('.content-div').hide();
+            		$('.content-div:visible').hide();
 			let i = $(this).parent().parent().children().first().html();
 			let rowSelected = obj[i-1];
 
@@ -148,6 +152,9 @@ $(document).ready(() => {
 			
 			$('#viewDiv').show();
        	 	}
+		if (buttonClass.includes('upload')) {
+			$(".content-div:visible").hide();
+		}
 		
 	});
 		

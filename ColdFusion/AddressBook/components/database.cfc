@@ -478,7 +478,7 @@
 				<cfset arrayAppend(local.message.errors,"*image field is required.")>
 			</cfif>
 		<cfelse> 
-			<cfinclude template="../temp.cfm">	
+			<cfinclude template="../temp.cfm">
 			<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
 				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
