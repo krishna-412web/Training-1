@@ -284,22 +284,15 @@
 		<cfargument name="presentHobbyArray" type="array">
 		<cfset local.result = {}>
 		<cfset local.insertArray=[]>
-		<cfset local.deleteArray=[]>
 		<cfloop array="#arguments.presentHobbyArray#" index="local.i">
 			<cfif NOT ArrayContains(pastHobbyArray,local.i)>
 				<cfset ArrayAppend(local.insertArray,local.i)>
 			</cfif>
 		</cfloop>
-		<cfloop array="#arguments.pastHobbyArray#" index="local.i">
-			<cfif NOT ArrayContains(presentHobbyArray,#local.i#)>
-				<cfset ArrayAppend(local.deleteArray,#local.i#)>
-			</cfif>
-		</cfloop>
 		<cfif NOT ArrayIsEmpty(local.insertArray)>
 			<cfset local.result.insertList = ArraytoList(local.insertArray)>
 		</cfif>
-		<cfreturn local.result>
-		
+		<cfreturn local.result>	
 	</cffunction>	
 		
 	<cffunction name="updateContact">
@@ -393,8 +386,6 @@
 		<cfset local.addErrorMessage="*add operation unsuccessfull">
 		<cfset local.editErrorMessage="*edit operation unsuccessfull">
 		<cfset local.message.flag = 1 >
-		<cfset local.message.tflag = 1>
-		<cfset local.message.gflag = 1>
 		<cfset local.message.hflag = 1>
 		<cfset local.allowedExtensions = "jpg,jpeg,png,gif,bmp,tiff">
 		<cfset local.result = dynamicForm()>
@@ -452,14 +443,9 @@
 		<cfif len(trim(form.gender)) EQ 0>
 			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*gender field is required.")>
-		<cfelse>
-			<cfif NOT listFind(local.result.genderList,form.gender)>
-				<cfset local.message.flag=0>
-				<cfset local.message.gflag=0>
-			</cfif>
-			<cfif local.message.gflag EQ 0>
-				<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
-			</cfif>
+		<cfelseif NOT listFind(local.result.genderList,form.gender)>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
 		</cfif>
 
 	
@@ -467,8 +453,8 @@
 			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*title field is required.")>
 		<cfelseif NOT listFind(local.result.titleList,form.title)>
-				<cfset local.message.flag=0>
-				<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
 		</cfif>
 
 		<cfif structKeyExists(form,"hobbies")>
@@ -496,17 +482,17 @@
 			<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
 				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
-			</cfif>			
+			</cfif>
+			<cffile action="delete"
+				file="#local.imgPath#">			
 		</cfif>
 		
 		<cfif len(trim(form.dob)) EQ 0>
 			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*date field is required.")>
-		<cfelse>
-			<cfif NOT isDate(form.dob)>
-				<cfset local.message.flag=0>
-				<cfset arrayAppend(local.message.errors,"*date input is invalid.")>
-			</cfif>
+		<cfelseif NOT isDate(form.dob)>
+			<cfset local.message.flag=0>
+			<cfset arrayAppend(local.message.errors,"*date input is invalid.")>
 		</cfif>
 
 		<cfreturn local.message>
@@ -523,20 +509,16 @@
 		<cfif len(trim(arguments.form.email)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
-		<cfelse>
-			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.form.email)>
-				<cfset local.message.flag = 0 >
-				<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
-			</cfif>
+		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.form.email)>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
 		</cfif>
 		<cfif len(trim(arguments.form.userName)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*userName is required.")>
-		<cfelse>
-			<cfif NOT REFind("^\w{5,}$", arguments.form.userName)>
+		<cfelseif NOT REFind("^\w{5,}$", arguments.form.userName)>
 				<cfset local.message.flag = 0 >
 				<cfset arrayAppend(local.message.errors, "*userName input is invalid.")>
-			</cfif>
 		</cfif>
 		<cfif len(trim(arguments.form.passWord)) eq 0 AND len(trim(arguments.form.confirmPassWord)) eq 0>
 			<cfset local.message.flag = 0 >

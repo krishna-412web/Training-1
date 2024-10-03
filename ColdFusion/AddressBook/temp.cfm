@@ -6,4 +6,5 @@
         filefield="profile"
         destination="#uploadDir#"
         nameConflict="makeunique">
+<cfset local.imgPath="#uploadDir##cffile.serverFile#">
 <cfset local.uploadedFileExt = cffile.SERVERFILEEXT>

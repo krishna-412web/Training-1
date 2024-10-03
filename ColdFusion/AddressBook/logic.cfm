@@ -8,13 +8,10 @@
 		<cfif structKeyExists(form, "submit1")>
 			<cfset variables.message = obj1.formValidate()>
 			<cfif variables.message.flag EQ 1>
-				<cfif structKeyExists(form,"operation")>
-					<cfif form.operation EQ "add">	
-						<cfset message=obj1.addContact()>
-					</cfif>
-					<cfif form.operation EQ "edit">
-						<cfset result = obj1.updateContact()>				
-					</cfif>
+				<cfif structKeyExists(form,"logId")>
+					<cfset result = obj1.updateContact()>
+				<cfelse>
+					<cfset message= obj1.addContact()>				
 				</cfif>
 			</cfif>
 		</cfif>
