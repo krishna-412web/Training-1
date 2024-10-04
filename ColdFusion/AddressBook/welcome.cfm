@@ -117,7 +117,7 @@
         				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       				</div>
            			<div class="modal-body">
-					<form action="" method="post">
+					<form action="" method="post" enctype="multipart/form-data">
 						<div class="row">
 							<h5 class="text-dark text-center">UPLOAD SPREADSHEET</h5>
 						</div>

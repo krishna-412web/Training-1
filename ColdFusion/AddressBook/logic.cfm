@@ -19,6 +19,9 @@
 			<cfset obj1.deleteContact(form.logId)>
 			<cflocation url="welcome.cfm" addToken="no" statusCode="302">
 		</cfif>
+		<cfif structKeyExists(form,"uploadSubmit")>
+			<cfinclude template="excelUpload.cfm">
+		</cfif>
 	<cfelse>
 		<cflocation url="index.cfm" addToken="no" statusCode="302">
 	</cfif>

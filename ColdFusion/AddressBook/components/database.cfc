@@ -11,7 +11,7 @@
 		<cfargument name="passWord" type="string">
 		<cfquery name="local.get" result="r">
 			SELECT 
-				uid,name,password,salt
+				uid,name,email,password,salt
 			FROM 
 				user 
 			WHERE 
@@ -26,6 +26,7 @@
 				<cfset local.result.value = 1 >
 				<cfset session.uid=local.get.uid>
 				<cfset session.user=local.get.name>
+				<cfset session.email=local.get.email>
 			<cfelse>
 				<cfset local.result.value = 0 >
 			</cfif>	
@@ -537,5 +538,129 @@
 		</cfif>
 		<cfreturn local.message>
 	</cffunction>
+	<cffunction name="selectEmail">
+		<cfquery name="local.getEmail" returnType="struct">
+			SELECT
+				email
+			FROM
+				log_book
+			WHERE
+				user_id=<cfqueryparam value="#session.uid#" cfsqltype="varchar">
+		</cfquery>
+		<cfreturn local.getEmail.RESULTSET>
+	</cffunction>
+	<cffunction name="excelValidate">
+		<cfargument name="inputRow" type="struct">
+		<cfset local.result=structNew()>
+		<cfset local.result.remarks = []>
+		<cfset local.result.flag = 1 >
+		<cfset local.result.hflag = 1>
+		<cfset local.checkData = dynamicForm()>
+		<cfset result.temp = local.checkData>
 
+		<cfif len(trim(inputRow.firstName)) eq 0>
+			<cfset local.result.flag = 0 >
+			<cfset arrayAppend(local.result.remarks, "*firstname is required.")>
+		</cfif>
+
+		<cfif len(trim(inputRow.lastName)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*lastname is required.")>
+		</cfif>
+
+		<cfif len(trim(inputRow.email)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*email is required.")>
+		<cfelse>
+			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", inputRow.email)>
+				<cfset local.result.flag = 0 >
+				<cfset arrayAppend(local.result.remarks, "*email input is invalid.")>
+			</cfif>
+		</cfif>
+
+		<cfif len(trim(inputRow.house_flat)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*housename is required.")>
+		</cfif>
+
+		<cfif len(trim(inputRow.street)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*street is required.")>
+		</cfif>
+
+		<cfif len(trim(inputRow.city)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*city is required.")>
+		</cfif>
+
+		<cfif len(trim(inputRow.state)) eq 0>
+			<cfset local.result.flag = false >
+    			<cfset arrayAppend(local.result.remarks, "*state is required.")>
+		</cfif>
+
+		<cfif NOT Len(trim(inputRow.phone)) EQ 10 OR NOT REFind("^[0-9]{10}$", inputRow.phone)>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*phone no is required/not in valid format.")>
+		</cfif>
+		
+		<cfif len(trim(inputRow.pincode)) eq 0>
+			<cfset local.result.flag = 0 >
+    			<cfset arrayAppend(local.result.remarks, "*pincode is required.")>
+		</cfif>
+		
+		<cfloop array="#local.checkData.title#" index="i">
+			<option value="#i.genderid#">#i.gendername#</option>
+		</cfloop>
+
+		<cfloop array="#local.checkData.gender#" index="i">
+			<option value="#i.genderid#">#i.gendername#</option>
+		</cfloop>
+
+		<cfloop array="#local.checkData.hobbies#" index="i">
+			<option value="#i.genderid#">#i.gendername#</option>
+		</cfloop>
+
+		<!---<cfif len(trim(inputRow.gender)) EQ 0>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*gender field is required.")>
+		<cfelseif NOT listFind(local.result.genderList,inputRow.gender)>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*invalid value for gender field")>
+		</cfif>
+
+	
+		<cfif len(trim(inputRow.title)) EQ 0>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*title field is required.")>
+		<cfelseif NOT listFind(local.result.titleList,inputRow.title)>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*invalid value for title field")>
+		</cfif>
+
+		<cfif structKeyExists(inputRow,"hobbies")>
+			<cfloop list="#inputRow.hobbies#" index="local.i">
+				<cfif NOT listFind(local.result.hobbieList,local.i)>
+					<cfset local.result.flag=0>
+					<cfset local.result.hflag=0>
+				</cfif>
+			</cfloop>
+			<cfif local.result.hflag EQ 0>
+				<cfset arrayAppend(local.result.remarks,"*invalid value for hobbies field")>
+			</cfif>
+		<cfelse> 
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*hobbies field is required.")>
+		</cfif>--->
+		
+		<cfif len(trim(inputRow.dob)) EQ 0>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*date field is required.")>
+		<cfelseif NOT isDate(inputRow.dob)>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*date input is invalid.")>
+		</cfif>
+
+		<cfreturn local.result>
+		
+	</cffunction>
 </cfcomponent>
