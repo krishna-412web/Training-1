@@ -1,7 +1,6 @@
 <cfset obj = CreateObject("component", "components.database")>
 <cfset get = obj.selectdata()>
 
-
 <cfset spreadsheetObj = SpreadsheetNew("AddressBook",false)>
 
 

@@ -404,11 +404,9 @@
 		<cfif len(trim(form.email)) eq 0>
 			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
-		<cfelse>
-			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
-				<cfset local.message.flag = 0 >
-				<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
-			</cfif>
+		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
+			<cfset local.message.flag = 0 >
+			<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
 		</cfif>
 
 		<cfif len(trim(form.houseName)) eq 0>
@@ -539,24 +537,32 @@
 		<cfreturn local.message>
 	</cffunction>
 	<cffunction name="selectEmail">
-		<cfquery name="local.getEmail" returnType="struct">
+		<cfquery name="local.getEmail">
 			SELECT
 				email
 			FROM
 				log_book
 			WHERE
-				user_id=<cfqueryparam value="#session.uid#" cfsqltype="varchar">
+				user_id=<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">
 		</cfquery>
-		<cfreturn local.getEmail.RESULTSET>
+		<cfreturn local.getEmail>
 	</cffunction>
 	<cffunction name="excelValidate">
 		<cfargument name="inputRow" type="struct">
 		<cfset local.result=structNew()>
 		<cfset local.result.remarks = []>
 		<cfset local.result.flag = 1 >
-		<cfset local.result.hflag = 1>
+		<cfset local.result.hflag = 0>
+		<cfset local.result.hobbieVal = arraynew(1)>
+		<cfset local.result.gflag = 0>
+		<cfset local.result.genderVal = 1>
+		<cfset local.result.tflag = 0>
+		<cfset local.result.titleVal = 1>
+		<cfset local.result.errors=0>
+		<cfset local.hobbieName= listtoArray(arguments.inputRow.hobbies)>
 		<cfset local.checkData = dynamicForm()>
-		<cfset result.temp = local.checkData>
+		<!---<cfset result.temp = ValueArray(selectEmail(),"EMAIL")>--->
+		
 
 		<cfif len(trim(inputRow.firstName)) eq 0>
 			<cfset local.result.flag = 0 >
@@ -571,11 +577,9 @@
 		<cfif len(trim(inputRow.email)) eq 0>
 			<cfset local.result.flag = 0 >
     			<cfset arrayAppend(local.result.remarks, "*email is required.")>
-		<cfelse>
-			<cfif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", inputRow.email)>
-				<cfset local.result.flag = 0 >
-				<cfset arrayAppend(local.result.remarks, "*email input is invalid.")>
-			</cfif>
+		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", inputRow.email)>
+			<cfset local.result.flag = 0 >
+			<cfset arrayAppend(local.result.remarks, "*email input is invalid.")>
 		</cfif>
 
 		<cfif len(trim(inputRow.house_flat)) eq 0>
@@ -608,49 +612,66 @@
     			<cfset arrayAppend(local.result.remarks, "*pincode is required.")>
 		</cfif>
 		
-		<cfloop array="#local.checkData.title#" index="i">
-			<option value="#i.genderid#">#i.gendername#</option>
-		</cfloop>
+		<cfif len(inputRow.title) GT 0>
+			<cfloop array="#local.checkData.title#" index="i">
+				<cfif FindNoCase(inputRow.title,i.value) NEQ 0 >
+					<cfset local.result.tflag=1>
+					<cfset local.result.titleVal = i.id>
+				</cfif>
+			</cfloop>
+		</cfif>
 
-		<cfloop array="#local.checkData.gender#" index="i">
-			<option value="#i.genderid#">#i.gendername#</option>
-		</cfloop>
+		<cfif len(inputRow.gender) GT 0>
+			<cfloop array="#local.checkData.gender#" index="i">
+				<cfif CompareNoCase(inputRow.gender,i.gendername) EQ 0>
+					<cfset local.result.gflag=1>
+					<cfset local.result.genderVal = i.genderid>
+					<cfbreak>
+				</cfif>
+			</cfloop>
+		</cfif>
 
-		<cfloop array="#local.checkData.hobbies#" index="i">
-			<option value="#i.genderid#">#i.gendername#</option>
-		</cfloop>
+		<cfif len(inputRow.hobbies) GT 0>
+			<cfloop array="#local.checkData.hobbies#" index="i">
+				<cfif ArrayFindNoCase(local.hobbieName,i.hobbieName) NEQ 0 >
+					<cfset ArrayAppend(local.result.hobbieVal,i.hobbieid)>
+				</cfif>
+			</cfloop>
+			<cfif NOT ArrayIsEmpty(local.result.hobbieVal)>
+				<cfset local.result.hflag =  1>
+				<cfset local.result.hobbieList = ArraytoList(local.result.hobbieVal)>
+			</cfif>			
+		</cfif>
+		
 
-		<!---<cfif len(trim(inputRow.gender)) EQ 0>
+
+		<cfif local.result.gflag EQ 0>
 			<cfset local.result.flag=0>
 			<cfset arrayAppend(local.result.remarks,"*gender field is required.")>
-		<cfelseif NOT listFind(local.result.genderList,inputRow.gender)>
+		<cfelseif local.result.genderVal EQ 0>
 			<cfset local.result.flag=0>
 			<cfset arrayAppend(local.result.remarks,"*invalid value for gender field")>
 		</cfif>
 
 	
-		<cfif len(trim(inputRow.title)) EQ 0>
+		<cfif local.result.tflag EQ 0>
 			<cfset local.result.flag=0>
 			<cfset arrayAppend(local.result.remarks,"*title field is required.")>
-		<cfelseif NOT listFind(local.result.titleList,inputRow.title)>
+		<cfelseif local.result.titleVal EQ 0>
 			<cfset local.result.flag=0>
 			<cfset arrayAppend(local.result.remarks,"*invalid value for title field")>
 		</cfif>
 
-		<cfif structKeyExists(inputRow,"hobbies")>
-			<cfloop list="#inputRow.hobbies#" index="local.i">
-				<cfif NOT listFind(local.result.hobbieList,local.i)>
-					<cfset local.result.flag=0>
-					<cfset local.result.hflag=0>
-				</cfif>
-			</cfloop>
-			<cfif local.result.hflag EQ 0>
-				<cfset arrayAppend(local.result.remarks,"*invalid value for hobbies field")>
-			</cfif>
-		<cfelse> 
+		<cfif  len(trim(inputRow.hobbies)) EQ 0 >
 			<cfset local.result.flag=0>
-			<cfset arrayAppend(local.result.remarks,"*hobbies field is required.")>
-		</cfif>--->
+			<cfset arrayAppend(local.result.remarks,"*hobbie is required")>	
+		<cfelseif local.result.hflag EQ 0 > 
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*hobbie invalid value")>
+		<cfelseif arraylen(local.hobbieName) NEQ arraylen(local.result.hobbieVal)>
+			<cfset local.result.flag=0>
+			<cfset arrayAppend(local.result.remarks,"*hobbie invalid value")>
+		</cfif>
 		
 		<cfif len(trim(inputRow.dob)) EQ 0>
 			<cfset local.result.flag=0>
@@ -660,7 +681,135 @@
 			<cfset arrayAppend(local.result.remarks,"*date input is invalid.")>
 		</cfif>
 
+		<cfif NOT ArrayIsEmpty(local.result.remarks)>
+			<cfset local.result.remarkList = ArraytoList(local.result.remarks)>
+		</cfif>
+
 		<cfreturn local.result>
 		
+	</cffunction>
+	<cffunction name="excelInsert">
+		<cfargument name="input" type="struct">
+		<cfargument name="operation" type="string">
+		<cfif arguments.operation EQ "add">
+			<cfdump var="#arguments.input#">
+			<cfquery name="local.addData" result="r">
+				INSERT INTO 
+					log_book(user_id,
+						title,
+						firstname,
+						lastname,
+						gender,
+						dob,
+						profile,
+						house_flat,
+						street,
+						city,
+						state,
+						pincode,
+						email,
+						phone) 
+				VALUES (<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#arguments.input.RESULT.titleVal#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#arguments.input.firstName#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.lastName#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.RESULT.genderVal#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#input.dob#" cfsqltype="cf_sql_date">,
+					<cfqueryparam value="./images/signup.png" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.house_flat#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.street#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.city#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.state#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.pincode#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#arguments.input.email#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#arguments.input.phone#" cfsqltype="cf_sql_decimal">);
+			</cfquery>
+			<cfquery name="local.insertHobbies">
+				INSERT INTO
+					hobbiecontact(
+						log_id,
+						hobbieid
+					)
+				VALUES
+					<cfloop list="#arguments.input.RESULT.hobbieList#" index="local.i">
+						(
+							<cfqueryparam value="#r.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
+						)
+						<cfif local.i NEQ listLast(arguments.input.RESULT.HOBBIELIST,",")>,</cfif>
+					</cfloop>
+				;
+			</cfquery>
+		<cfelseif arguments.operation EQ "update">
+			<cfquery name="updateRest" result ="r1">
+				UPDATE
+					log_book
+				SET
+					title= <cfqueryparam value="#arguments.input.RESULT.titleVal#" cfsqltype="cf_sql_integer">,
+					firstname= <cfqueryparam value="#arguments.input.firstName#" cfsqltype="cf_sql_varchar">,
+					lastname= <cfqueryparam value="#arguments.input.lastName#" cfsqltype="cf_sql_varchar">,
+					gender= <cfqueryparam value="#arguments.input.RESULT.genderVal#" cfsqltype="cf_sql_varchar">,
+					house_flat= <cfqueryparam value="#arguments.input.house_flat#" cfsqltype="cf_sql_varchar">,
+					street= <cfqueryparam value="#arguments.input.street#" cfsqltype="cf_sql_varchar">,
+					city= <cfqueryparam value="#arguments.input.city#" cfsqltype="cf_sql_varchar">,
+					state= <cfqueryparam value="#arguments.input.state#" cfsqltype="cf_sql_varchar">,
+					pincode= <cfqueryparam value="#arguments.input.pincode#" cfsqltype="cf_sql_integer">,
+					phone= <cfqueryparam value="#arguments.input.phone#" cfsqltype="cf_sql_decimal">,
+					dob= <cfqueryparam value="#arguments.input.dob#" cfsqltype="cf_sql_date">
+				WHERE
+					email= <cfqueryparam value="#arguments.input.email#" cfsqltype="cf_sql_varchar">
+				AND
+					user_id=<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;	
+			</cfquery>
+			<cfquery name="getlogId" returnType="struct">
+				SELECT log_id
+				FROM log_book
+				WHERE
+					email= <cfqueryparam value="#arguments.input.email#" cfsqltype="cf_sql_varchar">
+				AND
+					user_id=<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;					
+			</cfquery>
+			<cfquery name="getHobby">
+				SELECT 
+					hobbieid 
+				FROM 
+					hobbiecontact
+				WHERE
+					log_id = <cfqueryparam value="#getlogId.RESULTSET[1].log_id#" cfsqltype="cf_sql_integer">;
+			</cfquery>
+			<cfset previousHobbyArray = ValueArray(getHobby,"hobbieid")>
+			<cfset presentHobbyArray = listToArray(input.RESULT.hobbieList)>
+			<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
+			<cfquery name="deleteHobby">
+				DELETE FROM
+					hobbiecontact
+				WHERE 
+					log_id= <cfqueryparam value="#getlogId.RESULTSET[1].log_id#" cfsqltype="cf_sql_integer">
+				AND
+					hobbieid NOT IN 
+						(<cfqueryparam value="#input.RESULT.HOBBIELIST#" cfsqltype="cf_sql_integer" list="true">);
+			</cfquery>
+
+		
+			<cfif structKeyExists(local.result,'insertList')>
+				<cfquery name="updateHobby">
+					INSERT INTO
+						hobbiecontact(
+							log_id,
+							hobbieid
+						)
+					VALUES
+						<cfloop list="#local.result.insertList#" index="local.i">
+							(
+								<cfqueryparam value="#getlogId.RESULTSET[1].log_id#" cfsqltype="cf_sql_integer">,
+								<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
+							)
+							<cfif i NEQ listLast(local.result.insertList,",")>,</cfif>
+						</cfloop>
+					;
+				</cfquery>
+			</cfif>
+
+		</cfif>
 	</cffunction>
 </cfcomponent>

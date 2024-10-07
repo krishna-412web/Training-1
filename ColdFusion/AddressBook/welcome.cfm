@@ -124,7 +124,7 @@
 						<input type="file" id="spreadsheet" name="spreadsheet" accept=".xls, .xlsx, .csv"/>
 						<div class="mt-2"></div>
 						<div class="row">
-							<div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" name="uploadSubmit">Yes</button></div>
+							<div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" id="uploadSubmit" name="uploadSubmit">Yes</button></div>
 							<div class="col-4"></div>
 							<div class="col-4"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">No</button></div>
 						</div>

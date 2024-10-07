@@ -181,7 +181,13 @@ $(document).ready(() => {
 		let row = $(this).parent().parent().attr('id');
 		$("#delInp").attr('value',row);
 	});
-		
+	
+	$("#uploadSubmit").click(function() {
+		setTimeout(function() {
+			window.location.href="welcome.cfm";
+		},500);
+	});
+	
 	$(document).on('click','.printContact', function(event) {
 		let id= $(this).parent().parent().attr('id');
 		let i = $(this).parent().parent().children().first().html();
