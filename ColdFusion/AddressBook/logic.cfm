@@ -8,10 +8,15 @@
 		<cfif structKeyExists(form, "submit1")>
 			<cfset variables.message = obj1.formValidate()>
 			<cfif variables.message.flag EQ 1>
-				<cfif structKeyExists(form,"logId")>
-					<cfset result = obj1.updateContact()>
+				<cfif structKeyExists(form,"profile") AND len(trim(form.profile)) GT 0>
+					<cfinclude template="image.cfm">
 				<cfelse>
-					<cfset message= obj1.addContact()>				
+					<cfset imgPath="./images/signup.png">
+				</cfif>
+				<cfif structKeyExists(form,"logId")>
+					<cfset result = obj1.updateContact(form,{},imgPath)>
+				<cfelse>
+					<cfset message= obj1.addContact(form,{},imgPath)>				
 				</cfif>
 			</cfif>
 		</cfif>

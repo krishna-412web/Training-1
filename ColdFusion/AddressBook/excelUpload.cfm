@@ -31,13 +31,11 @@
 			gender = GENDER,
 			dob = DOB
 			}>
-	<cfdump var="#local.row#">
 	<cfset local.result= obj1.excelValidate(local.row)>
 	<cfset structInsert(local.row,"RESULT","#local.result#")>
 	<cfset arrayappend(local.uploadResult,local.row)>
 </cfoutput>
-cfdump var="#local.uploadResult#">
-<cfdump var="#local.uploadResult#">
+
 <cfif NOT ArrayIsEmpty(local.uploadResult)>
 	<cfinclude template="uploadResult.cfm">
 <cfelse>
