@@ -185,7 +185,7 @@ $(document).ready(() => {
 	$("#uploadSubmit").click(function() {
 		setTimeout(function() {
 			window.location.href="welcome.cfm";
-		},500);
+		},1500);
 	});
 	
 	$(document).on('click','.printContact', function(event) {
