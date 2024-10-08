@@ -99,3 +99,5 @@
 
 <!--- Serve the file and delete it after download --->
 <cfcontent type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" variable="#binary#" >
+
+<cflocation url="welcome.cfm">
