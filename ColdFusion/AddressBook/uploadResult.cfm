@@ -30,18 +30,14 @@
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
-<cfset imgPath="./images/signup.png">
 <cfloop array="#local.uploadResult#" index="j" item="i">
 	<cfif NOT structKeyExists(i.RESULT,"REMARKLIST")>
-		<cfif ArrayContains(emailArray,i.email)>
-			<cfset local.operation="update">
-			<cfset result = obj1.updateContact({},i)>
-		<cfelse>
-			<cfset local.operation="add">
-			<cfset message= obj1.addContact({},i,imgPath)>
+			<cfif ArrayContains(emailArray,i.email)>
+				<cfset local.operation="update">
+			<cfelse>
+				<cfset local.operation="add">
+			</cfif>
 		</cfif>
-		<!---<cfset obj1.excelInsert(i,local.operation)>--->
-	</cfif>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.title#", j+2, 1)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+2, 2)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+2, 3)>

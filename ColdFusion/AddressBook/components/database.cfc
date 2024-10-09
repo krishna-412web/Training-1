@@ -86,10 +86,23 @@
 	</cffunction>
 
 	<cffunction name="addContact">
-		<cfargument name="form" type="struct">
-		<cfargument name="inputRow" type="struct">
+
+		<cfargument name="title" type="string">
+		<cfargument name="firstName" type="string">
+		<cfargument name="lastName" type="string">
+		<cfargument name="gender" type="string">
+		<cfargument name="dob" type="string">
+		<cfargument name="house_flat" type="string">
+		<cfargument name="street" type="string">
+		<cfargument name="city" type="string">
+		<cfargument name="state" type="string">
+		<cfargument name="pincode" type="string">
+		<cfargument name="email" type="string">
+		<cfargument name="phone" type="string">
+		<cfargument name="hobbies" type="array">
 		<cfargument name="imgPath" type="string">
-		<cfset local.mainstruct= structNew()>
+
+		<!---<cfset local.mainstruct= structNew()>
 		<cfif NOT structIsEmpty(arguments.form)>
 			<cfset local.mainstruct=arguments.form>
 			<cfset local.hobbies = ListToArray(form.hobbies)>
@@ -98,7 +111,7 @@
 			<cfset local.hobbies = ListToArray(inputRow.RESULT.hobbielist)>
 		</cfif>
 		<cfdump var="#local.mainstruct#">
-		<cfset local.message = structNew()>
+		<cfset local.message = structNew()>--->
 
 		<cfquery name="local.addData" result="r">
 			INSERT INTO 
@@ -117,31 +130,19 @@
 					email,
 					phone) 
 			VALUES (<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">,
-				<cfif structKeyExists(local.mainstruct,"result")>
-					<cfqueryparam value="#local.mainstruct.RESULT.titleVal#" cfsqltype="cf_sql_integer">,
-				<cfelse>
-					<cfqueryparam value="#local.mainstruct.title#" cfsqltype="cf_sql_integer">,
-				</cfif>
-				<cfqueryparam value="#local.mainstruct.firstName#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.mainstruct.lastName#" cfsqltype="cf_sql_varchar">,
-				<cfif structKeyExists(local.mainstruct,"result")>
-					<cfqueryparam value="#local.mainstruct.RESULT.genderVal#" cfsqltype="cf_sql_integer">,
-				<cfelse>
-					<cfqueryparam value="#local.mainstruct.gender#" cfsqltype="cf_sql_varchar">,
-				</cfif>
-				<cfqueryparam value="#local.mainstruct.dob#" cfsqltype="cf_sql_date">,
+				<cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date">,
 				<cfqueryparam value="#arguments.imgPath#" cfsqltype="cf_sql_varchar">,
-				<cfif structKeyExists(local.mainstruct,"result")>
-					<cfqueryparam value="#local.mainstruct.house_flat#" cfsqltype="cf_sql_varchar">,
-				<cfelse>
-					<cfqueryparam value="#local.mainstruct.houseName#" cfsqltype="cf_sql_varchar">,
-				</cfif>
-				<cfqueryparam value="#local.mainstruct.street#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.mainstruct.city#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.mainstruct.state#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.mainstruct.pincode#" cfsqltype="cf_sql_integer">,
-				<cfqueryparam value="#local.mainstruct.email#" cfsqltype="cf_sql_varchar">,
-				<cfqueryparam value="#local.mainstruct.phone#" cfsqltype="cf_sql_decimal">);
+				<cfqueryparam value="#arguments.house_flat#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_integer">,
+				<cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
+				<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">);
 		</cfquery>
 		<cfquery name="local.insertHobbies">
 			INSERT INTO
@@ -150,12 +151,12 @@
 					hobbieid
 				)
 			VALUES
-				<cfloop array="#local.hobbies#" index="j" item="local.i">
+				<cfloop array="#arguments.hobbies#" index="j" item="local.i">
 					(
 						<cfqueryparam value="#r.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
 					)
-					<cfif j NEQ Arraylen(local.hobbies)>,</cfif>
+					<cfif j NEQ Arraylen(arguments.hobbies)>,</cfif>
 				</cfloop>
 			;
 		</cfquery>	
@@ -307,6 +308,7 @@
 		<cfargument name="pastHobbyArray" type="array">
 		<cfargument name="presentHobbyArray" type="array">
 		<cfset local.result = {}>
+		<cfset local.result.hobbies = ArraytoList(presentHobbyArray)>
 		<cfset local.insertArray=[]>
 		<cfloop array="#arguments.presentHobbyArray#" index="local.i">
 			<cfif NOT ArrayContains(pastHobbyArray,local.i)>
@@ -318,103 +320,107 @@
 		</cfif>
 		<cfreturn local.result>	
 	</cffunction>	
-		
-	<cffunction name="updateContact">
-		<cfargument name="form" type="struct">
+	
+	<cffunction name="excelGetHobby">
 		<cfargument name="inputRow" type="struct">
+		<cfset local.hobbies = ListToArray(inputRow.RESULT.hobbielist)>
+		<cfset local.result = structNew()>
+		<cfquery name="getlogId" returnType="struct">
+			SELECT log_id
+			FROM log_book
+			WHERE
+				email= <cfqueryparam value="#arguments.inputRow.email#" cfsqltype="cf_sql_varchar">
+			AND
+				user_id=<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;					
+		</cfquery>
+		<cfquery name="getHobby">
+			SELECT 
+				hobbieid 
+			FROM 
+				hobbiecontact
+			WHERE
+				log_id = <cfqueryparam value="#getlogId.RESULTSET[1].log_id#" cfsqltype="cf_sql_integer">;
+		</cfquery>
+		<cfset previousHobbyArray = ValueArray(getHobby,"hobbieid")>
+		<cfset presentHobbyArray = listToArray(inputRow.RESULT.hobbieList)>
+		<cfset local.logId = getlogId.RESULTSET[1].log_id>
+		<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
+		<cfset local.result.logId = getlogId.RESULTSET[1].log_id>
+		<cfreturn local.result>
+	</cffunction>	
+
+	<cffunction name="updateContact">
+		<cfargument name="title" type="string">
+		<cfargument name="firstName" type="string">
+		<cfargument name="lastName" type="string">
+		<cfargument name="gender" type="string">
+		<cfargument name="dob" type="string">
+		<cfargument name="house_flat" type="string">
+		<cfargument name="street" type="string">
+		<cfargument name="city" type="string">
+		<cfargument name="state" type="string">
+		<cfargument name="pincode" type="string">
+		<cfargument name="email" type="string">
+		<cfargument name="phone" type="string">
+		<cfargument name="result" type="struct">
 		<cfargument name="imgPath" type="string">
-		<cfset local.mainstruct= structNew()>
-		<cfif NOT structIsEmpty(arguments.form)>
+		<cfargument name="logId" type="string" required="false">
+
+		<cfset local.output= structNew()>
+		<!---<cfif NOT structIsEmpty(arguments.form)>
 			<cfset local.mainstruct=arguments.form>
 			<cfset local.logId = decryptData(local.mainstruct.logId)>
 			<cfset previousHobbyArray = listToArray(local.mainstruct.prevHobbieList)>
 			<cfset presentHobbyArray = listToArray(local.mainstruct.hobbies)>
 			<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
-			<cfif structKeyExists(local.mainstruct, "profile") AND Len(Trim(local.mainstruct.profile)) GT 0>
+		<cfelseif NOT structIsEmpty(arguments.inputRow)>
+			<cfset structAppend(local.mainstruct,arguments.inputRow)>
+			
+		</cfif>--->
+		<cfif NOT arguments.imgPath EQ "" AND Len(Trim(arguments.imgPath)) GT 0>
 				<cfinclude template="../image.cfm">
 				<cfquery name="update">
 					UPDATE 
 						log_book
 					SET 
-						profile = <cfqueryparam value="#imgPath#" cfsqltype="cf_sql_varchar">
+						profile = <cfqueryparam value="#arguments.imgPath#" cfsqltype="cf_sql_varchar">
 					WHERE 
-						log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+						log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">
 				</cfquery>		
 			</cfif>
-		<cfelseif NOT structIsEmpty(arguments.inputRow)>
-			<cfset structAppend(local.mainstruct,arguments.inputRow)>
-			<cfset local.hobbies = ListToArray(inputRow.RESULT.hobbielist)>
-			<cfquery name="getlogId" returnType="struct">
-				SELECT log_id
-				FROM log_book
-				WHERE
-					email= <cfqueryparam value="#local.mainstruct.email#" cfsqltype="cf_sql_varchar">
-				AND
-					user_id=<cfqueryparam value="#session.uid#" cfsqltype="cf_sql_integer">;					
-			</cfquery>
-			<cfquery name="getHobby">
-				SELECT 
-					hobbieid 
-				FROM 
-					hobbiecontact
-				WHERE
-					log_id = <cfqueryparam value="#getlogId.RESULTSET[1].log_id#" cfsqltype="cf_sql_integer">;
-			</cfquery>
-			<cfset previousHobbyArray = ValueArray(getHobby,"hobbieid")>
-			<cfset presentHobbyArray = listToArray(local.mainstruct.RESULT.hobbieList)>
-			<cfset local.logId = getlogId.RESULTSET[1].log_id>
-			<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
-		</cfif>
 		<cfset local.message = structNew()>
 		<cfquery name="updateRest">
 			UPDATE
 				log_book
 			SET
-				<cfif structKeyExists(local.mainstruct,"result")>
-					title=<cfqueryparam value="#local.mainstruct.RESULT.titleVal#" cfsqltype="cf_sql_integer">,
-				<cfelse>
-					title= <cfqueryparam value="#local.mainstruct.title#" cfsqltype="cf_sql_integer">,
-				</cfif>
-				firstname= <cfqueryparam value="#local.mainstruct.firstName#" cfsqltype="cf_sql_varchar">,
-				lastname= <cfqueryparam value="#local.mainstruct.lastName#" cfsqltype="cf_sql_varchar">,
-				<cfif structKeyExists(local.mainstruct,"result")>
-					gender=<cfqueryparam value="#local.mainstruct.RESULT.genderVal#" cfsqltype="cf_sql_integer">,
-				<cfelse>
-					gender= <cfqueryparam value="#local.mainstruct.gender#" cfsqltype="cf_sql_integer">,
-				</cfif>
-				<cfif structKeyExists(local.mainstruct,"result")>
-					house_flat=<cfqueryparam value="#local.mainstruct.house_flat#" cfsqltype="cf_sql_varchar">,
-				<cfelse>
-					house_flat= <cfqueryparam value="#local.mainstruct.houseName#" cfsqltype="cf_sql_varchar">,
-				</cfif>
-				street= <cfqueryparam value="#local.mainstruct.street#" cfsqltype="cf_sql_varchar">,
-				city= <cfqueryparam value="#local.mainstruct.city#" cfsqltype="cf_sql_varchar">,
-				state= <cfqueryparam value="#local.mainstruct.state#" cfsqltype="cf_sql_varchar">,
-				pincode= <cfqueryparam value="#local.mainstruct.pincode#" cfsqltype="cf_sql_integer">,
-				email= <cfqueryparam value="#local.mainstruct.email#" cfsqltype="cf_sql_varchar">,
-				phone= <cfqueryparam value="#local.mainstruct.phone#" cfsqltype="cf_sql_decimal">,
-				dob= <cfqueryparam value="#local.mainstruct.dob#" cfsqltype="cf_sql_date">
+				title= <cfqueryparam value="#arguments.title#" cfsqltype="cf_sql_integer">,
+				firstname= <cfqueryparam value="#arguments.firstName#" cfsqltype="cf_sql_varchar">,
+				lastname= <cfqueryparam value="#arguments.lastName#" cfsqltype="cf_sql_varchar">,
+				gender= <cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_integer">,
+				house_flat= <cfqueryparam value="#arguments.house_flat#" cfsqltype="cf_sql_varchar">,
+				street= <cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
+				city= <cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
+				state= <cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
+				pincode= <cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_integer">,
+				email= <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
+				phone= <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">,
+				dob= <cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date">
 			WHERE
-				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">;
+				log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">;
 		</cfquery>
 		
 		<cfquery name="deleteHobby">
 			DELETE FROM
 				hobbiecontact
 			WHERE 
-				log_id= <cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">
+				log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">
 			AND
 				hobbieid NOT IN 
-					(<cfif structKeyExists(local.mainstruct,"result")>
-						<cfqueryparam value="#local.mainstruct.RESULT.hobbieList#" cfsqltype="cf_sql_integer" list="true">
-					<cfelse>
-						<cfqueryparam value="#local.mainstruct.hobbies#" cfsqltype="cf_sql_integer" list="true">
-					</cfif>
-					);
+					(<cfqueryparam value="#arguments.result.hobbies#" cfsqltype="cf_sql_integer" list="true">);
 		</cfquery>
 
 		
-		<cfif structKeyExists(local.result,'insertList')>
+		<cfif structKeyExists(arguments.result,'insertList')>
 			<cfquery name="updateHobby">
 				INSERT INTO
 					hobbiecontact(
@@ -422,17 +428,18 @@
 						hobbieid
 					)
 				VALUES
-					<cfloop list="#local.result.insertList#" index="local.i">
+					<cfloop list="#arguments.result.insertList#" index="local.i">
 						(
-							<cfqueryparam value="#local.logId#" cfsqltype="cf_sql_integer">,
+							<cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
 						)
-						<cfif i NEQ listLast(local.result.insertList,",")>,</cfif>
+						<cfif i NEQ listLast(arguments.result.insertList,",")>,</cfif>
 					</cfloop>
 				;
 			</cfquery>
 		</cfif>
-		<cfreturn local.result>
+		<cfset local.output.value = 1>
+		<cfreturn local.output>
 	</cffunction>
 
 	<cffunction name="deleteContact" access="remote" returnFormat="JSON">

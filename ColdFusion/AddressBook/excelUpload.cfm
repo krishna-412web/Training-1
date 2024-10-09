@@ -36,7 +36,54 @@
 	<cfset arrayappend(local.uploadResult,local.row)>
 </cfoutput>
 
+
+<cfset obj = CreateObject("component", "components.database")>
+<cfset local.get = obj.selectEmail()>
+<cfset emailArray = ValueArray(local.get,"EMAIL")>
+
 <cfif NOT ArrayIsEmpty(local.uploadResult)>
+	<cfloop array="#local.uploadResult#" index="j" item="i">
+		<cfif NOT structKeyExists(i.RESULT,"REMARKLIST")>
+			<cfif ArrayContains(emailArray,i.email)>
+				<cfset local.operation="update">
+				<cfset imgPath="">
+				<cfset input = obj1.excelGetHobby(i)>
+				<cfset result = obj1.updateContact(i.RESULT.titleVal,
+								i.firstName,
+								i.lastName,
+								i.RESULT.genderVal,
+								i.dob,
+								i.house_flat,
+								i.street,
+								i.city,
+								i.state,
+								i.pincode,
+								i.email,
+								i.phone,
+								input,
+								imgPath,
+								input.logId)>
+			<cfelse>
+				<cfset local.operation="add">
+				<cfset imgPath="./images/signup.png">
+				<cfset local.hobbies = ListToArray(i.RESULT.hobbielist)>
+				<cfset message= obj1.addContact(i.RESULT.titleVal,
+								i.firstName,
+								i.lastName,
+								i.RESULT.genderVal,
+								i.dob,
+								i.house_flat,
+								i.street,
+								i.city,
+								i.state,
+								i.pincode,
+								i.email,
+								i.phone,
+								local.hobbies,
+								imgPath)>
+			</cfif>
+		</cfif>
+	</cfloop>
 	<cfinclude template="uploadResult.cfm">
 <cfelse>
 	<script>alert("*Uploaded spreadsheet is empty");</script>
