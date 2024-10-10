@@ -17,7 +17,8 @@
 <cfset uploadRow = structNew()>
 <cfoutput query="contactData">
 	<cfset uploadRow = structNew()>
-	<cfset local.row = {email = EMAIL, 
+	<cfset local.row = {rowno= contactData.currentRow,
+			email = EMAIL, 
 		    	firstname = FIRSTNAME,
 			lastname = LASTNAME, 
 			phone = PHONE,
@@ -37,6 +38,7 @@
 </cfoutput>
 
 
+
 <cfset obj = CreateObject("component", "components.database")>
 <cfset local.get = obj.selectEmail()>
 <cfset emailArray = ValueArray(local.get,"EMAIL")>
@@ -45,7 +47,7 @@
 	<cfloop array="#local.uploadResult#" index="j" item="i">
 		<cfif NOT structKeyExists(i.RESULT,"REMARKLIST")>
 			<cfif ArrayContains(emailArray,i.email)>
-				<cfset local.operation="update">
+				<cfset local.uploadResult[j].operation="updated">
 				<cfset imgPath="">
 				<cfset input = obj1.excelGetHobby(i)>
 				<cfset result = obj1.updateContact(i.RESULT.titleVal,
@@ -64,7 +66,7 @@
 								imgPath,
 								input.logId)>
 			<cfelse>
-				<cfset local.operation="add">
+				<cfset local.uploadResult[j].operation="added">
 				<cfset imgPath="./images/signup.png">
 				<cfset local.hobbies = ListToArray(i.RESULT.hobbielist)>
 				<cfset message= obj1.addContact(i.RESULT.titleVal,
@@ -82,9 +84,13 @@
 								local.hobbies,
 								imgPath)>
 			</cfif>
+		<cfelse>
+			<cfset local.uploadResult[j].operation="error">
 		</cfif>
 	</cfloop>
-	<cfinclude template="uploadResult.cfm">
+	<cfset local.sortedArray=obj.ArrayChange(local.uploadResult)>
+	<cfset session.uploadResult=arrayNew(1)>
+	<cfset  session.uploadResult = duplicate(local.sortedArray)>
 <cfelse>
 	<script>alert("*Uploaded spreadsheet is empty");</script>
 </cfif>

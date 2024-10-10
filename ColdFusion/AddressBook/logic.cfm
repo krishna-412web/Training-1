@@ -62,6 +62,9 @@
 		<cfif structKeyExists(form,"uploadSubmit")>
 			<cfinclude template="excelUpload.cfm">
 		</cfif>
+		<cfif structKeyExists(form,"uploadResult")>
+			<cfinclude template="uploadResult.cfm">
+		</cfif>
 	<cfelse>
 		<cflocation url="index.cfm" addToken="no" statusCode="302">
 	</cfif>

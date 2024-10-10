@@ -1,6 +1,11 @@
-<cfset obj = CreateObject("component", "components.database")>
+<!---<cfset obj = CreateObject("component", "components.database")>
 <cfset get = obj.selectEmail()>
-<cfset emailArray = ValueArray(get,"EMAIL")>
+<cfset emailArray = ValueArray(get,"EMAIL")>--->
+
+<cfif NOT structKeyExists(session,"uploadResult")>
+	<script>alert("Session Expired")</script>
+	<cflocation url="welcome.cfm">
+</cfif>
 
 <cfset spreadsheetObj = SpreadsheetNew("AddressBook",false)>
 
@@ -30,14 +35,7 @@
 <cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
 <cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
 
-<cfloop array="#local.uploadResult#" index="j" item="i">
-	<cfif NOT structKeyExists(i.RESULT,"REMARKLIST")>
-			<cfif ArrayContains(emailArray,i.email)>
-				<cfset local.operation="update">
-			<cfelse>
-				<cfset local.operation="add">
-			</cfif>
-		</cfif>
+<cfloop array="#session.uploadResult#" index="j" item="i">
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.title#", j+2, 1)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+2, 2)>
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+2, 3)>
@@ -54,19 +52,13 @@
 	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+2, 13)>
 	<cfif structKeyExists(i.RESULT,"REMARKLIST")>
 		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.RESULT.REMARKLIST#", j+2, 14)>
-		<cfif NOT j+2 EQ 3>
-			<cfset SpreadsheetShiftRows(spreadsheetObj,3,j+2,1)>
-			<cfset SpreadsheetShiftRows(spreadsheetObj,j+3,-(j))>
-		</cfif>
-	<cfelseif local.operation EQ "add">
-		<cfset spreadsheetSetCellValue(spreadsheetObj, "Added", j+2, 14)>
-	<cfelseif local.operation EQ "update">
-		<cfset spreadsheetSetCellValue(spreadsheetObj, "Updated", j+2, 14)>
+	<cfelse>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.operation#", j+2, 14)>
 	</cfif>
 	<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+2,20)>
 </cfloop>
 
-<cfloop from="3" to="#3+ArrayLen(local.uploadResult)#" index="i">
+<cfloop from="3" to="#3+ArrayLen(session.uploadResult)#" index="i">
 	<cfif i%2 EQ 0>
 		<cfset SpreadsheetFormatRow(spreadsheetObj,data,i)>
 	</cfif>

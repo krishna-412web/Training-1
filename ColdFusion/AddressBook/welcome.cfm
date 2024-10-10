@@ -35,9 +35,14 @@
 				<div class="card mt-2 row">
 					<div class="card-body row d-flex flex-row justify-content-end">
 						<button type="button" id="pdfFeature" class="btn btn-info col-1 mx-1">pdf</button>
-						<button type="button" id="excelFeature" class="btn btn-sm btn-info col-1 mx-1">Excel(Data)</button>
-						<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-1 mx-1">Excel(Plain)</button>
+						<button type="button" id="excelFeature" class="btn btn-sm btn-info col-2 mx-1">Template With Data</button>
+						<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-2 mx-1">Plain Template</button>
 						<button type="button" id="printFeature" class="btn btn-info col-1 mx-1">print</button>
+						<cfif StructKeyExists(session, "uploadResult") AND structKeyExists(form,"uploadSubmit")>
+							<form class="col-1" action="" method="POST">
+								<button type="submit" id="uploadResult" name="uploadResult" class="btn btn-info ">Result</button>
+							</form>
+    						</cfif>
 					</div>
 				</div>
 			</div>
@@ -121,12 +126,19 @@
 						<div class="row">
 							<h5 class="text-dark text-center">UPLOAD SPREADSHEET</h5>
 						</div>
+						<div class="row">
+							<div class="col-1"></div>
+							<div class="col-5"><button type="button" id="excelTemplate" class="btn btn-info">Template With Data</button></div>
+							<div class="col-5"><button type="button" id="excelPlain" class="btn btn-info">Plain Template</button></div>
+							<div class="col-1"></div>
+						</div>
+						<div class="mt-1"></div>
 						<input type="file" id="spreadsheet" name="spreadsheet" accept=".xls, .xlsx, .csv"/>
 						<div class="mt-2"></div>
 						<div class="row">
-							<div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" id="uploadSubmit" name="uploadSubmit">Yes</button></div>
-							<div class="col-4"></div>
-							<div class="col-4"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">No</button></div>
+							<div class="col-5"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">Cancel</button></div>
+							<div class="col-2"></div>
+							<div class="col-5"><button type="submit" class="btn btn-sm btn-danger w-100" id="uploadSubmit" name="uploadSubmit">Upload</button></div>
 						</div>
 					</form>
 				</div>

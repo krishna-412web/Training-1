@@ -756,4 +756,18 @@
 		<cfreturn local.result>
 		
 	</cffunction>
+	<cffunction name="Arraychange">
+		<cfargument name="uploadResult" type="array">
+		<cfset sortedArray = arrayNew(1)>
+		<cfset checkedArray = arrayNew(1)>
+		<cfloop array="#arguments.uploadResult#" index="i" >
+			<cfif i.operation EQ "error">
+				<cfset ArrayAppend(sortedArray,i)>
+			<cfelse>
+				<cfset ArrayAppend(checkedArray,i)>
+			</cfif>
+		</cfloop>
+		<cfset ArrayAppend(sortedArray,checkedArray,"true")>
+		<cfreturn sortedArray/>
+	</cffunction>
 </cfcomponent>

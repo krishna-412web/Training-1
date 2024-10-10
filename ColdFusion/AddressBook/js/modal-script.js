@@ -52,10 +52,24 @@ $(document).ready(() => {
 	$("#excelFeature1").click(function(){
 		window.location.href="excelPlain.cfm";
 	});
+
+
+	$("#excelTemplate").click(function(){
+		window.location.href="excelFeature.cfm";
+	});
+
+	$("#excelPlain").click(function(){
+		window.location.href="excelPlain.cfm";
+	});
 	
+	/*$("#uploadResult").click(function(){
+		window.location.href="uploadResult.cfm";
+	});*/
+
 	$("#printFeature").click(function(){
         	window.print();
 	});
+		
 
 	$(document).on('click', '[data-bs-toggle="modal"]', function() {
 		console.log(obj);
@@ -182,11 +196,11 @@ $(document).ready(() => {
 		$("#delInp").attr('value',row);
 	});
 	
-	$("#uploadSubmit").click(function() {
+	/*$("#uploadSubmit").click(function() {
 		setTimeout(function() {
 			window.location.href="welcome.cfm";
 		},1500);
-	});
+	});*/
 	
 	$(document).on('click','.printContact', function(event) {
 		let id= $(this).parent().parent().attr('id');
