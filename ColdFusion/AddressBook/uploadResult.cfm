@@ -3,8 +3,8 @@
 <cfset emailArray = ValueArray(get,"EMAIL")>--->
 
 <cfif NOT structKeyExists(session,"uploadResult")>
-	<script>alert("Session Expired")</script>
-	<cflocation url="welcome.cfm">
+	<script>alert("Session Expired");</script>
+	<cflocation url="welcome.cfm" addToken="no">  
 </cfif>
 
 <cfset spreadsheetObj = SpreadsheetNew("AddressBook",false)>
@@ -57,6 +57,7 @@
 	</cfif>
 	<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+2,20)>
 </cfloop>
+
 
 <cfloop from="3" to="#3+ArrayLen(session.uploadResult)#" index="i">
 	<cfif i%2 EQ 0>

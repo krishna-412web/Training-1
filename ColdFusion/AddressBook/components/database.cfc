@@ -87,11 +87,11 @@
 
 	<cffunction name="addContact">
 
-		<cfargument name="title" type="string">
+		<cfargument name="title" type="numeric">
 		<cfargument name="firstName" type="string">
 		<cfargument name="lastName" type="string">
-		<cfargument name="gender" type="string">
-		<cfargument name="dob" type="string">
+		<cfargument name="gender" type="numeric">
+		<cfargument name="dob" type="date">
 		<cfargument name="house_flat" type="string">
 		<cfargument name="street" type="string">
 		<cfargument name="city" type="string">
@@ -101,17 +101,6 @@
 		<cfargument name="phone" type="string">
 		<cfargument name="hobbies" type="array">
 		<cfargument name="imgPath" type="string">
-
-		<!---<cfset local.mainstruct= structNew()>
-		<cfif NOT structIsEmpty(arguments.form)>
-			<cfset local.mainstruct=arguments.form>
-			<cfset local.hobbies = ListToArray(form.hobbies)>
-		<cfelseif NOT structIsEmpty(arguments.inputRow)>
-			<cfset structAppend(local.mainstruct,arguments.inputRow)>
-			<cfset local.hobbies = ListToArray(inputRow.RESULT.hobbielist)>
-		</cfif>
-		<cfdump var="#local.mainstruct#">
-		<cfset local.message = structNew()>--->
 
 		<cfquery name="local.addData" result="r">
 			INSERT INTO 
@@ -321,7 +310,7 @@
 		<cfreturn local.result>	
 	</cffunction>	
 	
-	<cffunction name="excelGetHobby">
+	<cffunction name="excelGetDetails">
 		<cfargument name="inputRow" type="struct">
 		<cfset local.hobbies = ListToArray(inputRow.RESULT.hobbielist)>
 		<cfset local.result = structNew()>
@@ -350,11 +339,11 @@
 	</cffunction>	
 
 	<cffunction name="updateContact">
-		<cfargument name="title" type="string">
+		<cfargument name="title" type="numeric">
 		<cfargument name="firstName" type="string">
 		<cfargument name="lastName" type="string">
-		<cfargument name="gender" type="string">
-		<cfargument name="dob" type="string">
+		<cfargument name="gender" type="numeric">
+		<cfargument name="dob" type="date">
 		<cfargument name="house_flat" type="string">
 		<cfargument name="street" type="string">
 		<cfargument name="city" type="string">
@@ -367,16 +356,6 @@
 		<cfargument name="logId" type="string" required="false">
 
 		<cfset local.output= structNew()>
-		<!---<cfif NOT structIsEmpty(arguments.form)>
-			<cfset local.mainstruct=arguments.form>
-			<cfset local.logId = decryptData(local.mainstruct.logId)>
-			<cfset previousHobbyArray = listToArray(local.mainstruct.prevHobbieList)>
-			<cfset presentHobbyArray = listToArray(local.mainstruct.hobbies)>
-			<cfset local.result = ArrayDiff(previousHobbyArray,presentHobbyArray)>
-		<cfelseif NOT structIsEmpty(arguments.inputRow)>
-			<cfset structAppend(local.mainstruct,arguments.inputRow)>
-			
-		</cfif>--->
 		<cfif NOT arguments.imgPath EQ "" AND Len(Trim(arguments.imgPath)) GT 0>
 				<cfinclude template="../image.cfm">
 				<cfquery name="update">
@@ -458,7 +437,6 @@
 		</cfquery>
 	</cffunction>
 	<cffunction name="formValidate">
-		<!---<cfargument name="form" type="struct">--->
 		<cfset local.message=structNew()>
 		<cfset local.message.errors = []>
 		<cfset local.addErrorMessage="*add operation unsuccessfull">

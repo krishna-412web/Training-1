@@ -44,27 +44,7 @@ $(document).ready(() => {
 	$("#pdfFeature").click(function(){
 		window.location.href="pdfFeature.cfm";
 	});
-	
-	$("#excelFeature").click(function(){
-		window.location.href="excelFeature.cfm";
-	});
 
-	$("#excelFeature1").click(function(){
-		window.location.href="excelPlain.cfm";
-	});
-
-
-	$("#excelTemplate").click(function(){
-		window.location.href="excelFeature.cfm";
-	});
-
-	$("#excelPlain").click(function(){
-		window.location.href="excelPlain.cfm";
-	});
-	
-	/*$("#uploadResult").click(function(){
-		window.location.href="uploadResult.cfm";
-	});*/
 
 	$("#printFeature").click(function(){
         	window.print();

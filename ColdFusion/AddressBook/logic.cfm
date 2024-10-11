@@ -20,38 +20,38 @@
 					<cfset previousHobbyArray = listToArray(form.prevHobbieList)>
 					<cfset presentHobbyArray = listToArray(form.hobbies)>
 					<cfset local.result = obj1.ArrayDiff(previousHobbyArray,presentHobbyArray)>
-					<cfset result = obj1.updateContact(form.title,
-									form.firstName,
-									form.lastName,
-									form.gender,
-									form.dob,
-									form.houseName,
-									form.street,
-									form.city,
-									form.state,
-									form.pincode,
-									form.email,
-									form.phone,
-									local.result,
-									imgPath,
-									local.logId
+					<cfset result = obj1.updateContact(title=form.title,
+									firstName=form.firstName,
+									lastName=form.lastName,
+									gender=form.gender,
+									dob=form.dob,
+									house_flat=form.houseName,
+									street=form.street,
+									city=form.city,
+									state=form.state,
+									pincode=form.pincode,
+									email=form.email,
+									phone=form.phone,
+									result=local.result,
+									imgPath=imgPath,
+									logId=local.logId
 									)>
 				<cfelse>
 					<cfset local.hobbies = ListToArray(form.hobbies)>
-					<cfset message= obj1.addContact(form.title,
-									form.firstName,
-									form.lastName,
-									form.gender,
-									form.dob,
-									form.houseName,
-									form.street,
-									form.city,
-									form.state,
-									form.pincode,
-									form.email,
-									form.phone,
-									local.hobbies,
-									imgPath)>				
+					<cfset message= obj1.addContact(title=form.title,
+									firstName=form.firstName,
+									lastName=form.lastName,
+									gender=form.gender,
+									dob=form.dob,
+									house_flat=form.houseName,
+									street=form.street,
+									city=form.city,
+									state=form.state,
+									pincode=form.pincode,
+									email=form.email,
+									phone=form.phone,
+									hobbies=local.hobbies,
+									imgPath=imgPath)>				
 				</cfif>
 			</cfif>
 		</cfif>
@@ -61,9 +61,8 @@
 		</cfif>
 		<cfif structKeyExists(form,"uploadSubmit")>
 			<cfinclude template="excelUpload.cfm">
-		</cfif>
-		<cfif structKeyExists(form,"uploadResult")>
-			<cfinclude template="uploadResult.cfm">
+		<cfelseif NOT structKeyExists(form,"uploadSubmit") AND structKeyExists(session,"uploadResult")>
+			<cfset StructDelete(session, "uploadResult")>
 		</cfif>
 	<cfelse>
 		<cflocation url="index.cfm" addToken="no" statusCode="302">
