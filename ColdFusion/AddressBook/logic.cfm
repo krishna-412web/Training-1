@@ -20,7 +20,7 @@
 					<cfset previousHobbyArray = listToArray(form.prevHobbieList)>
 					<cfset presentHobbyArray = listToArray(form.hobbies)>
 					<cfset local.result = obj1.ArrayDiff(previousHobbyArray,presentHobbyArray)>
-					<cfset result = obj1.updateContact(title=form.title,
+					<cfset message = obj1.updateContact(title=form.title,
 									firstName=form.firstName,
 									lastName=form.lastName,
 									gender=form.gender,
@@ -38,7 +38,9 @@
 									)>
 				<cfelse>
 					<cfset local.hobbies = ListToArray(form.hobbies)>
-					<cfset message= obj1.addContact(title=form.title,
+					<cfset local.result = structNew()>
+					<cfset structInsert(local.result,"hobbies",local.hobbies)>
+					<cfset message= obj1.updateContact(title=form.title,
 									firstName=form.firstName,
 									lastName=form.lastName,
 									gender=form.gender,
@@ -50,7 +52,7 @@
 									pincode=form.pincode,
 									email=form.email,
 									phone=form.phone,
-									hobbies=local.hobbies,
+									result=local.result,
 									imgPath=imgPath)>				
 				</cfif>
 			</cfif>

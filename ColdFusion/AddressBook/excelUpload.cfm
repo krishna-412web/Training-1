@@ -68,7 +68,9 @@
 				<cfset local.uploadResult[j].operation="added">
 				<cfset imgPath="./images/signup.png">
 				<cfset local.hobbies = ListToArray(i.RESULT.hobbielist)>
-				<cfset message= obj1.addContact(title=i.RESULT.titleVal,
+				<cfset local.result=structNew()>
+				<cfset structInsert(local.result,"hobbies",local.hobbies)>
+				<cfset message= obj1.updateContact(title=i.RESULT.titleVal,
 								firstName=i.firstName,
 								lastName=i.lastName,
 								gender=i.RESULT.genderVal,
@@ -80,7 +82,7 @@
 								pincode=i.pincode,
 								email=i.email,
 								phone=i.phone,
-								hobbies=local.hobbies,
+								result=local.result,
 								imgPath=imgPath)>
 			</cfif>
 		<cfelse>
