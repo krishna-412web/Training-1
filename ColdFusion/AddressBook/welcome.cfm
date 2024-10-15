@@ -1,8 +1,4 @@
 <cfinclude template="logic.cfm">
-<cfinvoke 
-	component = "components.database" 	
-	method = "dynamicForm" 
-	returnVariable = "variables.result">
 <!---<cfdump var="#variables.result#">--->
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +18,7 @@
   				<div class="container-fluid row">
   						<h1 class="navbar-brand text-center col-11 m-0">AddressBook</h1>
 						<form class="col-1" action="" method="POST">
-							<button type="submit" name="submit" class="btn btn-info btn-block">Logout</button>
+							<a href="./welcome.cfm?logout=1" name="submit" class="btn btn-info btn-block">Logout</a>
 						</form>
   				</div>
 			</nav>

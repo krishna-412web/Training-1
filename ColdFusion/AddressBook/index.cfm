@@ -1,6 +1,6 @@
 <cfif structKeyExists(session,"result")>
 	<cfif session.result.value EQ 1>
-		<cflocation url="welcome.cfm" addToken="no" statusCode="302">
+		<cflocation url="welcome.cfm" addToken="no">
 	</cfif>
 <cfelse>
 	<cfset session.result = structNew()>
@@ -9,16 +9,13 @@
 <cfset errorMessage="">
 <cfif structKeyExists(form,"submit")>
 	<cfset obj = createObject('component','components.database')>
-	<cfset session.result = obj.access(form.userName,form.passWord)>
-	<cfoutput>
-		<cfif session.result.value EQ 1>
-				<cflocation url="welcome.cfm" addToken="no" statusCode="302">
-		<cfelse>
-			<cfset errorMessage="*unauthorized user">
-		</cfif>
-	</cfoutput>
+	<cfset session.result = application.obj.access(form.userName,form.passWord)>
+	<cfif session.result.value EQ 1>
+			<cflocation url="welcome.cfm" addToken="no">
+	<cfelse>
+		<cfset errorMessage="*unauthorized user">
+	</cfif>
 </cfif>
-
 <cfoutput>
 <!DOCTYPE html>
 <html lang="en" >

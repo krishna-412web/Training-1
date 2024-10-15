@@ -290,7 +290,6 @@
 		<cfset local.message = structNew()>
 		<cfif structKeyExists(arguments,"logId")>
 			<cfif NOT arguments.imgPath EQ "" AND Len(Trim(arguments.imgPath)) GT 0>
-				<cfinclude template="../image.cfm">
 				<cfquery name="update">
 					UPDATE 
 						log_book
@@ -419,8 +418,9 @@
 		</cfquery>
 	</cffunction>
 	<cffunction name="formValidate">
-		<cfset local.message=structNew()>
-		<cfset local.message.errors = []>
+		<cfset local.message = {
+				errors=[]
+		}>
 		<cfset local.addErrorMessage="*add operation unsuccessfull">
 		<cfset local.editErrorMessage="*edit operation unsuccessfull">
 		<cfset local.message.flag = 1 >
@@ -429,94 +429,83 @@
 		<cfset local.result = dynamicForm()>
 
 		<cfif len(trim(form.firstName)) eq 0>
-			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.lastName)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*lastname is required.")>
 		</cfif>
 
 		<cfif len(trim(form.email)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
 		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
-			<cfset local.message.flag = 0 >
 			<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
 		</cfif>
 
 		<cfif len(trim(form.houseName)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*housename is required.")>
 		</cfif>
 
 		<cfif len(trim(form.street)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*street is required.")>
 		</cfif>
 
 		<cfif len(trim(form.city)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*city is required.")>
 		</cfif>
 
 		<cfif len(trim(form.state)) eq 0>
-			<cfset local.message.flag = false >
     			<cfset arrayAppend(local.message.errors, "*state is required.")>
 		</cfif>
 
 		<cfif NOT Len(trim(form.phone)) EQ 10 OR NOT REFind("^[0-9]{10}$", form.phone)>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*phone no is required/not in valid format.")>
 		</cfif>
 		
 		<cfif len(trim(form.pincode)) eq 0>
-			<cfset local.message.flag = 0 >
     			<cfset arrayAppend(local.message.errors, "*pincode is required.")>
 		</cfif>
 		
 		<cfif len(trim(form.gender)) EQ 0>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*gender field is required.")>
 		<cfelseif NOT listFind(local.result.genderList,form.gender)>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
 		</cfif>
 
 	
 		<cfif len(trim(form.title)) EQ 0>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*title field is required.")>
 		<cfelseif NOT listFind(local.result.titleList,form.title)>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
 		</cfif>
 
 		<cfif structKeyExists(form,"hobbies")>
 			<cfloop list="#form.hobbies#" index="local.i">
 				<cfif NOT listFind(local.result.hobbieList,local.i)>
-					<cfset local.message.flag=0>
-					<cfset local.message.hflag=0>
+					<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
+					<cfbreak>
 				</cfif>
 			</cfloop>
-			<cfif local.message.hflag EQ 0>
-				<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
-			</cfif>
 		<cfelse> 
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*hobbies field is required.")>
 		</cfif>
 
 		<cfif len(trim(form.profile)) EQ 0 >
 			<cfif form.operation NEQ "edit">
-				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image field is required.")>
 			</cfif>
 		<cfelse> 
-			<cfinclude template="../temp.cfm">
+			<cfset uploadDir = expandPath('./temp/')>        
+			<cfif not directoryExists(uploadDir)>
+      			<cfdirectory action="create" directory="#uploadDir#">
+			</cfif>
+			<cffile action="upload"
+        		filefield="profile"
+        		destination="#uploadDir#"
+       			nameConflict="makeunique">
+			<cfset local.imgPath="#uploadDir##cffile.serverFile#">
+			<cfset local.uploadedFileExt = cffile.SERVERFILEEXT>
 			<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
-				<cfset local.message.flag=0>
 				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
 			</cfif>
 			<cffile action="delete"
@@ -524,10 +513,8 @@
 		</cfif>
 		
 		<cfif len(trim(form.dob)) EQ 0>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*date field is required.")>
 		<cfelseif NOT isDate(form.dob)>
-			<cfset local.message.flag=0>
 			<cfset arrayAppend(local.message.errors,"*date input is invalid.")>
 		</cfif>
 
