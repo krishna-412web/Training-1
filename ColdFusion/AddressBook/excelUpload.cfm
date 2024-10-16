@@ -31,15 +31,15 @@
 			gender = GENDER,
 			dob = DOB
 			}>
-	<cfset local.result= obj1.excelValidate(local.excelRow)>
+	<cfset local.result= application.obj.excelValidate(local.excelRow)>
 	<cfset structInsert(local.excelRow,"RESULT","#local.result#")>
 	<cfset arrayappend(local.uploadResult,local.excelRow)>
 </cfoutput>
 
 
 
-<cfset obj = CreateObject("component", "components.database")>
-<cfset local.get = obj.selectEmail()>
+<cfset application.obj = CreateObject("component", "components.database")>
+<cfset local.get = application.obj.selectEmail()>
 <cfset emailArray = ValueArray(local.get,"EMAIL")>
 
 <cfif NOT ArrayIsEmpty(local.uploadResult)>
@@ -48,8 +48,8 @@
 			<cfif ArrayContains(emailArray,i.email)>
 				<cfset local.uploadResult[j].operation="updated">
 				<cfset imgPath="">
-				<cfset local.updateDetails = obj1.excelGetDetails(i)>
-				<cfset result = obj1.updateContact(title=i.RESULT.titleVal,
+				<cfset local.updateDetails = application.obj.excelGetDetails(i)>
+				<cfset result = application.obj.updateContact(title=i.RESULT.titleVal,
 								firstName=i.firstName,
 								lastName=i.lastName,
 								gender=i.RESULT.genderVal,
@@ -70,7 +70,7 @@
 				<cfset local.hobbies = ListToArray(i.RESULT.hobbielist)>
 				<cfset local.result=structNew()>
 				<cfset structInsert(local.result,"hobbies",local.hobbies)>
-				<cfset message= obj1.updateContact(title=i.RESULT.titleVal,
+				<cfset message= application.obj.updateContact(title=i.RESULT.titleVal,
 								firstName=i.firstName,
 								lastName=i.lastName,
 								gender=i.RESULT.genderVal,

@@ -1,14 +1,12 @@
-<cfif NOT (structKeyExists(session,"result") AND session.result.value EQ 1)>
-	<cflocation url="index.cfm" addToken="no">
-</cfif> 
+
 <cfif structKeyExists(url,"logout") AND url.logout EQ 1>
 		<cfset session.result.value = 0>
 		<cflocation url="index.cfm" addToken="no">
 </cfif>
-<cfset obj1=CreateObject("component","components.database")>
+<cfset application.obj=CreateObject("component","components.database")>
 <cfif structKeyExists(form, "submit1")>
-	<cfset variables.message = obj1.formValidate()>
-	<cfif ArrayLen(variables.message.errors) NEQ 0>
+	<cfset variables.message = application.obj.formValidate()>
+	<cfif ArrayLen(variables.message.errors) EQ 0>
 		<cfif structKeyExists(form,"profile") AND len(trim(form.profile)) GT 0>
 			<cfset uploadDir = expandPath('./images/')>        
 			<cfif not directoryExists(uploadDir)>
@@ -26,11 +24,11 @@
 			<cfset imgPath="./images/signup.png">
 		</cfif>
 		<cfif structKeyExists(form,"logId")>
-			<cfset local.logId = obj1.decryptData(form.logId)>
+			<cfset local.logId = application.obj.decryptData(form.logId)>
 			<cfset previousHobbyArray = listToArray(form.prevHobbieList)>
 			<cfset presentHobbyArray = listToArray(form.hobbies)>
-			<cfset local.result = obj1.ArrayDiff(previousHobbyArray,presentHobbyArray)>
-			<cfset message = obj1.updateContact(title=form.title,
+			<cfset local.result = application.obj.ArrayDiff(previousHobbyArray,presentHobbyArray)>
+			<cfset message = application.obj.updateContact(title=form.title,
 							firstName=form.firstName,
 							lastName=form.lastName,
 							gender=form.gender,
@@ -50,7 +48,7 @@
 			<cfset local.hobbies = ListToArray(form.hobbies)>
 			<cfset local.result = structNew()>
 			<cfset structInsert(local.result,"hobbies",local.hobbies)>
-			<cfset message= obj1.updateContact(title=form.title,
+			<cfset message= application.obj.updateContact(title=form.title,
 							firstName=form.firstName,
 							lastName=form.lastName,
 							gender=form.gender,
@@ -68,7 +66,7 @@
 	</cfif>
 </cfif>
 <cfif structKeyExists(form,"deleteSubmit")>
-	<cfset obj1.deleteContact(form.logId)>
+	<cfset application.obj.deleteContact(form.logId)>
 	<cflocation url="welcome.cfm" addToken="no" >
 </cfif>
 <cfif structKeyExists(form,"uploadSubmit")>

@@ -32,9 +32,9 @@
 					<div class="card-body row d-flex flex-row justify-content-end">
 						<button type="button" id="pdfFeature" class="btn btn-info col-1 mx-1">pdf</button>
 						<!---<button type="button" id="excelFeature" class="btn btn-sm btn-info col-2 mx-1">Template With Data</button>--->
-						<a href="excelFeature.cfm" class="btn btn-info col-2 mx-1">Template With Data</a>
+						<a href="excelFeature.cfm?excelData=1" class="btn btn-info col-2 mx-1">Template With Data</a>
 						<!---<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-2 mx-1">Plain Template</button>--->
-						<a href="excelPlain.cfm" class="btn btn-info col-2 mx-1">Plain Template</a>
+						<a href="excelFeature.cfm" class="btn btn-info col-2 mx-1">Plain Template</a>
 						<button type="button" id="printFeature" class="btn btn-info col-1 mx-1">print</button>
 						<cfif StructKeyExists(session, "uploadResult") AND structKeyExists(form,"uploadSubmit")>
 							<form class="col-1" action="" method="POST">
@@ -127,10 +127,10 @@
 						<div class="row">
 							<div class="col-1"></div>
 							<div class="col-5">
-								<a class="btn btn-info" href="excelFeature.cfm">Template With Data</a>
+								<a class="btn btn-info" href="excelFeature.cfm?excelData=1">Template With Data</a>
 							</div>
 							<div class="col-5">
-								<a class="btn btn-info" href="excelPlain.cfm">Plain Template</a>
+								<a class="btn btn-info" href="excelFeature.cfm">Plain Template</a>
 							</div>
 							<div class="col-1"></div>
 						</div>
