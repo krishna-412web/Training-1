@@ -11,42 +11,47 @@
     	query="contactData" 
     	sheetname="AddressBook"
 	excludeHeaderRow = "true"
-    	headerrow="2">
-
-<cfset local.uploadResult = arrayNew(1)>
+    	headerrow="1">
+<!---<cfdump var="#contactData#" abort>--->
+<cfset errorArray = arrayNew(1)>
+<cfset successArray = arrayNew(1)>
+<cfset uploadResult = arrayNew(1)>
 <cfoutput query="contactData">
 	<cfset local.excelRow = structNew()>
 	<cfset local.excelRow = {rowno= contactData.currentRow,
-			email = EMAIL, 
-		    	firstname = FIRSTNAME,
-			lastname = LASTNAME, 
-			phone = PHONE,
-			house_flat = HOUSE_FLAT,
-			hobbies = HOBBIES,
-			street = STREET,
-			city = CITY,
-			state = STATE,
-			pincode = PINCODE,
-			title = TITLE,
-			gender = GENDER,
-			dob = DOB
+			email = contactData.EMAIL, 
+		    firstname = contactData.FIRSTNAME,
+			lastname = contactData.LASTNAME, 
+			phone = contactData.PHONE,
+			house_flat = contactData.HOUSE_FLAT,
+			hobbies = contactData.HOBBIES,
+			street = contactData.STREET,
+			city = contactData.CITY,
+			state = contactData.STATE,
+			pincode = contactData.PINCODE,
+			title = contactData.TITLE,
+			gender = contactData.GENDER,
+			dob = contactData.DOB
 			}>
-	<cfset local.result= application.obj.excelValidate(local.excelRow)>
+	<cfset local.result= application.obj.excelValidate(data = local.excelRow)>
+	<cfif arrayLen(local.result.errors)>
+	<cfelse>
+	</cfif>
 	<cfset structInsert(local.excelRow,"RESULT","#local.result#")>
-	<cfset arrayappend(local.uploadResult,local.excelRow)>
+	<cfset arrayappend(uploadResult,local.excelRow)>
 </cfoutput>
 
 
 
-<cfset application.obj = CreateObject("component", "components.database")>
+
 <cfset local.get = application.obj.selectEmail()>
 <cfset emailArray = ValueArray(local.get,"EMAIL")>
 
-<cfif NOT ArrayIsEmpty(local.uploadResult)>
-	<cfloop array="#local.uploadResult#" index="j" item="i">
+<cfif NOT ArrayIsEmpty(uploadResult)>
+	<cfloop array="#uploadResult#" index="j" item="i">
 		<cfif NOT structKeyExists(i.RESULT,"REMARKLIST")>
 			<cfif ArrayContains(emailArray,i.email)>
-				<cfset local.uploadResult[j].operation="updated">
+				<cfset uploadResult[j].operation="updated">
 				<cfset imgPath="">
 				<cfset local.updateDetails = application.obj.excelGetDetails(i)>
 				<cfset result = application.obj.updateContact(title=i.RESULT.titleVal,
@@ -65,7 +70,7 @@
 								imgPath=imgPath,
 								logId=local.updateDetails.logId)>
 			<cfelse>
-				<cfset local.uploadResult[j].operation="added">
+				<cfset uploadResult[j].operation="added">
 				<cfset imgPath="./images/signup.png">
 				<cfset local.hobbies = ListToArray(i.RESULT.hobbielist)>
 				<cfset local.result=structNew()>
@@ -86,12 +91,12 @@
 								imgPath=imgPath)>
 			</cfif>
 		<cfelse>
-			<cfset local.uploadResult[j].operation="error">
+			<cfset uploadResult[j].operation="error">
 		</cfif>
 	</cfloop>
 	<cfset local.errorArray = arrayNew(1)>
 	<cfset local.checkedArray = arrayNew(1)>
-	<cfloop array="#local.uploadResult#" index="i" >
+	<cfloop array="#uploadResult#" index="i" >
 		<cfif i.operation EQ "error">
 			<cfset ArrayAppend(local.errorArray,i)>
 		<cfelse>

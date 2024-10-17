@@ -198,15 +198,20 @@
 			FROM
 				hobbies;
 		</cfquery>
-
+		<cfset local.titleNameList=''>
 		<cfloop array="#local.getTitle.RESULTSET#" index="local.i">
 			<cfset ArrayAppend(local.titleArray,local.i.id)>
+			<cfset listAppend(local.titleNameList, local.i.value)>
 		</cfloop>
+		<cfset local.genderName=''>
 		<cfloop array="#local.getGender.RESULTSET#" index="local.i">
 			<cfset ArrayAppend(local.genderArray,local.i.genderid)>
+			<cfset local.genderName=listAppend(local.genderName, local.i.gendername)>
 		</cfloop>
+		<cfset local.hobbieNameList=''>
 		<cfloop array="#local.getHobbies.RESULTSET#" index="local.i">
 			<cfset ArrayAppend(local.hobbieArray,local.i.hobbieid)>
+			<cfset local.hobbieNameList=listAppend(local.hobbieNameList, local.i.hobbieName)>
 		</cfloop>
 
 		<cfset local.result.title = local.getTitle.RESULTSET>
@@ -215,6 +220,9 @@
 		<cfset local.result.genderList = ArrayToList(local.genderArray)>
 		<cfset local.result.hobbies = local.getHobbies.RESULTSET>
 		<cfset local.result.hobbieList = ArrayToList(local.hobbieArray)>
+		<cfset local.result.titleNameList = local.titleNameList>
+		<cfset local.result.genderName = local.genderName>
+		<cfset local.result.hobbieNames = local.hobbieNameList>
 
 		<cfreturn local.result>
 	</cffunction>
@@ -283,22 +291,11 @@
 		<cfargument name="pincode" type="string">
 		<cfargument name="email" type="string">
 		<cfargument name="phone" type="string">
-		<cfargument name="result" type="struct">
+		<cfargument name="hobbies" type="string">
 		<cfargument name="imgPath" type="string">
-		<cfargument name="logId" type="string" required="false">
-
-		<cfset local.message = structNew()>
-		<cfif structKeyExists(arguments,"logId")>
-			<cfif NOT arguments.imgPath EQ "" AND Len(Trim(arguments.imgPath)) GT 0>
-				<cfquery name="update">
-					UPDATE 
-						log_book
-					SET 
-						profile = <cfqueryparam value="#arguments.imgPath#" cfsqltype="cf_sql_varchar">
-					WHERE 
-						log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">
-				</cfquery>		
-			</cfif>
+		<cfargument name="logId" type="string" required="false" default="0">
+		<cfset local.message = {"value" : ""}>
+		<cfif structKeyExists(arguments,"logId") AND val(arguments.logId)>
 			<cfquery name="updateRest">
 				UPDATE
 					log_book
@@ -315,6 +312,9 @@
 					email= <cfqueryparam value="#arguments.email#" cfsqltype="cf_sql_varchar">,
 					phone= <cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_decimal">,
 					dob= <cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date">
+					<cfif Len(Trim(arguments.imgPath)) GT 0>
+						,profile = <cfqueryparam value="#arguments.imgPath#" cfsqltype="cf_sql_varchar">
+					</cfif>
 				WHERE
 					log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">;
 			</cfquery>
@@ -325,12 +325,20 @@
 				WHERE 
 					log_id= <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">
 				AND
-					hobbieid NOT IN 
-						(<cfqueryparam value="#arguments.result.hobbies#" cfsqltype="cf_sql_integer" list="true">);
+					hobbieid NOT IN (<cfqueryparam value="#arguments.hobbies#" cfsqltype="cf_sql_integer" list="true">);
 			</cfquery>
 
-		
-			<cfif structKeyExists(arguments.result,'insertList')>
+			<cfquery name="local.newHobby">
+				SELECT 
+					H.hobbieid
+				FROM 
+					hobbies H
+				WHERE
+					H.hobbieid IN (<cfqueryparam value="#arguments.hobbies#" cfsqltype="cf_sql_integer" list="true">)
+					AND NOT EXISTS(SELECT 1 FROM hobbiecontact UH WHERE UH.log_Id = <cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer"> 
+									AND UH.hobbieid=H.hobbieid);
+			</cfquery>	
+			<cfif local.newHobby.RECORDCOUNT>
 				<cfquery name="updateHobby">
 					INSERT INTO
 						hobbiecontact(
@@ -338,17 +346,17 @@
 							hobbieid
 						)
 					VALUES
-						<cfloop list="#arguments.result.insertList#" index="local.i">
+						<cfloop query="#local.newHobby#">
 							(
 								<cfqueryparam value="#arguments.logId#" cfsqltype="cf_sql_integer">,
-								<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
+								<cfqueryparam value="#local.newHobby.hobbieid#" cfsqltype="cf_sql_integer">
 							)
-							<cfif i NEQ listLast(arguments.result.insertList,",")>,</cfif>
+							<cfif local.newHobby.CURRENTROW NEQ local.newHobby.RECORDCOUNT>,</cfif>
 						</cfloop>
 					;
 				</cfquery>
 			</cfif>
-			<cfset local.message.value="Data Updated Successfully">
+			<cfset local.message.value = "Data Updated Successfully">
 		<cfelse>
 			<cfquery name="local.addData" result="r">
 				INSERT INTO 
@@ -388,12 +396,12 @@
 						hobbieid
 					)
 				VALUES
-					<cfloop array="#arguments.result.hobbies#" index="j" item="local.i">
+					<cfloop list="#arguments.hobbies#" index="local.j" item="local.i">
 						(
 							<cfqueryparam value="#r.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
 							<cfqueryparam value="#local.i#" cfsqltype="cf_sql_integer">
 						)
-						<cfif j NEQ Arraylen(arguments.result.hobbies)>,</cfif>
+						<cfif local.j NEQ Listlen(arguments.hobbies)>,</cfif>
 					</cfloop>
 				;
 			</cfquery>	
@@ -418,70 +426,95 @@
 		</cfquery>
 	</cffunction>
 	<cffunction name="formValidate">
+		<cfargument name="data" type="struct" required="true">
 		<cfset local.message = {
-				errors=[]
+				"errors" = []
 		}>
 		<cfset local.addErrorMessage="*add operation unsuccessfull">
 		<cfset local.editErrorMessage="*edit operation unsuccessfull">
-		<cfset local.message.flag = 1 >
-		<cfset local.message.hflag = 1>
 		<cfset local.allowedExtensions = "jpg,jpeg,png,gif,bmp,tiff">
 		<cfset local.result = dynamicForm()>
 
-		<cfif len(trim(form.firstName)) eq 0>
+		<cfif len(trim(arguments.data.firstName)) EQ 0>
 			<cfset arrayAppend(local.message.errors, "*firstname is required.")>
 		</cfif>
 
-		<cfif len(trim(form.lastName)) eq 0>
+		<cfif len(trim(arguments.data.lastName)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*lastname is required.")>
 		</cfif>
 
-		<cfif len(trim(form.email)) eq 0>
+		<cfif len(trim(arguments.data.email)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*email is required.")>
-		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", form.email)>
+		<cfelseif NOT REFind("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", arguments.data.email)>
 			<cfset arrayAppend(local.message.errors, "*email input is invalid.")>
 		</cfif>
 
-		<cfif len(trim(form.houseName)) eq 0>
+		<cfif len(trim(arguments.data.houseName)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*housename is required.")>
 		</cfif>
 
-		<cfif len(trim(form.street)) eq 0>
+		<cfif len(trim(arguments.data.street)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*street is required.")>
 		</cfif>
 
-		<cfif len(trim(form.city)) eq 0>
+		<cfif len(trim(arguments.data.city)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*city is required.")>
 		</cfif>
 
-		<cfif len(trim(form.state)) eq 0>
+		<cfif len(trim(arguments.data.state)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*state is required.")>
 		</cfif>
 
-		<cfif NOT Len(trim(form.phone)) EQ 10 OR NOT REFind("^[0-9]{10}$", form.phone)>
+		<cfif NOT Len(trim(arguments.data.phone)) EQ 10 OR NOT REFind("^[0-9]{10}$", arguments.data.phone)>
     			<cfset arrayAppend(local.message.errors, "*phone no is required/not in valid format.")>
 		</cfif>
 		
-		<cfif len(trim(form.pincode)) eq 0>
+		<cfif len(trim(arguments.data.pincode)) EQ 0>
     			<cfset arrayAppend(local.message.errors, "*pincode is required.")>
 		</cfif>
 		
-		<cfif len(trim(form.gender)) EQ 0>
-			<cfset arrayAppend(local.message.errors,"*gender field is required.")>
-		<cfelseif NOT listFind(local.result.genderList,form.gender)>
-			<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
+		<cfif structKeyExists(arguments.data,'gender')>
+			<cfif len(trim(arguments.data.gender)) EQ 0>
+				<cfset arrayAppend(local.message.errors,"*gender field is required.")>
+			<cfelseif NOT listFind(local.result.genderList,arguments.data.gender)>
+				<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
+			</cfif>
+		<cfelseif structKeyExists(arguments.data,'genderName')>
+			<cfif len(trim(arguments.data.genderName)) EQ 0>
+				<cfset arrayAppend(local.message.errors,"*gender field is required.")>
+			<cfelseif NOT listFind(local.result.genderName,arguments.data.genderName)>
+				<cfset arrayAppend(local.message.errors,"*invalid value for gender field")>
+			</cfif>
+		<cfelse>
+			<cfset arrayAppend(local.message.errors,"*gender field is missing")>
 		</cfif>
 
-	
-		<cfif len(trim(form.title)) EQ 0>
-			<cfset arrayAppend(local.message.errors,"*title field is required.")>
-		<cfelseif NOT listFind(local.result.titleList,form.title)>
-			<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
+		<cfif structKeyExists(arguments.data,'title')>
+			<cfif len(trim(arguments.data.title)) EQ 0>
+				<cfset arrayAppend(local.message.errors,"*title field is required.")>
+			<cfelseif NOT listFind(local.result.titleList,arguments.data.title)>
+				<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
+			</cfif>
+		<cfelseif structKeyExists(arguments.data,'titleName')>
+			<cfif len(trim(arguments.data.titleName)) EQ 0>
+				<cfset arrayAppend(local.message.errors,"*title field is required.")>
+			<cfelseif NOT listFind(local.result.titleNameList,arguments.data.titleName)>
+				<cfset arrayAppend(local.message.errors,"*invalid value for title field")>
+			</cfif>			
+		<cfelse>
+			<cfset arrayAppend(local.message.errors,"*title field is missing")>
 		</cfif>
 
-		<cfif structKeyExists(form,"hobbies")>
-			<cfloop list="#form.hobbies#" index="local.i">
+		<cfif structKeyExists(arguments.data,"hobbies")>
+			<cfloop list="#arguments.data.hobbies#" index="local.i">
 				<cfif NOT listFind(local.result.hobbieList,local.i)>
+					<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
+					<cfbreak>
+				</cfif>
+			</cfloop>
+		<cfelseif structKeyExists(arguments.data,"hobbieNames")>
+			<cfloop list="#arguments.data.hobbieNames#" index="local.i">
+				<cfif NOT listFind(local.result.hobbieNameList,local.i)>
 					<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
 					<cfbreak>
 				</cfif>
@@ -489,32 +522,30 @@
 		<cfelse> 
 			<cfset arrayAppend(local.message.errors,"*hobbies field is required.")>
 		</cfif>
-
-		<cfif len(trim(form.profile)) EQ 0 >
-			<cfif form.operation NEQ "edit">
-				<cfset arrayAppend(local.message.errors,"*image field is required.")>
+		<cfif structKeyExists(arguments.data,"profile")>
+			<cfif len(trim(arguments.data.profile)) EQ 0 AND NOT(structKeyExists(arguments.data,"logId") AND Len(Trim(arguments.data.logId)))>
+					<cfset arrayAppend(local.message.errors,"*image field is required.")>
+			<cfelseif Len(Trim(arguments.data.logId))> 
+				<cfset local.uploadDir = expandPath('./temp/')>        
+				<cfif not directoryExists(local.uploadDir)>
+					<cfdirectory action="create" directory="#local.uploadDir#">
+				</cfif>
+				<cffile action="upload"
+					filefield="arguments.data.profile"
+					destination="#local.uploadDir#"
+					nameConflict="makeunique">
+				<cfset local.imgPath="#local.uploadDir##cffile.serverFile#">
+				<cfset local.uploadedFileExt = cffile.SERVERFILEEXT>
+				<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
+					<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
+				</cfif>
+				<cffile action="delete" file="#local.imgPath#">			
 			</cfif>
-		<cfelse> 
-			<cfset uploadDir = expandPath('./temp/')>        
-			<cfif not directoryExists(uploadDir)>
-      			<cfdirectory action="create" directory="#uploadDir#">
-			</cfif>
-			<cffile action="upload"
-        		filefield="profile"
-        		destination="#uploadDir#"
-       			nameConflict="makeunique">
-			<cfset local.imgPath="#uploadDir##cffile.serverFile#">
-			<cfset local.uploadedFileExt = cffile.SERVERFILEEXT>
-			<cfif NOT listFindNoCase(local.allowedExtensions, local.uploadedFileExt)>
-				<cfset arrayAppend(local.message.errors,"*image invalid extensions(jpg/png allowed).")>
-			</cfif>
-			<cffile action="delete"
-				file="#local.imgPath#">			
 		</cfif>
 		
-		<cfif len(trim(form.dob)) EQ 0>
+		<cfif len(trim(arguments.data.dob)) EQ 0>
 			<cfset arrayAppend(local.message.errors,"*date field is required.")>
-		<cfelseif NOT isDate(form.dob)>
+		<cfelseif NOT isDate(arguments.data.dob)>
 			<cfset arrayAppend(local.message.errors,"*date input is invalid.")>
 		</cfif>
 

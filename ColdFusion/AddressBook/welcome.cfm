@@ -30,7 +30,7 @@
 			<div class="row">
 				<div class="card mt-2 row">
 					<div class="card-body row d-flex flex-row justify-content-end">
-						<button type="button" id="pdfFeature" class="btn btn-info col-1 mx-1">pdf</button>
+						<a href="excelFeature.cfm?pdfData=1" class="btn btn-info col-2 mx-1">PDF</a>
 						<!---<button type="button" id="excelFeature" class="btn btn-sm btn-info col-2 mx-1">Template With Data</button>--->
 						<a href="excelFeature.cfm?excelData=1" class="btn btn-info col-2 mx-1">Template With Data</a>
 						<!---<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-2 mx-1">Plain Template</button>--->
@@ -322,7 +322,7 @@
 										</div>
 									</div>	
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
-									<button class="btn btn-primary w-100" type="submit" name="submit1" id="submit1">Add Contact</button>
+									<button class="btn btn-primary w-100" type="submit" name="updateSubmit" id="submit1">Add Contact</button>
 							</form>
 						</div>
                     			</div>
