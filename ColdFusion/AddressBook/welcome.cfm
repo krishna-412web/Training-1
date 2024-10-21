@@ -40,7 +40,7 @@
 							<form class="col-1" action="" method="POST">
 								<a href="uploadResult.cfm" class="btn btn-info ">Result</a>
 							</form>
-    						</cfif>
+    					</cfif>
 					</div>
 				</div>
 			</div>

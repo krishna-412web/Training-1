@@ -17,50 +17,64 @@
 <cfset data={color="white",fgcolor="grey_50_percent",alignV="center"}>
 <cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true",alignV="center"}>
 
-<cfset spreadsheetSetCellValue(spreadsheetObj, "TITLE", 2, 1)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "FIRSTNAME", 2, 2)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "LASTNAME", 2, 3)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "GENDER", 2, 4)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "DOB", 2, 5)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 2, 6)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 2, 7)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES",2,8)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "HOUSE_FLAT",2,9)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "STREET",2,10)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "CITY",2,11)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "STATE",2,12)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "PINCODE",2,13)>
-<cfset spreadsheetSetCellValue(spreadsheetObj, "REMARKS",2,14)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "TITLE", 1, 1)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "FIRSTNAME", 1, 2)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "LASTNAME", 1, 3)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "GENDER", 1, 4)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "DOB", 1, 5)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 1, 6)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 1, 7)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES",1,8)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "HOUSE_FLAT",1,9)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "STREET",1,10)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "CITY",1,11)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "STATE",1,12)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PINCODE",1,13)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "REMARKS",1,14)>
 
-<cfset SpreadsheetFormatRow (spreadsheetObj, myFormat, 1)>
-<cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 2)>
+<cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 1)>
 
-<cfloop array="#session.uploadResult#" index="j" item="i">
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.title#", j+2, 1)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+2, 2)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+2, 3)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.gender#", j+2, 4)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.dob#", j+2, 5)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.email#", j+2, 6)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.phone#", j+2, 7)>
-	<!---<cfset hobbieList = ArraytoList(i.hobbies)>--->
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.hobbies#", j+2, 8)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.house_flat#", j+2, 9)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.street#", j+2, 10)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.city#", j+2, 11)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.state#", j+2, 12)>
-	<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+2, 13)>
-	<cfif structKeyExists(i.RESULT,"REMARKLIST")>
-		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.RESULT.REMARKLIST#", j+2, 14)>
-	<cfelse>
-		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.operation#", j+2, 14)>
-	</cfif>
-	<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+2,20)>
-</cfloop>
-
+<cfif arrayLen(session.errorArray) GT 0>
+	<cfloop array="#session.errorArray#" index="j" item="i">
+		<cfset remarkList = ArraytoList(i.RESULT.errors)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.titleName#", j+1, 1)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+1, 2)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+1, 3)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.genderName#", j+1, 4)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.dob#", j+1, 5)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.email#", j+1, 6)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.phone#", j+1, 7)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.hobbieNames#", j+1, 8)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.houseName#", j+1, 9)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.street#", j+1, 10)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.city#", j+1, 11)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.state#", j+1, 12)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+1, 13)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#remarkList#", j+1, 14)>
+		<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+1,20)>
+	</cfloop>
+<cfelseif arrayLen(session.successArray) GT 0>
+	<cfloop array="#session.successArray#" index="j" item="i">
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.titleName#", j+1, 1)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+1, 2)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+1, 3)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.genderName#", j+1, 4)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.dob#", j+1, 5)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.email#", j+1, 6)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.phone#", j+1, 7)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.hobbieNames#", j+1, 8)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.houseName#", j+1, 9)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.street#", j+1, 10)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.city#", j+1, 11)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.state#", j+1, 12)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+1, 13)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.RESULT#", j+1, 14)>
+		<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+1,20)>
+	</cfloop>
+</cfif>
 
 <cfloop from="3" to="#3+ArrayLen(session.uploadResult)#" index="i">
-	<cfif i%2 EQ 0>
+	<cfif i%2 NEQ 0>
 		<cfset SpreadsheetFormatRow(spreadsheetObj,data,i)>
 	</cfif>
 </cfloop>

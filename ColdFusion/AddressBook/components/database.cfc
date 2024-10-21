@@ -201,7 +201,7 @@
 		<cfset local.titleNameList=''>
 		<cfloop array="#local.getTitle.RESULTSET#" index="local.i">
 			<cfset ArrayAppend(local.titleArray,local.i.id)>
-			<cfset listAppend(local.titleNameList, local.i.value)>
+			<cfset local.titleNameList = listAppend(local.titleNameList, local.i.value)>
 		</cfloop>
 		<cfset local.genderName=''>
 		<cfloop array="#local.getGender.RESULTSET#" index="local.i">
@@ -514,7 +514,7 @@
 			</cfloop>
 		<cfelseif structKeyExists(arguments.data,"hobbieNames")>
 			<cfloop list="#arguments.data.hobbieNames#" index="local.i">
-				<cfif NOT listFind(local.result.hobbieNameList,local.i)>
+				<cfif NOT listFind(local.result.hobbieNames,local.i)>
 					<cfset arrayAppend(local.message.errors,"*invalid value for hobbies field")>
 					<cfbreak>
 				</cfif>
@@ -523,15 +523,15 @@
 			<cfset arrayAppend(local.message.errors,"*hobbies field is required.")>
 		</cfif>
 		<cfif structKeyExists(arguments.data,"profile")>
-			<cfif len(trim(arguments.data.profile)) EQ 0 AND NOT(structKeyExists(arguments.data,"logId") AND Len(Trim(arguments.data.logId)))>
+			<cfif len(trim(arguments.data.profile)) EQ 0 AND NOT (structKeyExists(arguments.data, "logId") AND len(trim(arguments.data.logId)))>
 					<cfset arrayAppend(local.message.errors,"*image field is required.")>
-			<cfelseif Len(Trim(arguments.data.logId))> 
+			<cfelseif len(trim(arguments.data.profile))> 
 				<cfset local.uploadDir = expandPath('./temp/')>        
 				<cfif not directoryExists(local.uploadDir)>
 					<cfdirectory action="create" directory="#local.uploadDir#">
 				</cfif>
 				<cffile action="upload"
-					filefield="arguments.data.profile"
+					filefield="profile"
 					destination="#local.uploadDir#"
 					nameConflict="makeunique">
 				<cfset local.imgPath="#local.uploadDir##cffile.serverFile#">
