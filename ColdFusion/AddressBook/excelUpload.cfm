@@ -13,9 +13,8 @@
 	excludeHeaderRow = "true"
     	headerrow="1">
 <!---<cfdump var="#contactData#" abort>--->
-<cfset session.errorArray = arrayNew(1)>
-<cfset session.successArray = arrayNew(1)>
-<cfset uploadResult = arrayNew(1)>
+<cfset errorArray = arrayNew(1)>
+<cfset successArray = arrayNew(1)>
 <cfoutput query="contactData">
 	<cfset excelRow = structNew()>
 	<cfset excelRow = {"rowno"= contactData.currentRow,
@@ -37,7 +36,7 @@
 	<cfif arrayLen(local.result.errors)>
 		<cfset excelRow.status = 0>
 		<cfset excelRow.result.errors = local.result.errors>
-		<cfset ArrayAppend(session.errorArray,excelRow)>
+		<cfset ArrayAppend(errorArray,excelRow)>
 	<cfelse>
 		<cfquery name="getCOntact">
 			SELECT
@@ -96,13 +95,99 @@
 		)>
 		<cfset excelRow.status = 1>
 		<cfset excelRow.result = val(logId) ? 'Updated' : "Added">
-		<cfset arrayAppend(session.successArray, excelRow)>
+		<cfset arrayAppend(successArray, excelRow)>
 	</cfif>
 </cfoutput>
-<cfset session.uploadResult = arraynew(1)>
-<cfset arrayAppend(session.uploadResult, session.errorArray)>
-<cfset arrayAppend(session.uploadResult, session.successArray)>
-<!---<cfdump var="#errorArray#">
-<cfdump var="#successArray#" abort>--->
 
+<cfset spreadsheetObj = SpreadsheetNew("AddressBook", true)>
+
+
+<cfset myFormat=StructNew()>
+<cfset myFormat.bold="true">
+<cfset myFormat.alignV="center">
+
+<cfset data={color="white",fgcolor="grey_50_percent",alignV="center"}>
+<cfset dataHead={color="white",fgcolor="grey_50_percent",bold="true",alignV="center"}>
+
+<cfset spreadsheetSetCellValue(spreadsheetObj, "TITLE", 1, 1)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "FIRSTNAME", 1, 2)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "LASTNAME", 1, 3)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "GENDER", 1, 4)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "DOB", 1, 5)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "EMAIL", 1, 6)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PHONE", 1, 7)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "HOBBIES",1,8)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "HOUSE_FLAT",1,9)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "STREET",1,10)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "CITY",1,11)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "STATE",1,12)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "PINCODE",1,13)>
+<cfset spreadsheetSetCellValue(spreadsheetObj, "REMARKS",1,14)>
+
+<cfset SpreadsheetFormatRow (spreadsheetObj, dataHead, 1)>
+
+<cfif arrayLen(errorArray) GT 0>
+	<cfloop array="#errorArray#" index="j" item="i">
+		<cfset remarkList = ArraytoList(i.RESULT.errors)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.titleName#", j+1, 1)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+1, 2)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+1, 3)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.genderName#", j+1, 4)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.dob#", j+1, 5)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.email#", j+1, 6)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.phone#", j+1, 7)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.hobbieNames#", j+1, 8)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.houseName#", j+1, 9)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.street#", j+1, 10)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.city#", j+1, 11)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.state#", j+1, 12)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+1, 13)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#remarkList#", j+1, 14)>
+		<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+1,20)>
+	</cfloop>
+<cfelseif arrayLen(successArray) GT 0>
+	<cfloop array="#successArray#" index="j" item="i">
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.titleName#", j+1, 1)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.firstname#", j+1, 2)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.lastname#", j+1, 3)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.genderName#", j+1, 4)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.dob#", j+1, 5)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.email#", j+1, 6)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.phone#", j+1, 7)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.hobbieNames#", j+1, 8)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.houseName#", j+1, 9)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.street#", j+1, 10)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.city#", j+1, 11)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.state#", j+1, 12)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.pincode#", j+1, 13)>
+		<cfset spreadsheetSetCellValue(spreadsheetObj, "#i.RESULT#", j+1, 14)>
+		<cfset SpreadsheetSetRowHeight(spreadsheetObj,j+1,20)>
+	</cfloop>
+</cfif>
+
+<cfloop from="3" to="#3+ArrayLen(errorArray)+ArrayLen(successArray)#" index="i">
+	<cfif i%2 NEQ 0>
+		<cfset SpreadsheetFormatRow(spreadsheetObj,data,i)>
+	</cfif>
+</cfloop>
+
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,1,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,2,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,3,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,4,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,5,20)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,6,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,7,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,8,35)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,9,25)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,10,20)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,11,20)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,12,20)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,13,20)>
+<cfset SpreadSheetSetColumnWidth(spreadsheetobj,14,30)>
+
+<cfset binary = SpreadsheetReadBinary(spreadsheetObj)>
+<cfset uniqueFileName = CreateUUID() & ".xlsx">
+<cfset destinationPath = ExpandPath("./temp/") & uniqueFileName>
+<cffile action="write" file="#destinationPath#" output="#binary#" addnewline="no">
 

@@ -47,8 +47,6 @@
 	</cfif>
 <cfelseif structKeyExists(form,"uploadSubmit")>
 	<cfinclude template="excelUpload.cfm">
-<cfelseif NOT structKeyExists(form,"uploadSubmit") AND structKeyExists(session,"uploadResult")>
-	<cfset structDelete(session, "uploadResult")>
 </cfif>
 
 <cfinvoke 

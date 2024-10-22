@@ -36,9 +36,9 @@
 						<!---<button type="button" id="excelFeature1" class="btn btn-sm btn-info col-2 mx-1">Plain Template</button>--->
 						<a href="excelFeature.cfm" class="btn btn-info col-2 mx-1">Plain Template</a>
 						<button type="button" id="printFeature" class="btn btn-info col-1 mx-1">print</button>
-						<cfif StructKeyExists(session, "uploadResult") AND structKeyExists(form,"uploadSubmit")>
-							<form class="col-1" action="" method="POST">
-								<a href="uploadResult.cfm" class="btn btn-info ">Result</a>
+						<cfif structKeyExists(form,"uploadSubmit")>
+							<form class="col-1" name="uploadResult" action="" method="POST">
+								<cfoutput><a id="downloadButton" href="uploadResult.cfm?excelFileName=#URLEncodedFormat(uniqueFileName)#" class="btn btn-info ">Result</a></cfoutput>
 							</form>
     					</cfif>
 					</div>
