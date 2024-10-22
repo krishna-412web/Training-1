@@ -198,4 +198,14 @@ $(document).ready(() => {
 		 window.open(`output.cfm?id=${rowSelected.log_id}`);
 
 	});
+	$("#downloadButton").click(function(event) {
+		// Hide the closest form when the link is clicked
+		$(this).closest("form").hide();
+		
+		// Set isVisited to true
+		isVisited = true;
+
+		// Open the link in a new tab
+		//window.open($(this).attr("href"), "_blank");
+	});
 });
