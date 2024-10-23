@@ -337,7 +337,7 @@
 	</div>
 	<cfoutput>
 		<div class="container error">
-			<cfif structKeyExists(variables,'message') AND structKeyExists(variables.message,'errors') AND variables.message.flag EQ 0>
+			<cfif structKeyExists(variables,'message') AND structKeyExists(variables.message,'errors')>
 					<cfloop array="#variables.message.errors#" index="local.i">
 						<span class="text-danger">#local.i#</span>
 						<br>
